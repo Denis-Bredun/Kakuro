@@ -1,0 +1,8 @@
+1. WPF
+2. XUnit
+Nuget packages:
+XUnit tests project:
+1. coverlet.collector
+2. Microsoft.NET.Test.Sdk
+3. xunit
+4. xunit.runner.visualstudio
