@@ -8,7 +8,7 @@ namespace Kakuro.Tests.Unit_Tests
 {
     public class RatingRecordRepositoryTests
     {
-        private static Mock<IReadAllRepository<RatingRecord, DifficultyLevels>> _ratingRecordRepositoryMock;
+        private static Mock<IReadAllRepository<RatingRecord, DifficultyLevels>>? _ratingRecordRepositoryMock;
 
         public RatingRecordRepositoryTests()
         {
