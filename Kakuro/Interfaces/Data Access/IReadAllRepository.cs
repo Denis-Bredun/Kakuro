@@ -2,7 +2,7 @@
 {
     public interface IReadAllRepository<T, F>
     {
-        void Add(T entity);
+        void Add(T entity, F key);
         IEnumerable<T> GetAll(F key);
     }
 }
