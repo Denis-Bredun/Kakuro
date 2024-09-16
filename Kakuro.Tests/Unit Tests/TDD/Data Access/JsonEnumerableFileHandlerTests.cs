@@ -55,6 +55,7 @@ namespace Kakuro.Tests.Unit_Tests.TDD.Data_Access
             try
             {
                 handler.Object.Save(dataToSave, filepath);
+                actualData = JsonSerializer.Serialize(dataToSave);
             }
             catch (Exception)
             {
