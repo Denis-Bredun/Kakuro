@@ -149,5 +149,3 @@ namespace Kakuro.Tests.Unit_Tests
         }
     }
 }
-
-// NOTE: add to Tech. stack - FluentAssertions
