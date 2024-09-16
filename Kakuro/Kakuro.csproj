@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <Folder Include="Events\" />
-    <Folder Include="Data Access\" />
     <Folder Include="Base Classes\" />
     <Folder Include="Styles\" />
     <Folder Include="ViewModels\" />
