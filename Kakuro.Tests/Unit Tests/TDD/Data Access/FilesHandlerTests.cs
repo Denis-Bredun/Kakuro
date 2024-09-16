@@ -7,7 +7,7 @@ namespace Kakuro.Tests.Unit_Tests.TDD.Data_Access
 {
     public class FilesHandlerTests
     {
-        private static string _directorypath = "..\\..\\..\\TDD Tests Files\\";
+        private static string _directorypath = "..\\..\\..\\TDD Tests Files\\FilesHandlerTests\\";
 
         [Fact]
         public void Should_SaveDataToFile_When_InvokingMethod()
@@ -33,7 +33,7 @@ namespace Kakuro.Tests.Unit_Tests.TDD.Data_Access
         }
 
         [Fact]
-        public void Should_ThrowException_When_DirectoryDoesNotExist()
+        public void Should_NotSaveData_When_DirectoryDoesNotExist()
         {
             // Arrange
             var filepath = Path.Combine(_directorypath, "NonExistingDirectory", "Test_Directory_Doesnt_Exist.txt");
@@ -184,11 +184,13 @@ namespace Kakuro.Tests.Unit_Tests.TDD.Data_Access
         }
 
         [Fact]
-        public void Should_ThrowArgumentNullException_When_NullDataIsPassed()
+        public void Should_NotSaveData_When_NullDataIsPassed()
         {
             // Arrange
             var filepath = Path.Combine(_directorypath, "Test_NullData.json");
             Directory.CreateDirectory(_directorypath);
+            File.WriteAllText(filepath, string.Empty);
+
             var filesHandler = new Mock<IFilesHandler<IEnumerable<TestPerson>, string>>();
 
             filesHandler.Setup(h => h.Save(It.IsAny<IEnumerable<TestPerson>>(), It.IsAny<string>()))
@@ -201,20 +203,19 @@ namespace Kakuro.Tests.Unit_Tests.TDD.Data_Access
                     File.WriteAllText(path, jsonData);
                 });
 
-            IEnumerable<TestPerson> actualData = null, expectedData = new List<TestPerson>();
-
             // Act
             try
             {
                 filesHandler.Object.Save(null, filepath);
             }
-            catch (Exception)
+            catch (ArgumentNullException)
             {
-                actualData = new List<TestPerson>();
+                // Ignoring exception, cuz we just want to check the file after catching it.
             }
 
             // Assert
-            actualData.Should().BeEquivalentTo(expectedData);
+            var fileContent = File.ReadAllText(filepath);
+            fileContent.Should().Be(string.Empty);
         }
 
         [Fact]
@@ -379,7 +380,7 @@ namespace Kakuro.Tests.Unit_Tests.TDD.Data_Access
             // Arrange
             var filepath = Path.Combine(_directorypath, "Test_EmptyFile.json");
             Directory.CreateDirectory(_directorypath);
-            File.WriteAllText(filepath, string.Empty); // Create an empty file
+            File.WriteAllText(filepath, string.Empty);
             var filesHandler = new Mock<IFilesHandler<IEnumerable<TestPerson>, string>>();
 
             filesHandler.Setup(h => h.Load(It.IsAny<string>()))
@@ -454,15 +455,6 @@ namespace Kakuro.Tests.Unit_Tests.TDD.Data_Access
 
             // Assert
             loadedPeople.Should().BeEmpty();
-        }
-
-        public class TestPerson
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
-            public double Money { get; set; }
-            public string Description { get; set; }
-            public DateTime Time { get; set; }
         }
     }
 }
