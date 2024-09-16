@@ -371,7 +371,7 @@ namespace Kakuro.Tests.Unit_Tests.TDD.Data_Access
             var loadedPeople = filesHandler.Object.Load(filepath);
 
             // Assert
-            loadedPeople.Should().BeEmpty(); // Ensure that an empty list is returned
+            loadedPeople.Should().BeEmpty();
         }
 
         [Fact]

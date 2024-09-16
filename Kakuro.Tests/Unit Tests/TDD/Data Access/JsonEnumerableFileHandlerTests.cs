@@ -250,7 +250,6 @@ namespace Kakuro.Tests.Unit_Tests.TDD.Data_Access
             filesHandler.Setup(h => h.Load(It.IsAny<string>()))
                 .Returns<string>(path =>
                 {
-                    // Check if the directory exists
                     var directory = Path.GetDirectoryName(path);
                     if (!Directory.Exists(directory))
                         return new List<TestPerson>();
