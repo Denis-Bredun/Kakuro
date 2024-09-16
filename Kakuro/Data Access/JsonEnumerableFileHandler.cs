@@ -12,7 +12,17 @@ namespace Kakuro.Data_Access
                 return new List<T>();
 
             var jsonData = File.ReadAllText(filepath);
-            return JsonSerializer.Deserialize<List<T>>(jsonData) ?? new List<T>();
+            List<T>? deserializedData;
+            try
+            {
+                deserializedData = JsonSerializer.Deserialize<List<T>>(jsonData);
+            }
+            catch (JsonException)
+            {
+                return new List<T>();
+            }
+
+            return deserializedData ?? new List<T>();
         }
 
         public void Save(IEnumerable<T> data, string filepath)
