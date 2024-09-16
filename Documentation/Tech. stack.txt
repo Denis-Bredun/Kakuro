@@ -11,3 +11,5 @@ XUnit tests project:
 2. Microsoft.NET.Test.Sdk
 3. xunit
 4. xunit.runner.visualstudio
+5. Moq
+6. FluentAssertions
