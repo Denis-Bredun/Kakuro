@@ -33,10 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Integration Tests\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Kakuro\Kakuro.csproj" />
   </ItemGroup>
 
