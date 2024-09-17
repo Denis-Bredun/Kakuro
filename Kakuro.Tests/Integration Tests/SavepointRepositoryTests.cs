@@ -12,7 +12,7 @@ namespace Kakuro.Tests.Integration_Tests
         public SavepointRepositoryTests()
         {
             _jsonEnumerableFileHandler = new JsonEnumerableFileHandler<Savepoint>();
-            _savepointRepository = new SavepointRepository(_jsonEnumerableFileHandler);
+            _savepointRepository = new SavepointRepository(_jsonEnumerableFileHandler, DIRECTORY_PATH);
         }
 
         public void Dispose()

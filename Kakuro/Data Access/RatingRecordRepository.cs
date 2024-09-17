@@ -19,9 +19,12 @@ namespace Kakuro.Data_Access
 
         public void Add(RatingRecord entity, DifficultyLevels key)
         {
+            if (entity == null)
+                return;
+
             string filepath = FormFilepath(key);
             var ratingTableConcreteDifficulty = GetAll(key);
-            ratingTableConcreteDifficulty.Append(entity);
+            ratingTableConcreteDifficulty = ratingTableConcreteDifficulty.Append(entity);
             _jsonEnumerableFileHandler.Save(ratingTableConcreteDifficulty, filepath);
         }
 

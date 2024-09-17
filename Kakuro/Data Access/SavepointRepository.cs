@@ -24,7 +24,7 @@ namespace Kakuro.Data_Access
                 return;
 
             var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
-            savepoints.Append(entity);
+            savepoints = savepoints.Append(entity);
             _jsonEnumerableFileHandler.Save(savepoints, _filepath);
         }
 
@@ -35,7 +35,7 @@ namespace Kakuro.Data_Access
             if (id > savepoints.Count() - 1 || id < 0)    // id starts from 0
                 return;
 
-            savepoints = savepoints.Where(el => el.Id != id); // el stands for "element"
+            savepoints = savepoints.Where(el => el.Id != id); // "el" stands for "element"
 
             _jsonEnumerableFileHandler.Save(savepoints, _filepath);
         }

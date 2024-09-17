@@ -8,6 +8,12 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
     {
         private const string DIRECTORY_PATH = "..\\..\\..\\Unit Tests\\Files\\JsonEnumerableFileHandlerTests\\";
 
+        public void Dispose()
+        {
+            if (Directory.Exists(DIRECTORY_PATH))
+                Directory.Delete(DIRECTORY_PATH, true);
+        }
+
         [Fact]
         public void Should_SaveDataToFile_When_InvokingMethod()
         {
@@ -316,12 +322,6 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
 
             // Assert
             Assert.Equivalent(savepointsToSave, loadedSavepoints);
-        }
-
-        public void Dispose()
-        {
-            if (Directory.Exists(DIRECTORY_PATH))
-                Directory.Delete(DIRECTORY_PATH, true);
         }
     }
 }
