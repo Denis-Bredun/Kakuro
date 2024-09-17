@@ -1,6 +1,7 @@
 ﻿using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access;
 using Kakuro.Models;
+using System.IO;
 
 namespace Kakuro.Data_Access
 {
@@ -17,12 +18,18 @@ namespace Kakuro.Data_Access
 
         public void Add(RatingRecord entity, DifficultyLevels key)
         {
-            throw new NotImplementedException();
+            string filepath = FormFilepath(key);
+            var ratingTableConcreteDifficulty = GetAll(key);
+            ratingTableConcreteDifficulty.Append(entity);
+            _jsonEnumerableFileHandler.Save(ratingTableConcreteDifficulty, filepath);
         }
 
         public IEnumerable<RatingRecord> GetAll(DifficultyLevels key)
         {
-            throw new NotImplementedException();
+            string filepath = FormFilepath(key);
+            return _jsonEnumerableFileHandler.Load(filepath);
         }
+
+        private string FormFilepath(DifficultyLevels level) => Path.Combine(DIRECTORY_PATH, level.ToString() + PART_OF_FILEPATH);
     }
 }
