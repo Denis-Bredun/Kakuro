@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
 {
-    public class JsonEnumerableFileHandlerTests
+    public class JsonEnumerableFileHandlerTests : IDisposable
     {
         private const string DIRECTORY_PATH = "..\\..\\..\\Unit Tests\\Files\\JsonEnumerableFileHandlerTests\\";
 
@@ -316,6 +316,12 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
 
             // Assert
             Assert.Equivalent(savepointsToSave, loadedSavepoints);
+        }
+
+        public void Dispose()
+        {
+            if (Directory.Exists(DIRECTORY_PATH))
+                Directory.Delete(DIRECTORY_PATH, true);
         }
     }
 }
