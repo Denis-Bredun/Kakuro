@@ -61,5 +61,7 @@ namespace Kakuro.Data_Access
 
             _jsonEnumerableFileHandler.Save(savepoints, _filepath);
         }
+
+        public int Count() => _jsonEnumerableFileHandler.Load(_filepath).Count();
     }
 }
