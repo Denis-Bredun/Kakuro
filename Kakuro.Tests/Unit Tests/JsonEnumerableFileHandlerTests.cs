@@ -1,20 +1,18 @@
-﻿using FluentAssertions;
-using Kakuro.Data_Access;
+﻿using Kakuro.Data_Access;
 using Kakuro.Models;
-using Kakuro.Tests.Unit_Tests.TDD.Data_Access;
 using System.Text.Json;
 
 namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
 {
     public class JsonEnumerableFileHandlerTests
     {
-        private static string _directorypath = "..\\..\\..\\Functionality Tests Files\\JsonEnumerableFileHandlerTests\\";
+        private const string DIRECTORY_PATH = "..\\..\\..\\Unit Tests\\Files\\JsonEnumerableFileHandlerTests\\";
 
         [Fact]
         public void Should_SaveDataToFile_When_InvokingMethod()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_Save_Data.json");
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_Save_Data.json");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<int>();
             var dataToSave = new List<int> { 1, 2, 3, 4, 5 };
 
@@ -24,14 +22,14 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
 
             // Assert
             var expectedJsonData = JsonSerializer.Serialize(dataToSave);
-            savedContent.Should().Be(expectedJsonData);
+            Assert.Equal(expectedJsonData, savedContent);
         }
 
         [Fact]
         public void Should_CreateDirectory_When_DirectoryDoesNotExist()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "NonExistingDirectory", "Test_Directory_Doesnt_Exist.json");
+            var filepath = Path.Combine(DIRECTORY_PATH, "NonExistingDirectory", "Test_Directory_Doesnt_Exist.json");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<int>();
             var dataToSave = new List<int> { 1, 2, 3, 4, 5 };
             string expectedData = JsonSerializer.Serialize(dataToSave), actualData = "Smth";
@@ -55,7 +53,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         public void Should_SaveAndReadJsonData_When_InvokingMethodWithIEnumerable()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_Json_Data.json");
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_Json_Data.json");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<int>();
             var dataToSave = new List<int> { 1, 2, 3, 4, 5 };
 
@@ -64,14 +62,14 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var loadedData = jsonEnumerableFileHandler.Load(filepath);
 
             // Assert
-            loadedData.Should().BeEquivalentTo(dataToSave);
+            Assert.Equivalent(dataToSave, loadedData);
         }
 
         [Fact]
         public void Should_CorrectlyDeserialize_When_FileContainsValidJson()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_ValidData.json");
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_ValidData.json");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
 
             var peopleToSave = new List<TestPerson>
@@ -86,29 +84,29 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
 
             // Assert
-            loadedPeople.Should().BeEquivalentTo(peopleToSave);
+            Assert.Equivalent(peopleToSave, loadedPeople);
         }
 
         [Fact]
         public void Should_ReturnEmpty_When_FileDoesNotExist()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_NonExistingFile.json");
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_NonExistingFile.json");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
 
             // Act
             var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
 
             // Assert
-            loadedPeople.Should().BeEmpty();
+            Assert.Empty(loadedPeople);
         }
 
         [Fact]
         public void Should_ReturnEmpty_When_FileIsEmpty()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_EmptyFile.json");
-            Directory.CreateDirectory(_directorypath);
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_EmptyFile.json");
+            Directory.CreateDirectory(DIRECTORY_PATH);
             File.WriteAllText(filepath, string.Empty);
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
 
@@ -116,15 +114,15 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
 
             // Assert
-            loadedPeople.Should().BeEmpty();
+            Assert.Empty(loadedPeople);
         }
 
         [Fact]
         public void Should_ReturnEmpty_When_FileContainsInvalidJson()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_InvalidJson.json");
-            Directory.CreateDirectory(_directorypath);
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_InvalidJson.json");
+            Directory.CreateDirectory(DIRECTORY_PATH);
             File.WriteAllText(filepath, "{ invalid json }");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
 
@@ -132,14 +130,14 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
 
             // Assert
-            loadedPeople.Should().BeEmpty();
+            Assert.Empty(loadedPeople);
         }
 
         [Fact]
         public void Should_SaveEmptyData_When_EmptyCollectionIsPassed()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_EmptyData.json");
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_EmptyData.json");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
 
             var emptyList = new List<TestPerson>();
@@ -151,28 +149,28 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var deserializedPeople = JsonSerializer.Deserialize<List<TestPerson>>(savedContent);
 
             // Assert
-            deserializedPeople.Should().BeEmpty();
+            Assert.Empty(deserializedPeople);
         }
 
         [Fact]
         public void Should_ReturnEmptyList_When_DirectoryDoesNotExist()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "NonExistingDirectory", "Test_File.json");
+            var filepath = Path.Combine(DIRECTORY_PATH, "NonExistingDirectory", "Test_File.json");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
 
             // Act
             var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
 
             // Assert
-            loadedPeople.Should().BeEmpty();
+            Assert.Empty(loadedPeople);
         }
 
         [Fact]
         public void Should_SaveLargeData_When_LargeCollectionIsPassed()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_LargeData.json");
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_LargeData.json");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
 
             var largeList = new List<TestPerson>();
@@ -188,14 +186,14 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var deserializedPeople = JsonSerializer.Deserialize<List<TestPerson>>(savedContent);
 
             // Assert
-            deserializedPeople.Should().BeEquivalentTo(largeList);
+            Assert.Equivalent(largeList, deserializedPeople);
         }
 
         [Fact]
         public void Should_SaveDataWithLargeNumbersAndDates_When_LargeNumbersAndDatesArePresent()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_LargeNumbersAndDates.json");
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_LargeNumbersAndDates.json");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
 
             var dataWithLargeNumbersAndDates = new List<TestPerson>
@@ -211,15 +209,15 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var deserializedPeople = JsonSerializer.Deserialize<List<TestPerson>>(savedContent);
 
             // Assert
-            deserializedPeople.Should().BeEquivalentTo(dataWithLargeNumbersAndDates);
+            Assert.Equivalent(dataWithLargeNumbersAndDates, deserializedPeople);
         }
 
         [Fact]
         public void Should_NotSaveData_When_NullDataIsPassed()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_NullData.json");
-            Directory.CreateDirectory(_directorypath);
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_NullData.json");
+            Directory.CreateDirectory(DIRECTORY_PATH);
             File.WriteAllText(filepath, string.Empty);
 
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
@@ -236,14 +234,14 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
 
             // Assert
             var fileContent = File.ReadAllText(filepath);
-            fileContent.Should().Be(string.Empty);
+            Assert.Empty(fileContent);
         }
 
         [Fact]
         public void Should_SaveDataWithSpecialCharacters_When_SpecialCharactersArePresent()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_SpecialCharsData.json");
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_SpecialCharsData.json");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
 
             var specialCharsList = new List<TestPerson>
@@ -257,14 +255,14 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var loadedData = jsonEnumerableFileHandler.Load(filepath);
 
             // Assert
-            loadedData.Should().BeEquivalentTo(specialCharsList);
+            Assert.Equivalent(specialCharsList, loadedData);
         }
 
         [Fact]
         public void Should_CorrectlyDeserialize_When_FileContainsValidRatingRecordJson()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_ValidRatingRecordData.json");
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_ValidRatingRecordData.json");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<RatingRecord>();
 
             var ratingRecordsToSave = new List<RatingRecord>
@@ -279,14 +277,14 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var loadedRatingRecords = jsonEnumerableFileHandler.Load(filepath);
 
             // Assert
-            loadedRatingRecords.Should().BeEquivalentTo(ratingRecordsToSave);
+            Assert.Equivalent(ratingRecordsToSave, loadedRatingRecords);
         }
 
         [Fact]
         public void Should_CorrectlyDeserialize_When_FileContainsValidSavepointJson()
         {
             // Arrange
-            var filepath = Path.Combine(_directorypath, "Test_ValidSavepointData.json");
+            var filepath = Path.Combine(DIRECTORY_PATH, "Test_ValidSavepointData.json");
             var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<Savepoint>();
 
             var savepointsToSave = new List<Savepoint>
@@ -317,7 +315,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var loadedSavepoints = jsonEnumerableFileHandler.Load(filepath);
 
             // Assert
-            loadedSavepoints.Should().BeEquivalentTo(savepointsToSave);
+            Assert.Equivalent(savepointsToSave, loadedSavepoints);
         }
     }
 }

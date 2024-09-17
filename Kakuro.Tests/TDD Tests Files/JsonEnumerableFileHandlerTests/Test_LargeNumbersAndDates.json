@@ -1,1 +1,0 @@
-[{"Id":2147483647,"Name":"Max Int","Money":1.7976931348623157E+308,"Description":"Max values","Time":"9999-12-31T23:59:59.9999999"},{"Id":-2147483648,"Name":"Min Int","Money":-1.7976931348623157E+308,"Description":"Min values","Time":"0001-01-01T00:00:00"}]

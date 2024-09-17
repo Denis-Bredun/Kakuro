@@ -1,4 +1,4 @@
-﻿namespace Kakuro.Tests.Unit_Tests.TDD.Data_Access
+﻿namespace Kakuro.Tests
 {
     public class TestPerson
     {
