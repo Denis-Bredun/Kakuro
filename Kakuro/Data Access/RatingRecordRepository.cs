@@ -8,12 +8,13 @@ namespace Kakuro.Data_Access
     public class RatingRecordRepository : IReadAllRepository<RatingRecord, DifficultyLevels>
     {
         private IJsonEnumerableFileHandler<RatingRecord> _jsonEnumerableFileHandler;
-        private const string DIRECTORY_PATH = "Rating Tables\\";
+        private readonly string _directoryPath;
         private const string PART_OF_FILEPATH = ". Rating Table.json";
 
-        public RatingRecordRepository(IJsonEnumerableFileHandler<RatingRecord> jsonEnumerableFileHandler)
+        public RatingRecordRepository(IJsonEnumerableFileHandler<RatingRecord> jsonEnumerableFileHandler, string directoryPath = "")
         {
             _jsonEnumerableFileHandler = jsonEnumerableFileHandler;
+            _directoryPath = string.IsNullOrWhiteSpace(directoryPath) ? "Rating Tables\\" : directoryPath;
         }
 
         public void Add(RatingRecord entity, DifficultyLevels key)
@@ -30,6 +31,6 @@ namespace Kakuro.Data_Access
             return _jsonEnumerableFileHandler.Load(filepath);
         }
 
-        private string FormFilepath(DifficultyLevels level) => Path.Combine(DIRECTORY_PATH, level.ToString() + PART_OF_FILEPATH);
+        private string FormFilepath(DifficultyLevels level) => Path.Combine(_directoryPath, level.ToString() + PART_OF_FILEPATH);
     }
 }
