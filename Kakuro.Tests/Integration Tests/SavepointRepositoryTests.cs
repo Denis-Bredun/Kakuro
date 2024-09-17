@@ -426,5 +426,246 @@ namespace Kakuro.Tests.Integration_Tests
             Assert.Single(savedSavepoints);
             Assert.Equal(savepoint2.Id, savedSavepoints[0].Id);
         }
+
+        [Fact]
+        public void Should_UpdateExistingSavepoint_When_EntityIsValid()
+        {
+            // Arrange
+            var savepoint1 = new Savepoint
+            {
+                Id = 0,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                }
+            };
+            var savepoint2 = new Savepoint
+            {
+                Id = 0,  // Same Id as savepoint1
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 5, Notes = new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 } }
+                }
+            };
+
+            _savepointRepository.Add(savepoint1);
+
+            // Act
+            _savepointRepository.Update(savepoint2);
+
+            // Assert
+            var updatedSavepoint = _savepointRepository.GetById(0);
+            Assert.NotNull(updatedSavepoint);
+            Assert.Equal(5, updatedSavepoint.DashboardItems.First().Value);
+            Assert.Equal(new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 }, updatedSavepoint.DashboardItems.First().Notes);
+        }
+
+        [Fact]
+        public void Should_NotUpdateSavepoint_When_EntityIsNull()
+        {
+            // Arrange
+            var savepoint = new Savepoint
+            {
+                Id = 0,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                }
+            };
+            _savepointRepository.Add(savepoint);
+
+            // Act
+            _savepointRepository.Update(null);
+
+            // Assert
+            var savedSavepoint = _savepointRepository.GetById(0);
+            Assert.NotNull(savedSavepoint);
+            Assert.Equal(2, savedSavepoint.DashboardItems.First().Value);
+        }
+
+        [Fact]
+        public void Should_NotUpdateSavepoint_When_SavepointDoesNotExist()
+        {
+            // Arrange
+            // We're assuming no savepoint with Id 1 exists
+
+            var savepoint = new Savepoint
+            {
+                Id = 1,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 5, Notes = new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 } }
+                }
+            };
+
+            // Act
+            _savepointRepository.Update(savepoint);
+
+            // Assert
+            var nonExistingSavepoint = _savepointRepository.GetById(1);
+            Assert.Null(nonExistingSavepoint);
+        }
+
+        [Fact]
+        public void Should_UpdateSavepoint_When_EntityIsEmpty()
+        {
+            // Arrange
+            var savepoint1 = new Savepoint
+            {
+                Id = 0,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                }
+            };
+            _savepointRepository.Add(savepoint1);
+
+            var emptySavepoint = new Savepoint
+            {
+                Id = 0,
+                DashboardItems = new List<DashboardItem>()
+            };
+
+            // Act
+            _savepointRepository.Update(emptySavepoint);
+
+            // Assert
+            var updatedSavepoint = _savepointRepository.GetById(0);
+            Assert.NotNull(updatedSavepoint);
+            Assert.Empty(updatedSavepoint.DashboardItems);
+        }
+
+        [Fact]
+        public void Should_UpdateSavepointWithMultipleDashboardItems_When_EntityIsUpdated()
+        {
+            // Arrange
+            var savepoint1 = new Savepoint
+            {
+                Id = 0,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                }
+            };
+            var updatedSavepoint = new Savepoint
+            {
+                Id = 0,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 5, Notes = new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 } },
+                    new DashboardItem { Value = 10, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
+                }
+            };
+            _savepointRepository.Add(savepoint1);
+
+            // Act
+            _savepointRepository.Update(updatedSavepoint);
+
+            // Assert
+            var actualSavepoint = _savepointRepository.GetById(0);
+            Assert.NotNull(actualSavepoint);
+            Assert.Equal(2, actualSavepoint.DashboardItems.Count);
+            Assert.Equal(5, actualSavepoint.DashboardItems.First().Value);
+            Assert.Equal(new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 }, actualSavepoint.DashboardItems.First().Notes);
+            Assert.Equal(10, actualSavepoint.DashboardItems.Last().Value);
+            Assert.Equal(new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 }, actualSavepoint.DashboardItems.Last().Notes);
+        }
+
+        [Fact]
+        public void Should_NotUpdateSavepoint_When_IdDoesNotMatch()
+        {
+            // Arrange
+            var savepoint1 = new Savepoint
+            {
+                Id = 0,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                }
+            };
+            var wrongIdSavepoint = new Savepoint
+            {
+                Id = 1,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 10, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
+                }
+            };
+            _savepointRepository.Add(savepoint1);
+
+            // Act
+            _savepointRepository.Update(wrongIdSavepoint);
+
+            // Assert
+            var actualSavepoint = _savepointRepository.GetById(0);
+            Assert.NotNull(actualSavepoint);
+            Assert.Equal(2, actualSavepoint.DashboardItems.First().Value);
+            Assert.Equal(new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 }, actualSavepoint.DashboardItems.First().Notes);
+        }
+
+        [Fact]
+        public void Should_UpdateSavepoint_When_EntityIsUpdatedWithPartialDashboardItems()
+        {
+            // Arrange
+            var savepoint1 = new Savepoint
+            {
+                Id = 0,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                }
+            };
+            var updatedSavepoint = new Savepoint
+            {
+                Id = 0,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 5 }
+                }
+            };
+            _savepointRepository.Add(savepoint1);
+
+            // Act
+            _savepointRepository.Update(updatedSavepoint);
+
+            // Assert
+            var actualSavepoint = _savepointRepository.GetById(0);
+            Assert.NotNull(actualSavepoint);
+            Assert.Single(actualSavepoint.DashboardItems);
+            Assert.Equal(5, actualSavepoint.DashboardItems.First().Value);
+            Assert.Equal(0, actualSavepoint.DashboardItems.First().Notes[0]);
+        }
+
+        [Fact]
+        public void Should_NotUpdateSavepoint_When_EntityHasSameValues()
+        {
+            // Arrange
+            var savepoint = new Savepoint
+            {
+                Id = 0,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                }
+            };
+            _savepointRepository.Add(savepoint);
+
+            var sameSavepoint = new Savepoint
+            {
+                Id = 0,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                }
+            };
+
+            // Act
+            _savepointRepository.Update(sameSavepoint);
+
+            // Assert
+            var updatedSavepoint = _savepointRepository.GetById(0);
+            Assert.NotNull(updatedSavepoint);
+            Assert.Single(updatedSavepoint.DashboardItems);
+        }
     }
 }

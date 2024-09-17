@@ -63,7 +63,11 @@ namespace Kakuro.Data_Access
         {
             var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
 
-            if (entity == null || savepoints.Count() == 0)
+            if (entity == null || savepoints.Count(el => el.Id == entity.Id) == 0)
+                return;
+
+            var existingSavepoint = savepoints.FirstOrDefault(el => el.Id == entity.Id);
+            if (existingSavepoint.Equals(entity))
                 return;
 
             savepoints = savepoints.Select((el, id) => entity.Id == id ? entity : el);

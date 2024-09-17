@@ -10,5 +10,24 @@
         {
             Notes = new int[MAX_COUNT_OF_NOTES];
         }
+
+        public override bool Equals(object? obj)
+        {
+            if (obj is DashboardItem other)
+            {
+                return Value == other.Value &&
+                       (Notes == null && other.Notes == null ||
+                       Notes != null && other.Notes != null && Notes.SequenceEqual(other.Notes));
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            // Hash code for the array cannot be generated using a simple XOR, so I use a combination of values
+            var notesHash = Notes?.Aggregate(0, (current, note) => current ^ note.GetHashCode()) ?? 0;
+            return (Value?.GetHashCode() ?? 0) ^ notesHash;
+        }
     }
 }
