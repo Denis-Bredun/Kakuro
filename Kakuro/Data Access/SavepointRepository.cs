@@ -11,6 +11,8 @@ namespace Kakuro.Data_Access
         private readonly string _filename = "Savepoints.json";
         private readonly string _filepath;
 
+        public int Count { private set; get; } = 0;
+
         public SavepointRepository(IJsonEnumerableFileHandler<Savepoint> jsonEnumerableFileHandler, string directoryPath = "")
         {
             _jsonEnumerableFileHandler = jsonEnumerableFileHandler;
@@ -24,7 +26,13 @@ namespace Kakuro.Data_Access
                 return;
 
             var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
+
+            if (savepoints.Count(el => el.Id == entity.Id) != 0) // "el" stands for "element"
+                return;
+
             savepoints = savepoints.Append(entity);
+            Count++;
+
             _jsonEnumerableFileHandler.Save(savepoints, _filepath);
         }
 
@@ -32,10 +40,11 @@ namespace Kakuro.Data_Access
         {
             var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
 
-            if (id > savepoints.Count() - 1 || id < 0)    // id starts from 0
+            if (savepoints.Count(el => el.Id == id) == 0)
                 return;
 
             savepoints = savepoints.Where(el => el.Id != id); // "el" stands for "element"
+            Count--;
 
             _jsonEnumerableFileHandler.Save(savepoints, _filepath);
         }
@@ -61,7 +70,5 @@ namespace Kakuro.Data_Access
 
             _jsonEnumerableFileHandler.Save(savepoints, _filepath);
         }
-
-        public int Count() => _jsonEnumerableFileHandler.Load(_filepath).Count();
     }
 }
