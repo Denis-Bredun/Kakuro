@@ -211,7 +211,7 @@ namespace Kakuro.Tests.Integration_Tests
         public void Should_ReturnZero_When_NoSavepointsExist()
         {
             // Arrange
-            // Skipping =)
+            // Repository is empty
 
             // Act
             int count = _savepointRepository.Count;
@@ -291,6 +291,140 @@ namespace Kakuro.Tests.Integration_Tests
 
             // Assert
             Assert.Equal(0, count);
+        }
+
+        [Fact]
+        public void Should_DeleteExistingSavepoint_When_ValidIdIsProvided()
+        {
+            // Arrange
+            var savepoint1 = new Savepoint { Id = 0, DashboardItems = new List<DashboardItem>() };
+            var savepoint2 = new Savepoint { Id = 1, DashboardItems = new List<DashboardItem>() };
+
+            _savepointRepository.Add(savepoint1);
+            _savepointRepository.Add(savepoint2);
+            _savepointRepository.Delete(0);
+
+            // Act
+            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+
+            // Assert
+            Assert.Single(savedSavepoints);
+            Assert.Equal(savepoint2.Id, savedSavepoints[0].Id);
+        }
+
+        [Fact]
+        public void Should_NotDelete_When_IdIsOutOfRange()
+        {
+            // Arrange
+            var savepoint1 = new Savepoint { Id = 0, DashboardItems = new List<DashboardItem>() };
+            var savepoint2 = new Savepoint { Id = 1, DashboardItems = new List<DashboardItem>() };
+
+            _savepointRepository.Add(savepoint1);
+            _savepointRepository.Add(savepoint2);
+            _savepointRepository.Delete(999);
+
+            // Act
+            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+
+            // Assert
+            Assert.Equal(2, savedSavepoints.Count);
+            Assert.True(savedSavepoints.Count(el => el.Id == savepoint1.Id) == 1);
+            Assert.True(savedSavepoints.Count(el => el.Id == savepoint2.Id) == 1);
+        }
+
+        [Fact]
+        public void Should_NotDelete_When_IdIsNegative()
+        {
+            // Arrange
+            var savepoint1 = new Savepoint { Id = 0, DashboardItems = new List<DashboardItem>() };
+            var savepoint2 = new Savepoint { Id = 1, DashboardItems = new List<DashboardItem>() };
+
+            _savepointRepository.Add(savepoint1);
+            _savepointRepository.Add(savepoint2);
+            _savepointRepository.Delete(-1);
+
+            // Act
+            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+
+            // Assert
+            Assert.Equal(2, savedSavepoints.Count);
+            Assert.True(savedSavepoints.Count(el => el.Id == savepoint1.Id) == 1);
+            Assert.True(savedSavepoints.Count(el => el.Id == savepoint2.Id) == 1);
+        }
+
+        [Fact]
+        public void Should_DeleteOnlySpecifiedSavepoint_When_ValidIdIsProvided()
+        {
+            // Arrange
+            var savepoint1 = new Savepoint { Id = 0, DashboardItems = new List<DashboardItem>() };
+            var savepoint2 = new Savepoint { Id = 1, DashboardItems = new List<DashboardItem>() };
+            var savepoint3 = new Savepoint { Id = 2, DashboardItems = new List<DashboardItem>() };
+
+            _savepointRepository.Add(savepoint1);
+            _savepointRepository.Add(savepoint2);
+            _savepointRepository.Add(savepoint3);
+            _savepointRepository.Delete(1);
+
+            // Act
+            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+
+            // Assert
+            Assert.Equal(2, savedSavepoints.Count);
+            Assert.True(savedSavepoints.Count(el => el.Id == savepoint1.Id) == 1);
+            Assert.True(savedSavepoints.Count(el => el.Id == savepoint3.Id) == 1);
+            Assert.False(savedSavepoints.Count(el => el.Id == savepoint2.Id) == 1);
+        }
+
+        [Fact]
+        public void Should_HandleEmptyRepository_When_DeleteIsCalled()
+        {
+            // Arrange
+            // Our reposiitory is empty
+
+            // Act
+            _savepointRepository.Delete(0);
+
+            // Assert
+            Assert.Equal(0, _savepointRepository.Count);
+        }
+
+        [Fact]
+        public void Should_HandleDelete_When_DeleteAlreadyDeletedSavepoint()
+        {
+            // Arrange
+            var savepoint1 = new Savepoint { Id = 0, DashboardItems = new List<DashboardItem>() };
+            var savepoint2 = new Savepoint { Id = 1, DashboardItems = new List<DashboardItem>() };
+
+            _savepointRepository.Add(savepoint1);
+            _savepointRepository.Add(savepoint2);
+            _savepointRepository.Delete(1);
+            _savepointRepository.Delete(1);
+
+            // Act
+            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+
+            // Assert
+            Assert.Single(savedSavepoints);
+            Assert.True(savedSavepoints.Count(el => el.Id == savepoint1.Id) == 1);
+        }
+
+        [Fact]
+        public void Should_SaveChangesToFile_When_Delete()
+        {
+            // Arrange
+            var savepoint1 = new Savepoint { Id = 0, DashboardItems = new List<DashboardItem>() };
+            var savepoint2 = new Savepoint { Id = 1, DashboardItems = new List<DashboardItem>() };
+
+            _savepointRepository.Add(savepoint1);
+            _savepointRepository.Add(savepoint2);
+            _savepointRepository.Delete(0);
+
+            // Act
+            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+
+            // Assert
+            Assert.Single(savedSavepoints);
+            Assert.Equal(savepoint2.Id, savedSavepoints[0].Id);
         }
     }
 }
