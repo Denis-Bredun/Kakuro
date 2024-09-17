@@ -15,22 +15,46 @@ namespace Kakuro.Data_Access
 
         public void Add(Savepoint entity)
         {
-            throw new NotImplementedException();
+            if (entity == null)
+                return;
+
+            var savepoints = _jsonEnumerableFileHandler.Load(FILEPATH);
+            savepoints.Append(entity);
+            _jsonEnumerableFileHandler.Save(savepoints, FILEPATH);
         }
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            var savepoints = _jsonEnumerableFileHandler.Load(FILEPATH);
+
+            if (id > savepoints.Count() - 1 || id < 0)    // id starts from 0
+                return;
+
+            savepoints = savepoints.Where(el => el.Id != id); // el stands for "element"
+
+            _jsonEnumerableFileHandler.Save(savepoints, FILEPATH);
         }
 
-        public Savepoint GetById(int id)
+        public Savepoint? GetById(int id)
         {
-            throw new NotImplementedException();
+            var savepoints = _jsonEnumerableFileHandler.Load(FILEPATH);
+
+            if (id > savepoints.Count() - 1 || id < 0)
+                return null;
+
+            return savepoints.ElementAt(id);
         }
 
         public void Update(Savepoint entity)
         {
-            throw new NotImplementedException();
+            var savepoints = _jsonEnumerableFileHandler.Load(FILEPATH);
+
+            if (entity == null || savepoints.Count() == 0)
+                return;
+
+            savepoints = savepoints.Select((el, id) => entity.Id == id ? entity : el);
+
+            _jsonEnumerableFileHandler.Save(savepoints, FILEPATH);
         }
     }
 }
