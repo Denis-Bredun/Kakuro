@@ -4,9 +4,9 @@ using System.Text.Json;
 
 namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
 {
-    public class JsonEnumerableFileHandlerTests : IDisposable
+    public class JsonFileHandlerTests : IDisposable
     {
-        private const string DIRECTORY_PATH = "..\\..\\..\\Unit Tests\\Files\\JsonEnumerableFileHandlerTests\\";
+        private const string DIRECTORY_PATH = "..\\..\\..\\Unit Tests\\Files\\JsonFileHandlerTests\\";
 
         public void Dispose()
         {
@@ -19,7 +19,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_Save_Data.json");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<int>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<int>();
             var dataToSave = new List<int> { 1, 2, 3, 4, 5 };
 
             // Act
@@ -36,7 +36,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "NonExistingDirectory", "Test_Directory_Doesnt_Exist.json");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<int>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<int>();
             var dataToSave = new List<int> { 1, 2, 3, 4, 5 };
             string expectedData = JsonSerializer.Serialize(dataToSave), actualData = "Smth";
 
@@ -60,7 +60,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_Json_Data.json");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<int>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<int>();
             var dataToSave = new List<int> { 1, 2, 3, 4, 5 };
 
             // Act
@@ -76,7 +76,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_ValidData.json");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
 
             var peopleToSave = new List<TestPerson>
             {
@@ -98,7 +98,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_NonExistingFile.json");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
 
             // Act
             var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
@@ -114,7 +114,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_EmptyFile.json");
             Directory.CreateDirectory(DIRECTORY_PATH);
             File.WriteAllText(filepath, string.Empty);
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
 
             // Act
             var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
@@ -130,7 +130,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_InvalidJson.json");
             Directory.CreateDirectory(DIRECTORY_PATH);
             File.WriteAllText(filepath, "{ invalid json }");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
 
             // Act
             var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
@@ -144,7 +144,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_EmptyData.json");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
 
             var emptyList = new List<TestPerson>();
 
@@ -163,7 +163,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "NonExistingDirectory", "Test_File.json");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
 
             // Act
             var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
@@ -177,7 +177,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_LargeData.json");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
 
             var largeList = new List<TestPerson>();
             for (int i = 0; i < 10000; i++)
@@ -200,7 +200,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_LargeNumbersAndDates.json");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
 
             var dataWithLargeNumbersAndDates = new List<TestPerson>
             {
@@ -226,7 +226,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             Directory.CreateDirectory(DIRECTORY_PATH);
             File.WriteAllText(filepath, string.Empty);
 
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
 
             // Act
             try
@@ -248,7 +248,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_SpecialCharsData.json");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<TestPerson>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
 
             var specialCharsList = new List<TestPerson>
             {
@@ -269,7 +269,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_ValidRatingRecordData.json");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<RatingRecord>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<RatingRecord>();
 
             var ratingRecordsToSave = new List<RatingRecord>
             {
@@ -291,7 +291,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_ValidSavepointData.json");
-            var jsonEnumerableFileHandler = new JsonEnumerableFileHandler<Savepoint>();
+            var jsonEnumerableFileHandler = new JsosFileHandler<Savepoint>();
 
             var savepointsToSave = new List<Savepoint>
             {

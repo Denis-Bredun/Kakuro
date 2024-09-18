@@ -6,14 +6,14 @@ namespace Kakuro.Data_Access
 {
     public class SavepointRepository : IRepository<Savepoint>
     {
-        private IJsonEnumerableFileHandler<Savepoint> _jsonEnumerableFileHandler;
+        private IJsonFileHandler<Savepoint> _jsonEnumerableFileHandler;
         private readonly string _directoryPath;
         private readonly string _filename = "Savepoints.json";
         private readonly string _filepath;
 
         public int Count { private set; get; } = 0;
 
-        public SavepointRepository(IJsonEnumerableFileHandler<Savepoint> jsonEnumerableFileHandler, string directoryPath = "")
+        public SavepointRepository(IJsonFileHandler<Savepoint> jsonEnumerableFileHandler, string directoryPath = "")
         {
             _jsonEnumerableFileHandler = jsonEnumerableFileHandler;
             _directoryPath = directoryPath;

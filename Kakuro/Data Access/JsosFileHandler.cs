@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace Kakuro.Data_Access
 {
-    public class JsonEnumerableFileHandler<T> : IJsonEnumerableFileHandler<T>
+    public class JsosFileHandler<T> : IJsonFileHandler<T>
     {
         public IEnumerable<T> Load(string filepath)
         {

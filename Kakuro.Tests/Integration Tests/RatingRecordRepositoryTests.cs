@@ -7,12 +7,12 @@ namespace Kakuro.Tests.Integration_Tests
     public class RatingRecordRepositoryTests : IDisposable
     {
         private const string DIRECTORY_PATH = "..\\..\\..\\Integration Tests\\Files\\RatingRecordRepositoryTests\\";
-        private JsonEnumerableFileHandler<RatingRecord> _jsonEnumerableFileHandler;
+        private JsosFileHandler<RatingRecord> _jsonEnumerableFileHandler;
         private RatingRecordRepository _ratingRecordRepository;
 
         public RatingRecordRepositoryTests()
         {
-            _jsonEnumerableFileHandler = new JsonEnumerableFileHandler<RatingRecord>();
+            _jsonEnumerableFileHandler = new JsosFileHandler<RatingRecord>();
             _ratingRecordRepository = new RatingRecordRepository(_jsonEnumerableFileHandler, DIRECTORY_PATH);
         }
 
