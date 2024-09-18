@@ -21,30 +21,35 @@ namespace Kakuro.Data_Access
             _filepath = Path.Combine(_directoryPath, FILENAME);
         }
 
-        public void Add(Savepoint entity)
+        public bool Add(Savepoint entity)
         {
             if (entity == null)
-                return;
+                return false;
 
             var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
 
-            if (savepoints.Count(el => el.Id == entity.Id) != 0) // "el" stands for "element"
-                return;
+            if (savepoints.Count() == 10)
+                return false;
+
+            if (savepoints.Any(IsIdEqual(entity.Id)))
+                return false;
 
             savepoints = savepoints.Append(entity);
             Count++;
 
             _jsonEnumerableFileHandler.Save(savepoints, _filepath);
+            return true;
         }
 
+        // "el" stands for "element"
         public void Delete(int id)
         {
             var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
 
-            if (savepoints.Count(el => el.Id == id) == 0)
+            if (!savepoints.Any(IsIdEqual(id)))
                 return;
 
-            savepoints = savepoints.Where(el => el.Id != id); // "el" stands for "element"
+            savepoints = savepoints.Where(el => !IsIdEqual(id)(el));
             Count--;
 
             _jsonEnumerableFileHandler.Save(savepoints, _filepath);
@@ -54,26 +59,28 @@ namespace Kakuro.Data_Access
         {
             var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
 
-            if (savepoints.Count(el => el.Id == id) == 0)
-                return null;
-
-            return savepoints.FirstOrDefault(el => el.Id == id);
+            return savepoints.FirstOrDefault(IsIdEqual(id));
         }
 
         public void Update(Savepoint entity)
         {
             var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
 
-            if (entity == null || savepoints.Count(el => el.Id == entity.Id) == 0)
+            if (entity == null || !savepoints.Any(IsIdEqual(entity.Id)))
                 return;
 
-            var existingSavepoint = savepoints.FirstOrDefault(el => el.Id == entity.Id);
+            var existingSavepoint = savepoints.FirstOrDefault(IsIdEqual(entity.Id));
             if (existingSavepoint.Equals(entity))
                 return;
 
-            savepoints = savepoints.Select((el, id) => entity.Id == id ? entity : el);
+            savepoints = savepoints.Select(el => IsIdEqual(entity.Id)(el) ? entity : el);
 
             _jsonEnumerableFileHandler.Save(savepoints, _filepath);
+        }
+
+        private Func<Savepoint, bool> IsIdEqual(int id)
+        {
+            return el => el.Id == id; // "el" stands for "element"
         }
     }
 }
