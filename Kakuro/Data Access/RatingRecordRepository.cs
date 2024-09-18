@@ -7,9 +7,10 @@ namespace Kakuro.Data_Access
 {
     public class RatingRecordRepository : IReadAllRepository<RatingRecord, DifficultyLevels>
     {
-        private IJsonFileHandler<RatingRecord> _jsonEnumerableFileHandler;
-        private readonly string _directoryPath;
         private const string PART_OF_FILEPATH = ". Rating Table.json";
+        private readonly string _directoryPath;
+
+        private IJsonFileHandler<RatingRecord> _jsonEnumerableFileHandler;
 
         public RatingRecordRepository(IJsonFileHandler<RatingRecord> jsonEnumerableFileHandler, string directoryPath = "")
         {
