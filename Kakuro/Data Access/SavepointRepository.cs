@@ -6,6 +6,7 @@ namespace Kakuro.Data_Access
 {
     public class SavepointRepository : IRepository<Savepoint>
     {
+        private const int MAX_COUNT = 10;
         private const string FILENAME = "Savepoints.json";
         private readonly string _directoryPath;
         private readonly string _filepath;
@@ -28,7 +29,7 @@ namespace Kakuro.Data_Access
 
             var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
 
-            if (savepoints.Count() == 10)
+            if (savepoints.Count() == MAX_COUNT)
                 return false;
 
             if (savepoints.Any(IsIdEqual(entity.Id)))

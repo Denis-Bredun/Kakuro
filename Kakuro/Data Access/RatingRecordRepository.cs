@@ -7,6 +7,7 @@ namespace Kakuro.Data_Access
 {
     public class RatingRecordRepository : IReadAllRepository<RatingRecord, DifficultyLevels>
     {
+        private const int MAX_COUNT_FOR_EACH_DIFFICULTY = 10;
         private const string PART_OF_FILEPATH = ". Rating Table.json";
         private readonly string _directoryPath;
 
@@ -24,9 +25,19 @@ namespace Kakuro.Data_Access
                 return;
 
             string filepath = FormFilepath(key);
-            var ratingTableConcreteDifficulty = GetAll(key);
-            ratingTableConcreteDifficulty = ratingTableConcreteDifficulty.Append(entity);
+            var ratingTableConcreteDifficulty = GetAll(key).ToList();
+            ratingTableConcreteDifficulty.Add(entity);
+
+            SortAndRemoveExcess(ratingTableConcreteDifficulty);
+
             _jsonEnumerableFileHandler.Save(ratingTableConcreteDifficulty, filepath);
+        }
+
+        private void SortAndRemoveExcess(List<RatingRecord> ratingRecords)
+        {
+            ratingRecords.Sort();
+            if (ratingRecords.Count > MAX_COUNT_FOR_EACH_DIFFICULTY)
+                ratingRecords.RemoveAt(MAX_COUNT_FOR_EACH_DIFFICULTY);
         }
 
         public IEnumerable<RatingRecord> GetAll(DifficultyLevels key)

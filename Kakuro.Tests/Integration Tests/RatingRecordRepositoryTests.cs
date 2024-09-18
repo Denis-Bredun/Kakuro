@@ -218,5 +218,96 @@ namespace Kakuro.Tests.Integration_Tests
             var savedRecords = _ratingRecordRepository.GetAll(DifficultyLevels.Easy).ToList();
             Assert.Equal(initialRecords.Count, savedRecords.Count);
         }
+
+        [Fact]
+        public void Should_NotAddMoreThanTenRecords_When_AddingMoreThanLimit()
+        {
+            // Arrange
+            var random = new Random();
+            var records = Enumerable.Range(1, 10).Select(i => new RatingRecord
+            {
+                GameCompletionTime = new TimeOnly(random.Next(0, 24), random.Next(0, 60)),
+                GameCompletionDate = new DateOnly(2024, 1, 1)
+            }).ToList();
+
+            foreach (var record in records)
+                _ratingRecordRepository.Add(record, DifficultyLevels.Easy);
+
+            var newRecord = new RatingRecord
+            {
+                GameCompletionTime = new TimeOnly(23, 59),
+                GameCompletionDate = new DateOnly(2024, 1, 2)
+            };
+
+            // Act
+            _ratingRecordRepository.Add(newRecord, DifficultyLevels.Easy);
+
+            // Assert
+            var savedRecords = _ratingRecordRepository.GetAll(DifficultyLevels.Easy).ToList();
+            Assert.Equal(10, savedRecords.Count);
+            Assert.DoesNotContain(newRecord, savedRecords);
+        }
+
+        [Fact]
+        public void Should_SortRecords_When_AddingMultipleRandomRecords()
+        {
+            // Arrange
+            var random = new Random();
+            var records = Enumerable.Range(1, 8).Select(i => new RatingRecord
+            {
+                GameCompletionTime = new TimeOnly(random.Next(0, 24), random.Next(0, 60)),
+                GameCompletionDate = new DateOnly(2024, 1, 1)
+            }).ToList();
+
+            foreach (var record in records)
+                _ratingRecordRepository.Add(record, DifficultyLevels.Easy);
+
+            // Act
+            var sortedRecords = _ratingRecordRepository.GetAll(DifficultyLevels.Easy).ToList();
+
+            // Assert
+            Assert.Equal(records.Count, sortedRecords.Count);
+
+            for (int i = 0; i < sortedRecords.Count - 1; i++)
+                Assert.True(sortedRecords[i].GameCompletionTime < sortedRecords[i + 1].GameCompletionTime);
+        }
+
+        [Fact]
+        public void Should_SortRecordsAndNotAddMoreThanTen_When_AddingNewRecord()
+        {
+            // Arrange
+            var random = new Random();
+
+            var initialRecords = Enumerable.Range(1, 10).Select(i => new RatingRecord
+            {
+                GameCompletionTime = new TimeOnly(random.Next(0, 24), random.Next(0, 60)),
+                GameCompletionDate = new DateOnly(2024, 1, 1)
+            }).ToList();
+
+            foreach (var record in initialRecords)
+            {
+                _ratingRecordRepository.Add(record, DifficultyLevels.Easy);
+            }
+
+            var newRecord = new RatingRecord
+            {
+                GameCompletionTime = new TimeOnly(23, 59),
+                GameCompletionDate = new DateOnly(2024, 1, 2)
+            };
+
+            // Act
+            _ratingRecordRepository.Add(newRecord, DifficultyLevels.Easy);
+
+            // Assert
+            var savedRecords = _ratingRecordRepository.GetAll(DifficultyLevels.Easy).ToList();
+
+            Assert.Equal(10, savedRecords.Count);
+
+            Assert.DoesNotContain(newRecord, savedRecords);
+
+            for (int i = 0; i < savedRecords.Count - 1; i++)
+                Assert.True(savedRecords[i].GameCompletionTime < savedRecords[i + 1].GameCompletionTime);
+        }
+
     }
 }
