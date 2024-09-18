@@ -16,7 +16,7 @@ namespace Kakuro.Data_Access
         public RatingRecordRepository(IJsonFileHandler<RatingRecord> jsonEnumerableFileHandler, string directoryPath = "")
         {
             _jsonEnumerableFileHandler = jsonEnumerableFileHandler;
-            _directoryPath = string.IsNullOrWhiteSpace(directoryPath) ? "Rating Tables\\" : directoryPath;
+            _directoryPath = FormDirectorypath(directoryPath);
         }
 
         public void Add(RatingRecord entity, DifficultyLevels key)
@@ -33,13 +33,6 @@ namespace Kakuro.Data_Access
             _jsonEnumerableFileHandler.Save(ratingTableConcreteDifficulty, filepath);
         }
 
-        private void SortAndRemoveExcess(List<RatingRecord> ratingRecords)
-        {
-            ratingRecords.Sort();
-            if (ratingRecords.Count > MAX_COUNT_FOR_EACH_DIFFICULTY)
-                ratingRecords.RemoveAt(MAX_COUNT_FOR_EACH_DIFFICULTY);
-        }
-
         public IEnumerable<RatingRecord> GetAll(DifficultyLevels key)
         {
             string filepath = FormFilepath(key);
@@ -47,5 +40,16 @@ namespace Kakuro.Data_Access
         }
 
         private string FormFilepath(DifficultyLevels level) => Path.Combine(_directoryPath, level.ToString() + PART_OF_FILEPATH);
+
+        private string FormDirectorypath(string directoryPath) => string.IsNullOrWhiteSpace(directoryPath) ? "Rating Tables\\" : directoryPath;
+
+        private void SortAndRemoveExcess(List<RatingRecord> ratingRecords)
+        {
+            ratingRecords.Sort();
+            if (IsExceedingMaxCount(ratingRecords.Count))
+                ratingRecords.RemoveAt(MAX_COUNT_FOR_EACH_DIFFICULTY);
+        }
+
+        private bool IsExceedingMaxCount(int count) => count > MAX_COUNT_FOR_EACH_DIFFICULTY;
     }
 }

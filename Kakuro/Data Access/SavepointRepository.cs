@@ -29,10 +29,7 @@ namespace Kakuro.Data_Access
 
             var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
 
-            if (savepoints.Count() == MAX_COUNT)
-                return false;
-
-            if (savepoints.Any(IsIdEqual(entity.Id)))
+            if (IsInvalidState(savepoints, entity.Id))
                 return false;
 
             savepoints = savepoints.Append(entity);
@@ -47,10 +44,10 @@ namespace Kakuro.Data_Access
         {
             var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
 
-            if (!savepoints.Any(IsIdEqual(id)))
+            if (!IsDuplicateId(savepoints, id))
                 return;
 
-            savepoints = savepoints.Where(el => !IsIdEqual(id)(el));
+            savepoints = savepoints.Where(GetRemoveByIdSelector(id));
             Count--;
 
             _jsonEnumerableFileHandler.Save(savepoints, _filepath);
@@ -67,21 +64,40 @@ namespace Kakuro.Data_Access
         {
             var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
 
-            if (entity == null || !savepoints.Any(IsIdEqual(entity.Id)))
+            if (IsUnableToUpdate(savepoints, entity))
                 return;
 
             var existingSavepoint = savepoints.FirstOrDefault(IsIdEqual(entity.Id));
             if (existingSavepoint.Equals(entity))
                 return;
 
-            savepoints = savepoints.Select(el => IsIdEqual(entity.Id)(el) ? entity : el);
+            savepoints = savepoints.Select(GetUpdatedSavepointSelector(entity.Id, entity));
 
             _jsonEnumerableFileHandler.Save(savepoints, _filepath);
         }
+
+        private bool IsUnableToUpdate(IEnumerable<Savepoint> savepoints, Savepoint entity) => entity == null || !IsDuplicateId(savepoints, entity.Id);
+
+        private bool IsInvalidState(IEnumerable<Savepoint> savepoints, int id) => IsMaxCountReached(savepoints) || IsDuplicateId(savepoints, id);
+
+        private bool IsMaxCountReached(IEnumerable<Savepoint> savepoints) => savepoints.Count() == MAX_COUNT;
+
+        private bool IsDuplicateId(IEnumerable<Savepoint> savepoints, int id) => savepoints.Any(IsIdEqual(id));
 
         private Func<Savepoint, bool> IsIdEqual(int id)
         {
             return el => el.Id == id; // "el" stands for "element"
         }
+
+        private Func<Savepoint, bool> GetRemoveByIdSelector(int id)
+        {
+            return el => !IsIdEqual(id)(el);
+        }
+
+        private Func<Savepoint, Savepoint> GetUpdatedSavepointSelector(int id, Savepoint newEntity)
+        {
+            return el => IsIdEqual(id)(el) ? newEntity : el;
+        }
+
     }
 }

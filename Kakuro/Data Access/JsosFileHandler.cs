@@ -8,11 +8,12 @@ namespace Kakuro.Data_Access
     {
         public IEnumerable<T> Load(string filepath)
         {
-            if (string.IsNullOrEmpty(filepath) || !File.Exists(filepath))
+            if (IsInvalidFile(filepath))
                 return new List<T>();
 
             var jsonData = File.ReadAllText(filepath);
             List<T>? deserializedData;
+
             try
             {
                 deserializedData = JsonSerializer.Deserialize<List<T>>(jsonData);
@@ -27,15 +28,26 @@ namespace Kakuro.Data_Access
 
         public void Save(IEnumerable<T> data, string filepath)
         {
-            if (data == null || string.IsNullOrEmpty(filepath))
+            if (AreInvalidSaveParameters(data, filepath))
                 return;
 
-            var directory = Path.GetDirectoryName(filepath);
-            if (!string.IsNullOrEmpty(directory) && !Directory.Exists(directory))
-                Directory.CreateDirectory(directory);
+            EnsureDirectoryExists(filepath);
 
             var jsonData = JsonSerializer.Serialize(data);
             File.WriteAllText(filepath, jsonData);
         }
+
+        private void EnsureDirectoryExists(string filepath)
+        {
+            var directory = Path.GetDirectoryName(filepath);
+            if (!IsEmptyPath(directory) && !Directory.Exists(directory))
+                Directory.CreateDirectory(directory);
+        }
+
+        private bool IsEmptyPath(string filepath) => string.IsNullOrEmpty(filepath);
+
+        private bool IsInvalidFile(string filepath) => IsEmptyPath(filepath) || !File.Exists(filepath);
+
+        private bool AreInvalidSaveParameters(IEnumerable<T> data, string filepath) => data == null || IsEmptyPath(filepath);
     }
 }
