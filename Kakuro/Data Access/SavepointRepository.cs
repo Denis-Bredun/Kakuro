@@ -11,13 +11,13 @@ namespace Kakuro.Data_Access
         private readonly string _directoryPath;
         private readonly string _filepath;
 
-        private IJsonFileHandler<Savepoint> _jsonEnumerableFileHandler;
+        private IJsonFileHandler<Savepoint> _jsonFileHandler;
 
         public int Count { private set; get; } = 0;
 
         public SavepointRepository(IJsonFileHandler<Savepoint> jsonEnumerableFileHandler, string directoryPath = "")
         {
-            _jsonEnumerableFileHandler = jsonEnumerableFileHandler;
+            _jsonFileHandler = jsonEnumerableFileHandler;
             _directoryPath = directoryPath;
             _filepath = Path.Combine(_directoryPath, FILENAME);
         }
@@ -27,7 +27,7 @@ namespace Kakuro.Data_Access
             if (entity == null)
                 return false;
 
-            var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
+            var savepoints = _jsonFileHandler.Load(_filepath);
 
             if (IsInvalidState(savepoints, entity.Id))
                 return false;
@@ -35,14 +35,14 @@ namespace Kakuro.Data_Access
             savepoints = savepoints.Append(entity);
             Count++;
 
-            _jsonEnumerableFileHandler.Save(savepoints, _filepath);
+            _jsonFileHandler.Save(savepoints, _filepath);
             return true;
         }
 
         // "el" stands for "element"
         public void Delete(int id)
         {
-            var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
+            var savepoints = _jsonFileHandler.Load(_filepath);
 
             if (!IsDuplicateId(savepoints, id))
                 return;
@@ -50,19 +50,19 @@ namespace Kakuro.Data_Access
             savepoints = savepoints.Where(GetRemoveByIdSelector(id));
             Count--;
 
-            _jsonEnumerableFileHandler.Save(savepoints, _filepath);
+            _jsonFileHandler.Save(savepoints, _filepath);
         }
 
         public Savepoint? GetById(int id)
         {
-            var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
+            var savepoints = _jsonFileHandler.Load(_filepath);
 
             return savepoints.FirstOrDefault(IsIdEqual(id));
         }
 
         public void Update(Savepoint entity)
         {
-            var savepoints = _jsonEnumerableFileHandler.Load(_filepath);
+            var savepoints = _jsonFileHandler.Load(_filepath);
 
             if (IsUnableToUpdate(savepoints, entity))
                 return;
@@ -73,7 +73,7 @@ namespace Kakuro.Data_Access
 
             savepoints = savepoints.Select(GetUpdatedSavepointSelector(entity.Id, entity));
 
-            _jsonEnumerableFileHandler.Save(savepoints, _filepath);
+            _jsonFileHandler.Save(savepoints, _filepath);
         }
 
         private bool IsUnableToUpdate(IEnumerable<Savepoint> savepoints, Savepoint entity) => entity == null || !IsDuplicateId(savepoints, entity.Id);
@@ -84,20 +84,11 @@ namespace Kakuro.Data_Access
 
         private bool IsDuplicateId(IEnumerable<Savepoint> savepoints, int id) => savepoints.Any(IsIdEqual(id));
 
-        private Func<Savepoint, bool> IsIdEqual(int id)
-        {
-            return el => el.Id == id; // "el" stands for "element"
-        }
+        private Func<Savepoint, bool> IsIdEqual(int id) => el => el.Id == id; // "el" stands for "element"
 
-        private Func<Savepoint, bool> GetRemoveByIdSelector(int id)
-        {
-            return el => !IsIdEqual(id)(el);
-        }
+        private Func<Savepoint, bool> GetRemoveByIdSelector(int id) => el => !IsIdEqual(id)(el);
 
-        private Func<Savepoint, Savepoint> GetUpdatedSavepointSelector(int id, Savepoint newEntity)
-        {
-            return el => IsIdEqual(id)(el) ? newEntity : el;
-        }
+        private Func<Savepoint, Savepoint> GetUpdatedSavepointSelector(int id, Savepoint newEntity) => el => IsIdEqual(id)(el) ? newEntity : el;
 
     }
 }

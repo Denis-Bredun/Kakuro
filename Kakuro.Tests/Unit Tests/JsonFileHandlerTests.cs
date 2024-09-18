@@ -19,11 +19,11 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_Save_Data.json");
-            var jsonEnumerableFileHandler = new JsosFileHandler<int>();
+            var jsonFileHandler = new JsosFileHandler<int>();
             var dataToSave = new List<int> { 1, 2, 3, 4, 5 };
 
             // Act
-            jsonEnumerableFileHandler.Save(dataToSave, filepath);
+            jsonFileHandler.Save(dataToSave, filepath);
             var savedContent = File.ReadAllText(filepath);
 
             // Assert
@@ -36,14 +36,14 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "NonExistingDirectory", "Test_Directory_Doesnt_Exist.json");
-            var jsonEnumerableFileHandler = new JsosFileHandler<int>();
+            var jsonFileHandler = new JsosFileHandler<int>();
             var dataToSave = new List<int> { 1, 2, 3, 4, 5 };
             string expectedData = JsonSerializer.Serialize(dataToSave), actualData = "Smth";
 
             // Act
             try
             {
-                jsonEnumerableFileHandler.Save(dataToSave, filepath);
+                jsonFileHandler.Save(dataToSave, filepath);
                 actualData = JsonSerializer.Serialize(dataToSave);
             }
             catch (Exception)
@@ -60,12 +60,12 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_Json_Data.json");
-            var jsonEnumerableFileHandler = new JsosFileHandler<int>();
+            var jsonFileHandler = new JsosFileHandler<int>();
             var dataToSave = new List<int> { 1, 2, 3, 4, 5 };
 
             // Act
-            jsonEnumerableFileHandler.Save(dataToSave, filepath);
-            var loadedData = jsonEnumerableFileHandler.Load(filepath);
+            jsonFileHandler.Save(dataToSave, filepath);
+            var loadedData = jsonFileHandler.Load(filepath);
 
             // Assert
             Assert.Equivalent(dataToSave, loadedData);
@@ -76,7 +76,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_ValidData.json");
-            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsosFileHandler<TestPerson>();
 
             var peopleToSave = new List<TestPerson>
             {
@@ -84,10 +84,10 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             new TestPerson { Id = 2, Name = "Bob", Money = 1500.0, Description = "Description B", Time = DateTime.Now }
             };
 
-            jsonEnumerableFileHandler.Save(peopleToSave, filepath);
+            jsonFileHandler.Save(peopleToSave, filepath);
 
             // Act
-            var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
+            var loadedPeople = jsonFileHandler.Load(filepath);
 
             // Assert
             Assert.Equivalent(peopleToSave, loadedPeople);
@@ -98,10 +98,10 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_NonExistingFile.json");
-            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsosFileHandler<TestPerson>();
 
             // Act
-            var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
+            var loadedPeople = jsonFileHandler.Load(filepath);
 
             // Assert
             Assert.Empty(loadedPeople);
@@ -114,10 +114,10 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_EmptyFile.json");
             Directory.CreateDirectory(DIRECTORY_PATH);
             File.WriteAllText(filepath, string.Empty);
-            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsosFileHandler<TestPerson>();
 
             // Act
-            var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
+            var loadedPeople = jsonFileHandler.Load(filepath);
 
             // Assert
             Assert.Empty(loadedPeople);
@@ -130,10 +130,10 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_InvalidJson.json");
             Directory.CreateDirectory(DIRECTORY_PATH);
             File.WriteAllText(filepath, "{ invalid json }");
-            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsosFileHandler<TestPerson>();
 
             // Act
-            var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
+            var loadedPeople = jsonFileHandler.Load(filepath);
 
             // Assert
             Assert.Empty(loadedPeople);
@@ -144,12 +144,12 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_EmptyData.json");
-            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsosFileHandler<TestPerson>();
 
             var emptyList = new List<TestPerson>();
 
             // Act
-            jsonEnumerableFileHandler.Save(emptyList, filepath);
+            jsonFileHandler.Save(emptyList, filepath);
 
             var savedContent = File.ReadAllText(filepath);
             var deserializedPeople = JsonSerializer.Deserialize<List<TestPerson>>(savedContent);
@@ -163,10 +163,10 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "NonExistingDirectory", "Test_File.json");
-            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsosFileHandler<TestPerson>();
 
             // Act
-            var loadedPeople = jsonEnumerableFileHandler.Load(filepath);
+            var loadedPeople = jsonFileHandler.Load(filepath);
 
             // Assert
             Assert.Empty(loadedPeople);
@@ -177,7 +177,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_LargeData.json");
-            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsosFileHandler<TestPerson>();
 
             var largeList = new List<TestPerson>();
             for (int i = 0; i < 10000; i++)
@@ -186,7 +186,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             }
 
             // Act
-            jsonEnumerableFileHandler.Save(largeList, filepath);
+            jsonFileHandler.Save(largeList, filepath);
 
             var savedContent = File.ReadAllText(filepath);
             var deserializedPeople = JsonSerializer.Deserialize<List<TestPerson>>(savedContent);
@@ -200,7 +200,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_LargeNumbersAndDates.json");
-            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsosFileHandler<TestPerson>();
 
             var dataWithLargeNumbersAndDates = new List<TestPerson>
             {
@@ -209,7 +209,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             };
 
             // Act
-            jsonEnumerableFileHandler.Save(dataWithLargeNumbersAndDates, filepath);
+            jsonFileHandler.Save(dataWithLargeNumbersAndDates, filepath);
 
             var savedContent = File.ReadAllText(filepath);
             var deserializedPeople = JsonSerializer.Deserialize<List<TestPerson>>(savedContent);
@@ -226,12 +226,12 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             Directory.CreateDirectory(DIRECTORY_PATH);
             File.WriteAllText(filepath, string.Empty);
 
-            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsosFileHandler<TestPerson>();
 
             // Act
             try
             {
-                jsonEnumerableFileHandler.Save(null, filepath);
+                jsonFileHandler.Save(null, filepath);
             }
             catch (ArgumentNullException)
             {
@@ -248,7 +248,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_SpecialCharsData.json");
-            var jsonEnumerableFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsosFileHandler<TestPerson>();
 
             var specialCharsList = new List<TestPerson>
             {
@@ -257,8 +257,8 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
             };
 
             // Act
-            jsonEnumerableFileHandler.Save(specialCharsList, filepath);
-            var loadedData = jsonEnumerableFileHandler.Load(filepath);
+            jsonFileHandler.Save(specialCharsList, filepath);
+            var loadedData = jsonFileHandler.Load(filepath);
 
             // Assert
             Assert.Equivalent(specialCharsList, loadedData);
@@ -269,7 +269,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_ValidRatingRecordData.json");
-            var jsonEnumerableFileHandler = new JsosFileHandler<RatingRecord>();
+            var jsonFileHandler = new JsosFileHandler<RatingRecord>();
 
             var ratingRecordsToSave = new List<RatingRecord>
             {
@@ -277,10 +277,10 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
                 new RatingRecord { GameCompletionTime = new TimeOnly(14, 20, 30), GameCompletionDate = new DateOnly(2024, 1, 10) }
             };
 
-            jsonEnumerableFileHandler.Save(ratingRecordsToSave, filepath);
+            jsonFileHandler.Save(ratingRecordsToSave, filepath);
 
             // Act
-            var loadedRatingRecords = jsonEnumerableFileHandler.Load(filepath);
+            var loadedRatingRecords = jsonFileHandler.Load(filepath);
 
             // Assert
             Assert.Equivalent(ratingRecordsToSave, loadedRatingRecords);
@@ -291,7 +291,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_ValidSavepointData.json");
-            var jsonEnumerableFileHandler = new JsosFileHandler<Savepoint>();
+            var jsonFileHandler = new JsosFileHandler<Savepoint>();
 
             var savepointsToSave = new List<Savepoint>
             {
@@ -315,10 +315,10 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
                 }
             };
 
-            jsonEnumerableFileHandler.Save(savepointsToSave, filepath);
+            jsonFileHandler.Save(savepointsToSave, filepath);
 
             // Act
-            var loadedSavepoints = jsonEnumerableFileHandler.Load(filepath);
+            var loadedSavepoints = jsonFileHandler.Load(filepath);
 
             // Assert
             Assert.Equivalent(savepointsToSave, loadedSavepoints);

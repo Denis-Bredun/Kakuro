@@ -7,13 +7,13 @@ namespace Kakuro.Tests.Integration_Tests
     public class RatingRecordRepositoryTests : IDisposable
     {
         private const string DIRECTORY_PATH = "..\\..\\..\\Integration Tests\\Files\\RatingRecordRepositoryTests\\";
-        private JsosFileHandler<RatingRecord> _jsonEnumerableFileHandler;
+        private JsosFileHandler<RatingRecord> _jsonFileHandler;
         private RatingRecordRepository _ratingRecordRepository;
 
         public RatingRecordRepositoryTests()
         {
-            _jsonEnumerableFileHandler = new JsosFileHandler<RatingRecord>();
-            _ratingRecordRepository = new RatingRecordRepository(_jsonEnumerableFileHandler, DIRECTORY_PATH);
+            _jsonFileHandler = new JsosFileHandler<RatingRecord>();
+            _ratingRecordRepository = new RatingRecordRepository(_jsonFileHandler, DIRECTORY_PATH);
         }
 
         public void Dispose()
@@ -196,7 +196,7 @@ namespace Kakuro.Tests.Integration_Tests
         {
             // Arrange
             var readOnlyDirectoryPath = "C:\\Windows";
-            var readOnlyRepository = new RatingRecordRepository(_jsonEnumerableFileHandler, readOnlyDirectoryPath);
+            var readOnlyRepository = new RatingRecordRepository(_jsonFileHandler, readOnlyDirectoryPath);
             var ratingRecord = new RatingRecord
             {
                 GameCompletionTime = new TimeOnly(10, 0),

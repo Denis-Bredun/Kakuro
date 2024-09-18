@@ -8,13 +8,13 @@ namespace Kakuro.Tests.Integration_Tests
         private const string DIRECTORY_PATH = "..\\..\\..\\Integration Tests\\Files\\SavepointRepositoryTests\\";
         private readonly string _filename = "Savepoints.json";
         private readonly string _filepath;
-        private JsosFileHandler<Savepoint> _jsonEnumerableFileHandler;
+        private JsosFileHandler<Savepoint> _jsonFileHandler;
         private SavepointRepository _savepointRepository;
 
         public SavepointRepositoryTests()
         {
-            _jsonEnumerableFileHandler = new JsosFileHandler<Savepoint>();
-            _savepointRepository = new SavepointRepository(_jsonEnumerableFileHandler, DIRECTORY_PATH);
+            _jsonFileHandler = new JsosFileHandler<Savepoint>();
+            _savepointRepository = new SavepointRepository(_jsonFileHandler, DIRECTORY_PATH);
             _filepath = Path.Combine(DIRECTORY_PATH, _filename);
         }
 
@@ -32,10 +32,10 @@ namespace Kakuro.Tests.Integration_Tests
             {
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
-            {
-                new DashboardItem { Value = 5 },
-                new DashboardItem { Value = 3 }
-            }
+                {
+                    new DashboardItem { Value = 5 },
+                    new DashboardItem { Value = 3 }
+                }
             };
 
             // Act
@@ -44,7 +44,7 @@ namespace Kakuro.Tests.Integration_Tests
             // Assert
             Assert.True(result);
 
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Single(savedSavepoints);
             Assert.Equal(savepoint.Id, savedSavepoints[0].Id);
             Assert.Equal(savepoint.DashboardItems[0].Value, savedSavepoints[0].DashboardItems[0].Value);
@@ -55,7 +55,7 @@ namespace Kakuro.Tests.Integration_Tests
         public void Should_NotAddSavepoint_When_NullSavepointProvided()
         {
             // Arrange
-            var initialSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var initialSavepoints = _jsonFileHandler.Load(_filepath).ToList();
 
             // Act
             var result = _savepointRepository.Add(null);
@@ -63,7 +63,7 @@ namespace Kakuro.Tests.Integration_Tests
             // Assert
             Assert.False(result);
 
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Equal(initialSavepoints.Count, savedSavepoints.Count);
         }
 
@@ -99,7 +99,7 @@ namespace Kakuro.Tests.Integration_Tests
             Assert.True(result1);
             Assert.True(result2);
 
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Equal(2, savedSavepoints.Count);
 
             Assert.Equal(savepoint1.Id, savedSavepoints[0].Id);
@@ -131,7 +131,7 @@ namespace Kakuro.Tests.Integration_Tests
             // Assert
             Assert.True(result);
 
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Single(savedSavepoints);
             Assert.Empty(savedSavepoints[0].DashboardItems);
         }
@@ -155,7 +155,7 @@ namespace Kakuro.Tests.Integration_Tests
             // Assert
             Assert.True(result);
 
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Single(savedSavepoints);
             Assert.Equal(savepoint.DashboardItems[0].Notes, savedSavepoints[0].DashboardItems[0].Notes);
         }
@@ -179,7 +179,7 @@ namespace Kakuro.Tests.Integration_Tests
             // Assert
             Assert.True(result);
 
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Single(savedSavepoints);
             Assert.Null(savedSavepoints[0].DashboardItems[0].Value);
         }
@@ -214,7 +214,7 @@ namespace Kakuro.Tests.Integration_Tests
             Assert.True(trueResult);
             Assert.False(falseResult);
 
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Single(savedSavepoints);
             var savedSavepoint = savedSavepoints.First();
             Assert.Equal(savepoint1.Id, savedSavepoint.Id);
@@ -256,7 +256,7 @@ namespace Kakuro.Tests.Integration_Tests
             // Assert
             Assert.False(result);
 
-            var allSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var allSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Equal(10, allSavepoints.Count);
         }
 
@@ -358,7 +358,7 @@ namespace Kakuro.Tests.Integration_Tests
             _savepointRepository.Delete(0);
 
             // Act
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
 
             // Assert
             Assert.Single(savedSavepoints);
@@ -377,7 +377,7 @@ namespace Kakuro.Tests.Integration_Tests
             _savepointRepository.Delete(999);
 
             // Act
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
 
             // Assert
             Assert.Equal(2, savedSavepoints.Count);
@@ -397,7 +397,7 @@ namespace Kakuro.Tests.Integration_Tests
             _savepointRepository.Delete(-1);
 
             // Act
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
 
             // Assert
             Assert.Equal(2, savedSavepoints.Count);
@@ -419,7 +419,7 @@ namespace Kakuro.Tests.Integration_Tests
             _savepointRepository.Delete(1);
 
             // Act
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
 
             // Assert
             Assert.Equal(2, savedSavepoints.Count);
@@ -454,7 +454,7 @@ namespace Kakuro.Tests.Integration_Tests
             _savepointRepository.Delete(1);
 
             // Act
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
 
             // Assert
             Assert.Single(savedSavepoints);
@@ -473,7 +473,7 @@ namespace Kakuro.Tests.Integration_Tests
             _savepointRepository.Delete(0);
 
             // Act
-            var savedSavepoints = _jsonEnumerableFileHandler.Load(_filepath).ToList();
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
 
             // Assert
             Assert.Single(savedSavepoints);

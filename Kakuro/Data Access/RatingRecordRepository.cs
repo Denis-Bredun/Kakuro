@@ -11,11 +11,11 @@ namespace Kakuro.Data_Access
         private const string PART_OF_FILEPATH = ". Rating Table.json";
         private readonly string _directoryPath;
 
-        private IJsonFileHandler<RatingRecord> _jsonEnumerableFileHandler;
+        private IJsonFileHandler<RatingRecord> _jsonFileHandler;
 
         public RatingRecordRepository(IJsonFileHandler<RatingRecord> jsonEnumerableFileHandler, string directoryPath = "")
         {
-            _jsonEnumerableFileHandler = jsonEnumerableFileHandler;
+            _jsonFileHandler = jsonEnumerableFileHandler;
             _directoryPath = FormDirectorypath(directoryPath);
         }
 
@@ -30,13 +30,13 @@ namespace Kakuro.Data_Access
 
             SortAndRemoveExcess(ratingTableConcreteDifficulty);
 
-            _jsonEnumerableFileHandler.Save(ratingTableConcreteDifficulty, filepath);
+            _jsonFileHandler.Save(ratingTableConcreteDifficulty, filepath);
         }
 
         public IEnumerable<RatingRecord> GetAll(DifficultyLevels key)
         {
             string filepath = FormFilepath(key);
-            return _jsonEnumerableFileHandler.Load(filepath);
+            return _jsonFileHandler.Load(filepath);
         }
 
         private string FormFilepath(DifficultyLevels level) => Path.Combine(_directoryPath, level.ToString() + PART_OF_FILEPATH);
