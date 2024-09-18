@@ -8,7 +8,7 @@
         public int CompareTo(RatingRecord? other)
         {
             if (other == null)
-                throw new ArgumentNullException(nameof(other), "The object to compare cannot be null.");
+                throw new ArgumentNullException("", "While sorting rating records, one was passed as null.");
 
             return GameCompletionTime.CompareTo(other.GameCompletionTime);
         }

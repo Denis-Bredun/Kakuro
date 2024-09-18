@@ -22,7 +22,7 @@ namespace Kakuro.Data_Access
         public void Add(RatingRecord entity, DifficultyLevels key)
         {
             if (entity == null)
-                return;
+                throw new NullReferenceException("Entity equals null");
 
             string filepath = FormFilepath(key);
             var ratingTableConcreteDifficulty = GetAll(key).ToList();

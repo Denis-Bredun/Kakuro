@@ -177,18 +177,14 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_NotSaveRecord_When_AddingNullRecord()
+        public void Should_ThrowNullReferenceException_When_AddingNullRecord()
         {
             // Arrange
             DifficultyLevels difficultyLevel = DifficultyLevels.Normal;
-            var initialRecords = _ratingRecordRepository.GetAll(difficultyLevel).ToList();
 
-            // Act
-            _ratingRecordRepository.Add(null, difficultyLevel);
-
-            // Assert
-            var savedRecords = _ratingRecordRepository.GetAll(difficultyLevel).ToList();
-            Assert.Equal(initialRecords.Count, savedRecords.Count);
+            // Act & Assert
+            var exception = Assert.Throws<NullReferenceException>(() => _ratingRecordRepository.Add(null, difficultyLevel));
+            Assert.Equal("Entity equals null", exception.Message);
         }
 
         [Fact]

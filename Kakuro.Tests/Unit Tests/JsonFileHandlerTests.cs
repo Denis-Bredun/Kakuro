@@ -2,7 +2,7 @@
 using Kakuro.Models;
 using System.Text.Json;
 
-namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
+namespace Kakuro.Tests.Unit_Tests
 {
     public class JsonFileHandlerTests : IDisposable
     {
@@ -219,7 +219,7 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
         }
 
         [Fact]
-        public void Should_NotSaveData_When_NullDataIsPassed()
+        public void Should_ThrowArgumentException_When_NullDataIsPassed()
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_NullData.json");
@@ -228,19 +228,9 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
 
             var jsonFileHandler = new JsosFileHandler<TestPerson>();
 
-            // Act
-            try
-            {
-                jsonFileHandler.Save(null, filepath);
-            }
-            catch (ArgumentNullException)
-            {
-                // Ignoring exception, because we just want to check the file after catching it
-            }
-
-            // Assert
-            var fileContent = File.ReadAllText(filepath);
-            Assert.Empty(fileContent);
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => jsonFileHandler.Save(null, filepath));
+            Assert.Equal("Invalid data or filepath", exception.Message);
         }
 
         [Fact]
@@ -322,6 +312,32 @@ namespace Kakuro.Tests.Unit_Tests.Functionality_tests.Data_Access
 
             // Assert
             Assert.Equivalent(savepointsToSave, loadedSavepoints);
+        }
+
+        [Fact]
+        public void Should_ThrowArgumentNullException_When_FilePathIsNull()
+        {
+            // Arrange
+            var jsonFileHandler = new JsosFileHandler<Savepoint>();
+            var savepoints = new List<Savepoint>
+            {
+                new Savepoint
+                {
+                    Id = 0,
+                    DashboardItems = new List<DashboardItem>
+                    {
+                        new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    }
+                }
+            };
+
+            string nullFilePath = null;
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => jsonFileHandler.Save(savepoints, nullFilePath));
+
+            // Assert
+            Assert.Equal("Invalid data or filepath", exception.Message);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Kakuro.Data_Access
         public void Save(IEnumerable<T> data, string filepath)
         {
             if (AreInvalidSaveParameters(data, filepath))
-                return;
+                throw new ArgumentException("Invalid data or filepath");
 
             EnsureDirectoryExists(filepath);
 
@@ -40,13 +40,14 @@ namespace Kakuro.Data_Access
         private void EnsureDirectoryExists(string filepath)
         {
             var directory = Path.GetDirectoryName(filepath);
-            if (!IsEmptyPath(directory) && !Directory.Exists(directory))
+            if (IsDirectoryNeeded(directory))
                 Directory.CreateDirectory(directory);
         }
 
         private bool IsEmptyPath(string filepath) => string.IsNullOrEmpty(filepath);
 
         private bool IsInvalidFile(string filepath) => IsEmptyPath(filepath) || !File.Exists(filepath);
+        private bool IsDirectoryNeeded(string directory) => !IsEmptyPath(directory) && !Directory.Exists(directory);
 
         private bool AreInvalidSaveParameters(IEnumerable<T> data, string filepath) => data == null || IsEmptyPath(filepath);
     }

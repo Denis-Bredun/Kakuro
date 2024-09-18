@@ -25,7 +25,7 @@ namespace Kakuro.Data_Access
         public bool Add(Savepoint entity)
         {
             if (entity == null)
-                return false;
+                throw new NullReferenceException("Entity equals null.");
 
             var savepoints = _jsonFileHandler.Load(_filepath);
 
@@ -45,7 +45,7 @@ namespace Kakuro.Data_Access
             var savepoints = _jsonFileHandler.Load(_filepath);
 
             if (!IsDuplicateId(savepoints, id))
-                return;
+                throw new ArgumentException("Savepoint with such ID wasn't found.");
 
             savepoints = savepoints.Where(GetRemoveByIdSelector(id));
             Count--;
@@ -57,28 +57,45 @@ namespace Kakuro.Data_Access
         {
             var savepoints = _jsonFileHandler.Load(_filepath);
 
-            return savepoints.FirstOrDefault(IsIdEqual(id));
+            var foundSavepoint = savepoints.FirstOrDefault(IsIdEqual(id));
+
+            if (foundSavepoint == null)
+                throw new NullReferenceException("Entity with such ID doesn't exist.");
+            else
+                return foundSavepoint;
         }
 
         public void Update(Savepoint entity)
         {
             var savepoints = _jsonFileHandler.Load(_filepath);
 
-            if (IsUnableToUpdate(savepoints, entity))
-                return;
+            CheckIfUnableToUpdate(savepoints, entity);
 
             var existingSavepoint = savepoints.FirstOrDefault(IsIdEqual(entity.Id));
             if (existingSavepoint.Equals(entity))
-                return;
+                return;         // i don't throw exception, because in user's opinion everything is okay and an update is done. Business logic, lmao
 
             savepoints = savepoints.Select(GetUpdatedSavepointSelector(entity.Id, entity));
 
             _jsonFileHandler.Save(savepoints, _filepath);
         }
 
-        private bool IsUnableToUpdate(IEnumerable<Savepoint> savepoints, Savepoint entity) => entity == null || !IsDuplicateId(savepoints, entity.Id);
+        private void CheckIfUnableToUpdate(IEnumerable<Savepoint> savepoints, Savepoint entity)
+        {
+            if (entity == null)
+                throw new NullReferenceException("Entity equals null.");
+            if (!IsDuplicateId(savepoints, entity.Id))
+                throw new ArgumentException("Savepoint with such ID wasn't found.");
+        }
 
-        private bool IsInvalidState(IEnumerable<Savepoint> savepoints, int id) => IsMaxCountReached(savepoints) || IsDuplicateId(savepoints, id);
+        private bool IsInvalidState(IEnumerable<Savepoint> savepoints, int id)
+        {
+            if (IsMaxCountReached(savepoints))
+                return true;
+            if (IsDuplicateId(savepoints, id))
+                throw new ArgumentException("Entity with such ID already exists!");
+            return false;
+        }
 
         private bool IsMaxCountReached(IEnumerable<Savepoint> savepoints) => savepoints.Count() == MAX_COUNT;
 

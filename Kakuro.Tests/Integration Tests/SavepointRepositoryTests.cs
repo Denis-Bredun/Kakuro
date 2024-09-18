@@ -52,16 +52,16 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_NotAddSavepoint_When_NullSavepointProvided()
+        public void Should_ThrowNullReferenceException_When_NullSavepointProvided()
         {
             // Arrange
             var initialSavepoints = _jsonFileHandler.Load(_filepath).ToList();
 
-            // Act
-            var result = _savepointRepository.Add(null);
+            // Act & Assert
+            var exception = Assert.Throws<NullReferenceException>(() => _savepointRepository.Add(null));
 
             // Assert
-            Assert.False(result);
+            Assert.Equal("Entity equals null.", exception.Message);
 
             var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Equal(initialSavepoints.Count, savedSavepoints.Count);
@@ -185,7 +185,7 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_NotAddSavepoint_When_SavepointWithDuplicateIdIsGiven()
+        public void Should_ThrowArgumentException_When_SavepointWithDuplicateIdIsGiven()
         {
             // Arrange
             var savepoint1 = new Savepoint
@@ -207,12 +207,11 @@ namespace Kakuro.Tests.Integration_Tests
             };
 
             // Act
-            var trueResult = _savepointRepository.Add(savepoint1);
-            var falseResult = _savepointRepository.Add(savepoint2);
+            _savepointRepository.Add(savepoint1);
+            var exception = Assert.Throws<ArgumentException>(() => _savepointRepository.Add(savepoint2));
 
             // Assert
-            Assert.True(trueResult);
-            Assert.False(falseResult);
+            Assert.Equal("Entity with such ID already exists!", exception.Message);
 
             var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Single(savedSavepoints);
@@ -366,7 +365,7 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_NotDelete_When_IdIsOutOfRange()
+        public void Should_ThrowArgumentException_When_DeleteAndIdIsOutOfRange()
         {
             // Arrange
             var savepoint1 = new Savepoint { Id = 0, DashboardItems = new List<DashboardItem>() };
@@ -374,19 +373,21 @@ namespace Kakuro.Tests.Integration_Tests
 
             _savepointRepository.Add(savepoint1);
             _savepointRepository.Add(savepoint2);
-            _savepointRepository.Delete(999);
 
             // Act
-            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
+            var exception = Assert.Throws<ArgumentException>(() => _savepointRepository.Delete(999));
 
             // Assert
+            Assert.Equal("Savepoint with such ID wasn't found.", exception.Message);
+
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Equal(2, savedSavepoints.Count);
             Assert.True(savedSavepoints.Count(el => el.Id == savepoint1.Id) == 1);
             Assert.True(savedSavepoints.Count(el => el.Id == savepoint2.Id) == 1);
         }
 
         [Fact]
-        public void Should_NotDelete_When_IdIsNegative()
+        public void Should_ThrowArgumentException_When_DeleteIdIsNegative()
         {
             // Arrange
             var savepoint1 = new Savepoint { Id = 0, DashboardItems = new List<DashboardItem>() };
@@ -394,12 +395,14 @@ namespace Kakuro.Tests.Integration_Tests
 
             _savepointRepository.Add(savepoint1);
             _savepointRepository.Add(savepoint2);
-            _savepointRepository.Delete(-1);
 
             // Act
-            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
+            var exception = Assert.Throws<ArgumentException>(() => _savepointRepository.Delete(-1));
 
             // Assert
+            Assert.Equal("Savepoint with such ID wasn't found.", exception.Message);
+
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Equal(2, savedSavepoints.Count);
             Assert.True(savedSavepoints.Count(el => el.Id == savepoint1.Id) == 1);
             Assert.True(savedSavepoints.Count(el => el.Id == savepoint2.Id) == 1);
@@ -429,20 +432,20 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_HandleEmptyRepository_When_DeleteIsCalled()
+        public void Should_ThrowArgumentException_When_DeletingFromEmptyRepository()
         {
             // Arrange
-            // Our reposiitory is empty
+            // Repository is empty
 
-            // Act
-            _savepointRepository.Delete(0);
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => _savepointRepository.Delete(0));
 
-            // Assert
+            Assert.Equal("Savepoint with such ID wasn't found.", exception.Message);
             Assert.Equal(0, _savepointRepository.Count);
         }
 
         [Fact]
-        public void Should_HandleDelete_When_DeleteAlreadyDeletedSavepoint()
+        public void Should_ThrowArgumentException_When_DeletingAlreadyDeletedSavepoint()
         {
             // Arrange
             var savepoint1 = new Savepoint { Id = 0, DashboardItems = new List<DashboardItem>() };
@@ -451,12 +454,13 @@ namespace Kakuro.Tests.Integration_Tests
             _savepointRepository.Add(savepoint1);
             _savepointRepository.Add(savepoint2);
             _savepointRepository.Delete(1);
-            _savepointRepository.Delete(1);
 
-            // Act
-            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => _savepointRepository.Delete(1));
 
             // Assert
+            Assert.Equal("Savepoint with such ID wasn't found.", exception.Message);
+            var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Single(savedSavepoints);
             Assert.True(savedSavepoints.Count(el => el.Id == savepoint1.Id) == 1);
         }
@@ -514,7 +518,7 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_NotUpdateSavepoint_When_EntityIsNull()
+        public void Should_ThrowNullReferenceException_When_UpdatingNullSavepoint()
         {
             // Arrange
             var savepoint = new Savepoint
@@ -527,21 +531,21 @@ namespace Kakuro.Tests.Integration_Tests
             };
             _savepointRepository.Add(savepoint);
 
-            // Act
-            _savepointRepository.Update(null);
+            // Act & Assert
+            var exception = Assert.Throws<NullReferenceException>(() => _savepointRepository.Update(null));
 
             // Assert
+            Assert.Equal("Entity equals null.", exception.Message);
             var savedSavepoint = _savepointRepository.GetById(0);
             Assert.NotNull(savedSavepoint);
             Assert.Equal(2, savedSavepoint.DashboardItems.First().Value);
         }
 
         [Fact]
-        public void Should_NotUpdateSavepoint_When_SavepointDoesNotExist()
+        public void Should_ThrowArgumentException_When_UpdatingNonExistingSavepoint()
         {
             // Arrange
-            // We're assuming no savepoint with Id 1 exists
-
+            // We're assuming that savepoint with ID = 1 doesn't exist
             var savepoint = new Savepoint
             {
                 Id = 1,
@@ -551,12 +555,14 @@ namespace Kakuro.Tests.Integration_Tests
                 }
             };
 
-            // Act
-            _savepointRepository.Update(savepoint);
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => _savepointRepository.Update(savepoint));
 
             // Assert
-            var nonExistingSavepoint = _savepointRepository.GetById(1);
-            Assert.Null(nonExistingSavepoint);
+            Assert.Equal("Savepoint with such ID wasn't found.", exception.Message);
+
+            var exception2 = Assert.Throws<NullReferenceException>(() => _savepointRepository.GetById(1));
+            Assert.Equal("Entity with such ID doesn't exist.", exception2.Message);
         }
 
         [Fact]
@@ -625,7 +631,7 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_NotUpdateSavepoint_When_IdDoesNotMatch()
+        public void Should_ThrowArgumentException_When_IdDoesNotMatchOnUpdate()
         {
             // Arrange
             var savepoint1 = new Savepoint
@@ -646,10 +652,11 @@ namespace Kakuro.Tests.Integration_Tests
             };
             _savepointRepository.Add(savepoint1);
 
-            // Act
-            _savepointRepository.Update(wrongIdSavepoint);
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => _savepointRepository.Update(wrongIdSavepoint));
 
             // Assert
+            Assert.Equal("Savepoint with such ID wasn't found.", exception.Message);
             var actualSavepoint = _savepointRepository.GetById(0);
             Assert.NotNull(actualSavepoint);
             Assert.Equal(2, actualSavepoint.DashboardItems.First().Value);
@@ -745,7 +752,7 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_ReturnNull_When_GettingNonExistentSavepoint()
+        public void Should_ThrowNullReferenceException_When_GettingNonExistentSavepoint()
         {
             // Arrange
             var existingSavepoint = new Savepoint
@@ -758,15 +765,15 @@ namespace Kakuro.Tests.Integration_Tests
             };
             _savepointRepository.Add(existingSavepoint);
 
-            // Act
-            var result = _savepointRepository.GetById(999);
+            // Act & Assert
+            var exception = Assert.Throws<NullReferenceException>(() => _savepointRepository.GetById(999));
 
             // Assert
-            Assert.Null(result);
+            Assert.Equal("Entity with such ID doesn't exist.", exception.Message);
         }
 
         [Fact]
-        public void Should_ReturnNull_When_GettingSavepointWithNegativeId()
+        public void Should_ThrowNullReferenceException_When_GettingSavepointWithNegativeId()
         {
             // Arrange
             var existingSavepoint = new Savepoint
@@ -779,21 +786,21 @@ namespace Kakuro.Tests.Integration_Tests
             };
             _savepointRepository.Add(existingSavepoint);
 
-            // Act
-            var result = _savepointRepository.GetById(-1);
+            // Act & Assert
+            var exception = Assert.Throws<NullReferenceException>(() => _savepointRepository.GetById(-1));
 
             // Assert
-            Assert.Null(result);
+            Assert.Equal("Entity with such ID doesn't exist.", exception.Message);
         }
 
         [Fact]
-        public void Should_ReturnNull_When_RepositoryIsEmpty()
+        public void Should_ThrowNullReferenceException_When_RepositoryIsEmpty()
         {
-            // Act
-            var result = _savepointRepository.GetById(0);
+            // Act & Assert
+            var exception = Assert.Throws<NullReferenceException>(() => _savepointRepository.GetById(0));
 
             // Assert
-            Assert.Null(result);
+            Assert.Equal("Entity with such ID doesn't exist.", exception.Message);
         }
 
         [Fact]
@@ -834,32 +841,33 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_GetFirstSavepoint_When_DuplicateIdsAdded()
+        public void Should_ThrowArgumentException_When_DuplicateIdAdded()
         {
             // Arrange
             var savepoint1 = new Savepoint
             {
                 Id = 1,
                 DashboardItems = new List<DashboardItem>
-            {
-                new DashboardItem { Value = 5, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
-            }
+                {
+                    new DashboardItem { Value = 5, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                }
             };
             var savepoint2 = new Savepoint
             {
                 Id = 1, // Duplicate ID
                 DashboardItems = new List<DashboardItem>
-            {
-                new DashboardItem { Value = 10, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
-            }
+                {
+                    new DashboardItem { Value = 10, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
+                }
             };
             _savepointRepository.Add(savepoint1);
-            _savepointRepository.Add(savepoint2); // wasn't added
 
-            // Act
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => _savepointRepository.Add(savepoint2));
+            Assert.Equal("Entity with such ID already exists!", exception.Message);
+
+            // We're ensuring that original savepoint was not altered
             var result = _savepointRepository.GetById(1);
-
-            // Assert
             Assert.NotNull(result);
             Assert.Equal(savepoint1.Id, result.Id);
             Assert.Equal(savepoint1.DashboardItems, result.DashboardItems);
