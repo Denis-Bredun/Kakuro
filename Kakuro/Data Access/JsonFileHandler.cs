@@ -37,6 +37,11 @@ namespace Kakuro.Data_Access
             File.WriteAllText(filepath, jsonData);
         }
 
+        public void Dispose()
+        {
+            // Resources cleaning
+        }
+
         private void EnsureDirectoryExists(string filepath)
         {
             var directory = Path.GetDirectoryName(filepath);
@@ -47,6 +52,7 @@ namespace Kakuro.Data_Access
         private bool IsEmptyPath(string filepath) => string.IsNullOrEmpty(filepath);
 
         private bool IsInvalidFile(string filepath) => IsEmptyPath(filepath) || !File.Exists(filepath);
+
         private bool IsDirectoryNeeded(string directory) => !IsEmptyPath(directory) && !Directory.Exists(directory);
 
         private bool AreInvalidSaveParameters(IEnumerable<T> data, string filepath) => data == null || IsEmptyPath(filepath);
