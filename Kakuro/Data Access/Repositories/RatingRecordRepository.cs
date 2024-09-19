@@ -1,9 +1,10 @@
 ﻿using Kakuro.Enums;
-using Kakuro.Interfaces.Data_Access;
+using Kakuro.Interfaces.Data_Access.Repositories;
+using Kakuro.Interfaces.Data_Access.Tools;
 using Kakuro.Models;
 using System.IO;
 
-namespace Kakuro.Data_Access
+namespace Kakuro.Data_Access.Repositories
 {
     public class RatingRecordRepository : IReadAllRepository<RatingRecord, DifficultyLevels>
     {

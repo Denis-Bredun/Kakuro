@@ -1,4 +1,4 @@
-﻿namespace Kakuro.Interfaces.Data_Access
+﻿namespace Kakuro.Interfaces.Data_Access.Tools
 {
     public interface IFilesHandler<T, F>
     {

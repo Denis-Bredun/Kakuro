@@ -1,8 +1,8 @@
-﻿using Kakuro.Interfaces.Data_Access;
+﻿using Kakuro.Interfaces.Data_Access.Tools;
 using System.IO;
 using System.Text.Json;
 
-namespace Kakuro.Data_Access
+namespace Kakuro.Data_Access.Tools
 {
     public class JsonFileHandler<T> : IJsonFileHandler<T>
     {

@@ -1,4 +1,5 @@
-﻿using Kakuro.Data_Access;
+﻿using Kakuro.Data_Access.Repositories;
+using Kakuro.Data_Access.Tools;
 using Kakuro.Enums;
 using Kakuro.Models;
 

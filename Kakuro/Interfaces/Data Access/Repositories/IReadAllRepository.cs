@@ -1,4 +1,4 @@
-﻿namespace Kakuro.Interfaces.Data_Access
+﻿namespace Kakuro.Interfaces.Data_Access.Repositories
 {
     public interface IReadAllRepository<T, F>
     {

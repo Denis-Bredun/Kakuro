@@ -1,8 +1,9 @@
 ﻿using Kakuro.Enums;
-using Kakuro.Interfaces.Data_Access;
+using Kakuro.Interfaces.Data_Access.Data_Providers;
+using Kakuro.Interfaces.Data_Access.Repositories;
 using Kakuro.Models;
 
-namespace Kakuro.Data_Access
+namespace Kakuro.Data_Access.Data_Providers
 {
     public class RatingRecordProvider : IRatingRecordProvider
     {
