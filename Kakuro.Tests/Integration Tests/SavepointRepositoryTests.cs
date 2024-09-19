@@ -8,12 +8,12 @@ namespace Kakuro.Tests.Integration_Tests
         private const string DIRECTORY_PATH = "..\\..\\..\\Integration Tests\\Files\\SavepointRepositoryTests\\";
         private readonly string _filename = "Savepoints.json";
         private readonly string _filepath;
-        private JsosFileHandler<Savepoint> _jsonFileHandler;
+        private JsonFileHandler<Savepoint> _jsonFileHandler;
         private SavepointRepository _savepointRepository;
 
         public SavepointRepositoryTests()
         {
-            _jsonFileHandler = new JsosFileHandler<Savepoint>();
+            _jsonFileHandler = new JsonFileHandler<Savepoint>();
             _savepointRepository = new SavepointRepository(_jsonFileHandler, DIRECTORY_PATH);
             _filepath = Path.Combine(DIRECTORY_PATH, _filename);
         }

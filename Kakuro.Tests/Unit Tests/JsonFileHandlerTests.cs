@@ -19,7 +19,7 @@ namespace Kakuro.Tests.Unit_Tests
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_Save_Data.json");
-            var jsonFileHandler = new JsosFileHandler<int>();
+            var jsonFileHandler = new JsonFileHandler<int>();
             var dataToSave = new List<int> { 1, 2, 3, 4, 5 };
 
             // Act
@@ -36,7 +36,7 @@ namespace Kakuro.Tests.Unit_Tests
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "NonExistingDirectory", "Test_Directory_Doesnt_Exist.json");
-            var jsonFileHandler = new JsosFileHandler<int>();
+            var jsonFileHandler = new JsonFileHandler<int>();
             var dataToSave = new List<int> { 1, 2, 3, 4, 5 };
             string expectedData = JsonSerializer.Serialize(dataToSave), actualData = "Smth";
 
@@ -60,7 +60,7 @@ namespace Kakuro.Tests.Unit_Tests
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_Json_Data.json");
-            var jsonFileHandler = new JsosFileHandler<int>();
+            var jsonFileHandler = new JsonFileHandler<int>();
             var dataToSave = new List<int> { 1, 2, 3, 4, 5 };
 
             // Act
@@ -76,7 +76,7 @@ namespace Kakuro.Tests.Unit_Tests
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_ValidData.json");
-            var jsonFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsonFileHandler<TestPerson>();
 
             var peopleToSave = new List<TestPerson>
             {
@@ -98,7 +98,7 @@ namespace Kakuro.Tests.Unit_Tests
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_NonExistingFile.json");
-            var jsonFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsonFileHandler<TestPerson>();
 
             // Act
             var loadedPeople = jsonFileHandler.Load(filepath);
@@ -114,7 +114,7 @@ namespace Kakuro.Tests.Unit_Tests
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_EmptyFile.json");
             Directory.CreateDirectory(DIRECTORY_PATH);
             File.WriteAllText(filepath, string.Empty);
-            var jsonFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsonFileHandler<TestPerson>();
 
             // Act
             var loadedPeople = jsonFileHandler.Load(filepath);
@@ -130,7 +130,7 @@ namespace Kakuro.Tests.Unit_Tests
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_InvalidJson.json");
             Directory.CreateDirectory(DIRECTORY_PATH);
             File.WriteAllText(filepath, "{ invalid json }");
-            var jsonFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsonFileHandler<TestPerson>();
 
             // Act
             var loadedPeople = jsonFileHandler.Load(filepath);
@@ -144,7 +144,7 @@ namespace Kakuro.Tests.Unit_Tests
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_EmptyData.json");
-            var jsonFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsonFileHandler<TestPerson>();
 
             var emptyList = new List<TestPerson>();
 
@@ -163,7 +163,7 @@ namespace Kakuro.Tests.Unit_Tests
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "NonExistingDirectory", "Test_File.json");
-            var jsonFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsonFileHandler<TestPerson>();
 
             // Act
             var loadedPeople = jsonFileHandler.Load(filepath);
@@ -177,7 +177,7 @@ namespace Kakuro.Tests.Unit_Tests
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_LargeData.json");
-            var jsonFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsonFileHandler<TestPerson>();
 
             var largeList = new List<TestPerson>();
             for (int i = 0; i < 10000; i++)
@@ -200,7 +200,7 @@ namespace Kakuro.Tests.Unit_Tests
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_LargeNumbersAndDates.json");
-            var jsonFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsonFileHandler<TestPerson>();
 
             var dataWithLargeNumbersAndDates = new List<TestPerson>
             {
@@ -226,7 +226,7 @@ namespace Kakuro.Tests.Unit_Tests
             Directory.CreateDirectory(DIRECTORY_PATH);
             File.WriteAllText(filepath, string.Empty);
 
-            var jsonFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsonFileHandler<TestPerson>();
 
             // Act & Assert
             var exception = Assert.Throws<ArgumentException>(() => jsonFileHandler.Save(null, filepath));
@@ -238,7 +238,7 @@ namespace Kakuro.Tests.Unit_Tests
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_SpecialCharsData.json");
-            var jsonFileHandler = new JsosFileHandler<TestPerson>();
+            var jsonFileHandler = new JsonFileHandler<TestPerson>();
 
             var specialCharsList = new List<TestPerson>
             {
@@ -259,7 +259,7 @@ namespace Kakuro.Tests.Unit_Tests
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_ValidRatingRecordData.json");
-            var jsonFileHandler = new JsosFileHandler<RatingRecord>();
+            var jsonFileHandler = new JsonFileHandler<RatingRecord>();
 
             var ratingRecordsToSave = new List<RatingRecord>
             {
@@ -281,7 +281,7 @@ namespace Kakuro.Tests.Unit_Tests
         {
             // Arrange
             var filepath = Path.Combine(DIRECTORY_PATH, "Test_ValidSavepointData.json");
-            var jsonFileHandler = new JsosFileHandler<Savepoint>();
+            var jsonFileHandler = new JsonFileHandler<Savepoint>();
 
             var savepointsToSave = new List<Savepoint>
             {
@@ -318,7 +318,7 @@ namespace Kakuro.Tests.Unit_Tests
         public void Should_ThrowArgumentNullException_When_FilePathIsNull()
         {
             // Arrange
-            var jsonFileHandler = new JsosFileHandler<Savepoint>();
+            var jsonFileHandler = new JsonFileHandler<Savepoint>();
             var savepoints = new List<Savepoint>
             {
                 new Savepoint
