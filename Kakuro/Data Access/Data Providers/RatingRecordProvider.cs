@@ -36,15 +36,16 @@ namespace Kakuro.Data_Access.Data_Providers
 
         public IEnumerable<RatingRecord> GetAll(DifficultyLevels key)
         {
-            var ratingRecords = Cache[key];
-            if (ratingRecords == null)
-            {
-                ratingRecords = _dataService.GetAll(key);
+            bool isKeyInCache = IsKeyInCache(key);
+
+            var ratingRecords = isKeyInCache ? Cache[key] : _dataService.GetAll(key);
+
+            if (!isKeyInCache)
                 Cache.Add(key, ratingRecords);
-            }
+
             return ratingRecords;
         }
 
-        private bool IsKeyInCache(DifficultyLevels key) => Cache.Count(pair => pair.Key == key) != 0;
+        private bool IsKeyInCache(DifficultyLevels key) => Cache.ContainsKey(key);
     }
 }
