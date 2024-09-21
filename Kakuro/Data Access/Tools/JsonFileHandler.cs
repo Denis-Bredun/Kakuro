@@ -6,6 +6,9 @@ namespace Kakuro.Data_Access.Tools
 {
     public class JsonFileHandler<T> : IJsonFileHandler<T>
     {
+        // #BAD: We should STORE filepathes here, i guess. So we could keep "Fabric method" pattern implementation.
+        // I've mentioned it in IFilesHandler.cs. We shall not pass filepath straightfully
+
         public IEnumerable<T> Load(string filepath)
         {
             if (IsInvalidFile(filepath))

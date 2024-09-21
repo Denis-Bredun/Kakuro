@@ -5,47 +5,46 @@ using Kakuro.Models;
 
 namespace Kakuro.Data_Access.Data_Providers
 {
-    public class RatingRecordProvider : IRatingRecordProvider, IDisposable
+    public class RatingRecordProvider : IRatingRecordProvider
     {
         private IReadAllRepository<RatingRecord, DifficultyLevels> _dataService;
-        private Dictionary<DifficultyLevels, IEnumerable<RatingRecord>> _cache; // temporary improvisation of cache, lmao
-                                                                                // in the future, it's planned that cache here is cleaned every 5 min.
+        public Dictionary<DifficultyLevels, IEnumerable<RatingRecord>> Cache { private set; get; }
+        // #BAD: Only for tests I made cache public for reading. But it shouldn't be public any possible way.
+        // It should be available only inside the class.
+        // #BAD: it's a temporary solution for the cache mechanism. There's an IMemoryCache and I should use it instead.
+        // As an idea to make it create inside of this Data Provider, but to check it with mocks, we can
+        // implement "Fabric method" pattern, in theory. Answer was also given here: https://qna.habr.com/q/1371574
 
         public RatingRecordProvider(IReadAllRepository<RatingRecord, DifficultyLevels> dataService)
         {
             _dataService = dataService;
-            _cache = new Dictionary<DifficultyLevels, IEnumerable<RatingRecord>>();
+            Cache = new Dictionary<DifficultyLevels, IEnumerable<RatingRecord>>();
         }
 
-        // Too inefficient an operation. This is a temporary solution until a proper cache service is implemented.
-        // MVP, anyway.
+        // #BAD: too inefficient algorithm. We add record straightfully to files just so entities with properties of game 
+        // completion time could sort, then we read ALL the data and then we save it to the cache.
         public void Add(RatingRecord entity, DifficultyLevels key)
         {
             _dataService.Add(entity, key);
             var newRatingRecords = _dataService.GetAll(key);
 
             if (IsKeyInCache(key))
-                _cache.Remove(key);
+                Cache.Remove(key);
 
-            _cache.Add(key, newRatingRecords);
+            Cache.Add(key, newRatingRecords);
         }
 
         public IEnumerable<RatingRecord> GetAll(DifficultyLevels key)
         {
-            var ratingRecords = _cache[key];
+            var ratingRecords = Cache[key];
             if (ratingRecords == null)
             {
                 ratingRecords = _dataService.GetAll(key);
-                _cache.Add(key, ratingRecords);
+                Cache.Add(key, ratingRecords);
             }
             return ratingRecords;
         }
 
-        public void Dispose()
-        {
-            _cache.Clear(); // Honestly, I'm not sure if it's needed or not. Let it be here for some time.
-        }
-
-        private bool IsKeyInCache(DifficultyLevels key) => _cache.Count(pair => pair.Key == key) != 0;
+        private bool IsKeyInCache(DifficultyLevels key) => Cache.Count(pair => pair.Key == key) != 0;
     }
 }

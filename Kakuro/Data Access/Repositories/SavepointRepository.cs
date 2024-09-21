@@ -9,7 +9,9 @@ namespace Kakuro.Data_Access.Repositories
     {
         private const int MAX_COUNT = 10;
         private const string FILENAME = "Savepoints.json";
-        private readonly string _directoryPath;
+        private readonly string _directoryPath;         // #BAD: we shall not store data about filepathes, directories and
+                                                        // count of max files in repositories. Some sort of File Handler is
+                                                        // responsible for that
         private readonly string _filepath;
 
         private IJsonFileHandler<Savepoint> _jsonFileHandler;
