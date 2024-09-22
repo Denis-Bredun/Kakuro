@@ -26,10 +26,7 @@ namespace Kakuro.Data_Access.Data_Providers
             if (isSaved == false)
                 return isSaved;
 
-            Cache.Add(entity);
-
-            if (Cache.Count > MAX_CACHE_COUNT)
-                Cache.RemoveAt(0);
+            AddSavepointToCache(entity);
 
             return isSaved;
         }
@@ -37,17 +34,48 @@ namespace Kakuro.Data_Access.Data_Providers
         public void Delete(int id)
         {
             _dataService.Delete(id);
-            Cache.Dequeue(id);
+            Cache.Remove(GetById(id));
         }
 
         public Savepoint? GetById(int id)
         {
-            throw new NotImplementedException();
+            var foundSavepoint = Cache.FirstOrDefault(IsIdEqual(id));
+
+            if (foundSavepoint == null)
+            {
+                foundSavepoint = _dataService.GetById(id);
+                AddSavepointToCache(foundSavepoint);
+            }
+
+            return foundSavepoint;
         }
 
         public void Update(Savepoint entity)
         {
-            throw new NotImplementedException();
+            _dataService.Update(entity);
+
+            var cachedSavepoint = Cache.FirstOrDefault(IsIdEqual(entity.Id));
+
+            if (cachedSavepoint != null)
+            {
+                var index = Cache.IndexOf(cachedSavepoint);
+                Cache[index] = entity;
+            }
+            else
+            {
+                var updatedSavepoint = _dataService.GetById(entity.Id);
+                AddSavepointToCache(updatedSavepoint);
+            }
         }
+
+        private void AddSavepointToCache(Savepoint entity)
+        {
+            Cache.Add(entity);
+
+            if (Cache.Count > MAX_CACHE_COUNT)
+                Cache.RemoveAt(0);
+        }
+
+        private Func<Savepoint, bool> IsIdEqual(int id) => el => el.Id == id; // "el" stands for "element"
     }
 }
