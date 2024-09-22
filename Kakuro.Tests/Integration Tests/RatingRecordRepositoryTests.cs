@@ -161,23 +161,6 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_SaveAndRetrieveEmptyRecord_When_AddingRecordWithDefaultValues()
-        {
-            // Arrange
-            var emptyRecord = new RatingRecord();
-            DifficultyLevels difficultyLevel = DifficultyLevels.Easy;
-
-            // Act
-            _ratingRecordRepository.Add(emptyRecord, difficultyLevel);
-
-            // Assert
-            var savedRecords = _ratingRecordRepository.GetAll(difficultyLevel).ToList();
-            Assert.Single(savedRecords);
-            Assert.Equal(default, savedRecords[0].GameCompletionTime);
-            Assert.Equal(default, savedRecords[0].GameCompletionDate);
-        }
-
-        [Fact]
         public void Should_ThrowNullReferenceException_When_AddingNullRecord()
         {
             // Arrange
@@ -186,6 +169,18 @@ namespace Kakuro.Tests.Integration_Tests
             // Act & Assert
             var exception = Assert.Throws<NullReferenceException>(() => _ratingRecordRepository.Add(null, difficultyLevel));
             Assert.Equal("Entity equals null", exception.Message);
+        }
+
+        [Fact]
+        public void Should_ThrowArgumentException_When_AddingRecordWithDefaultValues()
+        {
+            // Arrange
+            var defaultRatingRecord = new RatingRecord() { GameCompletionDate = default, GameCompletionTime = default };
+            DifficultyLevels difficultyLevel = DifficultyLevels.Normal;
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => _ratingRecordRepository.Add(defaultRatingRecord, difficultyLevel));
+            Assert.Equal("Entity's properties cannot be null or default.", exception.Message);
         }
 
         [Fact]

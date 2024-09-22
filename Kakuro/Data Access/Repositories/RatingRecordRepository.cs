@@ -22,8 +22,7 @@ namespace Kakuro.Data_Access.Repositories
 
         public void Add(RatingRecord entity, DifficultyLevels key)
         {
-            if (entity == null)
-                throw new NullReferenceException("Entity equals null");
+            CheckIfEntityIsEmpty(entity);
 
             string filepath = FormFilepath(key);
             var ratingTableConcreteDifficulty = GetAll(key).ToList();
@@ -52,5 +51,13 @@ namespace Kakuro.Data_Access.Repositories
         }
 
         private bool IsExceedingMaxCount(int count) => count > MAX_COUNT_FOR_EACH_DIFFICULTY;
+
+        private void CheckIfEntityIsEmpty(RatingRecord entity)
+        {
+            if (entity == null)
+                throw new NullReferenceException("Entity equals null");
+            else if (entity.GameCompletionTime == default || entity.GameCompletionDate == default)
+                throw new ArgumentException("Entity's properties cannot be null or default.");
+        }
     }
 }

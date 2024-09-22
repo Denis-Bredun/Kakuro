@@ -7,10 +7,10 @@ namespace Kakuro.Data_Access.Data_Providers
 {
     public class RatingRecordProvider : IRatingRecordProvider
     {
-        private bool _isCacheSynchronizedWithFiles = true;
         private IReadAllRepository<RatingRecord, DifficultyLevels> _dataService;
+        public bool IsCacheSynchronizedWithFiles { private set; get; }
         public Dictionary<DifficultyLevels, IEnumerable<RatingRecord>> Cache { private set; get; }
-        // #BAD: Only for tests I made cache public for reading. But it shouldn't be public any possible way.
+        // #BAD: Only for tests I made cache and IsCacheSynchronizedWithFiles public for reading. But it shouldn't be public any possible way.
         // It should be available only inside the class.
         // #BAD: it's a temporary solution for the cache mechanism. There's an IMemoryCache and I should use it instead.
         // As an idea to make it create inside of this Data Provider, but to check it with mocks, we can
@@ -25,14 +25,14 @@ namespace Kakuro.Data_Access.Data_Providers
         public void Add(RatingRecord entity, DifficultyLevels key)
         {
             _dataService.Add(entity, key);
-            _isCacheSynchronizedWithFiles = false;
+            IsCacheSynchronizedWithFiles = false;
         }
 
         public IEnumerable<RatingRecord> GetAll(DifficultyLevels key)
         {
             IEnumerable<RatingRecord>? ratingRecords;
 
-            if (_isCacheSynchronizedWithFiles)
+            if (IsCacheSynchronizedWithFiles)
             {
                 Cache.TryGetValue(key, out ratingRecords);
 
@@ -44,7 +44,7 @@ namespace Kakuro.Data_Access.Data_Providers
 
                 Cache[key] = ratingRecords;         // we update cache ONLY when it's not synchronized with data
 
-                _isCacheSynchronizedWithFiles = true;
+                IsCacheSynchronizedWithFiles = true;
             }
 
             return ratingRecords;

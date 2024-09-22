@@ -27,128 +27,95 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_AddAndRetrieveRatingRecord_When_ValidDataIsProvided()
+        public void Should_AddRatingRecordToRepository_When_ValidEntityIsProvided()
         {
             // Arrange
             var ratingRecord = new RatingRecord
             {
                 GameCompletionTime = new TimeOnly(1, 30),
-                GameCompletionDate = new DateOnly(2024, 9, 18)
+                GameCompletionDate = new DateOnly(2024, 9, 19)
             };
-            var difficulty = DifficultyLevels.Normal;
+            var difficultyLevel = DifficultyLevels.Hard;
 
             // Act
-            _ratingRecordProvider.Add(ratingRecord, difficulty);
-            var records = _ratingRecordProvider.GetAll(difficulty).ToList();
+            _ratingRecordProvider.Add(ratingRecord, difficultyLevel);
 
             // Assert
-            Assert.Single(records);
-            Assert.Equal(ratingRecord.GameCompletionTime, records[0].GameCompletionTime);
-            Assert.Equal(ratingRecord.GameCompletionDate, records[0].GameCompletionDate);
+            var recordsFromRepository = _ratingRecordRepository.GetAll(difficultyLevel).ToList();
+            Assert.Contains(ratingRecord, recordsFromRepository);
         }
 
         [Fact]
-        public void Should_CacheRatingRecords_When_RatingRecordsAreFetched()
+        public void Should_SetIsCacheSynchronizedWithFilesToFalse_When_AddIsCalled()
         {
             // Arrange
             var ratingRecord = new RatingRecord
-            {
-                GameCompletionTime = new TimeOnly(1, 30),
-                GameCompletionDate = new DateOnly(2024, 9, 18)
-            };
-            var difficulty = DifficultyLevels.Hard;
-
-            // Act
-            _ratingRecordProvider.Add(ratingRecord, difficulty);
-
-            // First retrieval - should come from the repository and cache it
-            var recordsFromRepo = _ratingRecordProvider.GetAll(difficulty).ToList();
-
-            // Simulate cache hit - second retrieval should come from the cache
-            var cachedRecords = _ratingRecordProvider.GetAll(difficulty).ToList();
-
-            // Assert
-            Assert.Single(recordsFromRepo);
-            Assert.Single(cachedRecords);
-            Assert.Equal(recordsFromRepo.First().GameCompletionTime, cachedRecords.First().GameCompletionTime);
-        }
-
-        [Fact]
-        public void Should_ClearCache_When_NewRecordIsAdded()
-        {
-            // Arrange
-            var initialRecord = new RatingRecord
-            {
-                GameCompletionTime = new TimeOnly(1, 30),
-                GameCompletionDate = new DateOnly(2024, 9, 18)
-            };
-            var newRecord = new RatingRecord
             {
                 GameCompletionTime = new TimeOnly(2, 15),
                 GameCompletionDate = new DateOnly(2024, 9, 19)
             };
-            var difficulty = DifficultyLevels.Easy;
-
-            _ratingRecordProvider.Add(initialRecord, difficulty);
+            var difficultyLevel = DifficultyLevels.Normal;
 
             // Act
-            var initialCache = _ratingRecordProvider.GetAll(difficulty).ToList();
-
-            // Adding a new record should reset cache
-            _ratingRecordProvider.Add(newRecord, difficulty);
-            var updatedCache = _ratingRecordProvider.GetAll(difficulty).ToList();
+            _ratingRecordProvider.Add(ratingRecord, difficultyLevel);
 
             // Assert
-            Assert.Single(initialCache); // Only 1 in initial cache
-            Assert.Equal(2, updatedCache.Count); // Cache updated with both records
-            Assert.Contains(updatedCache, r => r.GameCompletionTime == newRecord.GameCompletionTime);
+            var cache = _ratingRecordProvider.Cache;
+            Assert.False(_ratingRecordProvider.IsCacheSynchronizedWithFiles);
+            Assert.False(cache.ContainsKey(difficultyLevel));
         }
 
         [Fact]
-        public void Should_ThrowException_When_NullRecordAdded()
-        {
-            // Arrange
-            var difficulty = DifficultyLevels.Normal;
-
-            // Act & Assert
-            Assert.Throws<NullReferenceException>(() => _ratingRecordProvider.Add(null, difficulty));
-        }
-
-        [Fact]
-        public void Should_ReturnEmptyCollection_When_NoRecordsExistForDifficulty()
-        {
-            // Arrange
-            var difficulty = DifficultyLevels.Hard;
-
-            // Act
-            var records = _ratingRecordProvider.GetAll(difficulty);
-
-            // Assert
-            Assert.Empty(records);
-        }
-
-        [Fact]
-        public void Should_NotDuplicateCache_When_SameKeyIsUsed()
+        public void Should_UpdateCache_When_GetAllIsCalledAfterAdd()
         {
             // Arrange
             var ratingRecord = new RatingRecord
             {
-                GameCompletionTime = new TimeOnly(1, 30),
-                GameCompletionDate = new DateOnly(2024, 9, 18)
+                GameCompletionTime = new TimeOnly(0, 45),
+                GameCompletionDate = new DateOnly(2024, 9, 19)
             };
-            var difficulty = DifficultyLevels.Normal;
+            var difficultyLevel = DifficultyLevels.Easy;
 
             // Act
-            _ratingRecordProvider.Add(ratingRecord, difficulty);
-            var recordsFirstFetch = _ratingRecordProvider.GetAll(difficulty).ToList();
-
-            // Fetching the same difficulty should not duplicate cache
-            var recordsSecondFetch = _ratingRecordProvider.GetAll(difficulty).ToList();
+            _ratingRecordProvider.Add(ratingRecord, difficultyLevel);
+            var records = _ratingRecordProvider.GetAll(difficultyLevel).ToList();
 
             // Assert
-            Assert.Single(recordsFirstFetch);
-            Assert.Single(recordsSecondFetch);
+            Assert.Contains(ratingRecord, records);
+            Assert.True(_ratingRecordProvider.IsCacheSynchronizedWithFiles);
+            Assert.True(_ratingRecordProvider.Cache.ContainsKey(difficultyLevel));
+            var cachedRecords = _ratingRecordProvider.Cache[difficultyLevel].ToList();
+            Assert.Equal(records.Count, cachedRecords.Count);
+            for (int i = 0; i < records.Count; i++)
+                Assert.Equal(records[i], cachedRecords[i]);
         }
 
+        [Fact]
+        public void Should_ThrowNullReferenceException_When_AddingNullEntity()
+        {
+            // Arrange
+            RatingRecord nullRatingRecord = null;
+            var difficultyLevel = DifficultyLevels.Hard;
+
+            // Act & Assert
+            var exception = Assert.Throws<NullReferenceException>(() =>
+                _ratingRecordProvider.Add(nullRatingRecord, difficultyLevel));
+
+            Assert.Equal("Entity equals null", exception.Message);
+        }
+
+        [Fact]
+        public void Should_ThrowArgumentException_When_AddingEntityWithDefaultValues()
+        {
+            // Arrange
+            RatingRecord nullRatingRecord = new RatingRecord() { GameCompletionDate = default, GameCompletionTime = default };
+            var difficultyLevel = DifficultyLevels.Hard;
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() =>
+                _ratingRecordProvider.Add(nullRatingRecord, difficultyLevel));
+
+            Assert.Equal("Entity's properties cannot be null or default.", exception.Message);
+        }
     }
 }
