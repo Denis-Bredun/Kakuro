@@ -32,18 +32,17 @@ namespace Kakuro.Data_Access.Data_Providers
         {
             IEnumerable<RatingRecord>? ratingRecords;
 
-            if (_isCacheSynchronizedWithFiles)             // We update cache only when needed: when we added new data last time
-                                                           // AND when we try to read the data.
+            if (_isCacheSynchronizedWithFiles)
             {
                 Cache.TryGetValue(key, out ratingRecords);
 
-                ratingRecords ??= _dataService.GetAll(key);
+                ratingRecords ??= _dataService.GetAll(key); // we read data from dataService ONLY when there's no data in Cache
             }
             else
             {
                 ratingRecords = _dataService.GetAll(key);
 
-                Cache[key] = ratingRecords;
+                Cache[key] = ratingRecords;         // we update cache ONLY when it's not synchronized with data
 
                 _isCacheSynchronizedWithFiles = true;
             }
