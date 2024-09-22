@@ -2,7 +2,9 @@
 using Kakuro.Data_Access.Repositories;
 using Kakuro.Data_Access.Tools;
 using Kakuro.Enums;
+using Kakuro.Interfaces.Data_Access.Repositories;
 using Kakuro.Models;
+using Moq;
 
 namespace Kakuro.Tests.Integration_Tests
 {
@@ -66,31 +68,6 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_UpdateCache_When_GetAllIsCalledAfterAdd()
-        {
-            // Arrange
-            var ratingRecord = new RatingRecord
-            {
-                GameCompletionTime = new TimeOnly(0, 45),
-                GameCompletionDate = new DateOnly(2024, 9, 19)
-            };
-            var difficultyLevel = DifficultyLevels.Easy;
-
-            // Act
-            _ratingRecordProvider.Add(ratingRecord, difficultyLevel);
-            var records = _ratingRecordProvider.GetAll(difficultyLevel).ToList();
-
-            // Assert
-            Assert.Contains(ratingRecord, records);
-            Assert.True(_ratingRecordProvider.IsCacheSynchronizedWithFiles);
-            Assert.True(_ratingRecordProvider.Cache.ContainsKey(difficultyLevel));
-            var cachedRecords = _ratingRecordProvider.Cache[difficultyLevel].ToList();
-            Assert.Equal(records.Count, cachedRecords.Count);
-            for (int i = 0; i < records.Count; i++)
-                Assert.Equal(records[i], cachedRecords[i]);
-        }
-
-        [Fact]
         public void Should_ThrowNullReferenceException_When_AddingNullEntity()
         {
             // Arrange
@@ -116,6 +93,93 @@ namespace Kakuro.Tests.Integration_Tests
                 _ratingRecordProvider.Add(nullRatingRecord, difficultyLevel));
 
             Assert.Equal("Entity's properties cannot be null or default.", exception.Message);
+        }
+
+
+        // #BAD: tests below are made in a hurry. I should tests here much more things using Moq. I'll refactor these tests in the future
+
+        [Fact]
+        public void Should_ReturnRecordsFromCache_When_CacheIsSynchronized()
+        {
+            // Arrange
+            var ratingRecord = new RatingRecord
+            {
+                GameCompletionTime = new TimeOnly(0, 45),
+                GameCompletionDate = new DateOnly(2024, 9, 19)
+            };
+            var difficultyLevel = DifficultyLevels.Easy;
+
+            var mockDataService = new Mock<IReadAllRepository<RatingRecord, DifficultyLevels>>();
+            mockDataService.Setup(m => m.GetAll(difficultyLevel)).Returns(new List<RatingRecord> { ratingRecord });
+
+            var ratingRecordProvider = new RatingRecordProvider(mockDataService.Object);
+            ratingRecordProvider.Add(ratingRecord, difficultyLevel);
+            ratingRecordProvider.GetAll(difficultyLevel);
+
+            // Act
+            var records = ratingRecordProvider.GetAll(difficultyLevel).ToList();
+
+            // Assert
+            Assert.Contains(ratingRecord, records);
+            Assert.True(ratingRecordProvider.Cache.ContainsKey(difficultyLevel));
+            Assert.True(ratingRecordProvider.IsCacheSynchronizedWithFiles);
+
+            mockDataService.Verify(m => m.GetAll(It.IsAny<DifficultyLevels>()), Times.Never);
+        }
+
+        [Fact]
+        public void Should_ReturnRecordsFromDataService_When_CacheIsNotSynchronized()
+        {
+            // Arrange
+            var ratingRecord = new RatingRecord
+            {
+                GameCompletionTime = new TimeOnly(0, 50),
+                GameCompletionDate = new DateOnly(2024, 9, 20)
+            };
+            var difficultyLevel = DifficultyLevels.Normal;
+
+            var mockDataService = new Mock<IReadAllRepository<RatingRecord, DifficultyLevels>>();
+            mockDataService.Setup(m => m.GetAll(difficultyLevel)).Returns(new List<RatingRecord> { ratingRecord });
+
+            var ratingRecordProvider = new RatingRecordProvider(mockDataService.Object);
+            ratingRecordProvider.Add(ratingRecord, difficultyLevel);
+
+            // Assert
+            Assert.False(ratingRecordProvider.Cache.ContainsKey(difficultyLevel));
+            Assert.False(ratingRecordProvider.IsCacheSynchronizedWithFiles);
+
+            // Act
+            var records = ratingRecordProvider.GetAll(difficultyLevel).ToList();
+
+            // Assert
+            Assert.Contains(ratingRecord, records);
+            Assert.True(ratingRecordProvider.Cache.ContainsKey(difficultyLevel));
+            Assert.True(ratingRecordProvider.IsCacheSynchronizedWithFiles);
+
+            mockDataService.Verify(m => m.GetAll(difficultyLevel), Times.Once);
+        }
+
+        [Fact]
+        public void Should_UpdateCache_When_GetAllIsCalledAfterCacheInvalidation()
+        {
+            // Arrange
+            var ratingRecord = new RatingRecord
+            {
+                GameCompletionTime = new TimeOnly(0, 55),
+                GameCompletionDate = new DateOnly(2024, 9, 21)
+            };
+            var difficultyLevel = DifficultyLevels.Hard;
+
+            _ratingRecordProvider.Add(ratingRecord, difficultyLevel);
+
+            // Act
+            var recordsBeforeInvalidation = _ratingRecordProvider.GetAll(difficultyLevel).ToList();
+            _ratingRecordProvider.Add(new RatingRecord { GameCompletionTime = new TimeOnly(1, 10), GameCompletionDate = new DateOnly(2024, 9, 22) }, difficultyLevel);
+            var recordsAfterInvalidation = _ratingRecordProvider.GetAll(difficultyLevel).ToList();
+
+            // Assert
+            Assert.True(recordsBeforeInvalidation.SequenceEqual(_ratingRecordProvider.Cache[difficultyLevel]));
+            Assert.NotEqual(recordsBeforeInvalidation, recordsAfterInvalidation);
         }
     }
 }
