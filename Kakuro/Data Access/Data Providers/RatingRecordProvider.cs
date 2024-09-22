@@ -7,6 +7,7 @@ namespace Kakuro.Data_Access.Data_Providers
 {
     public class RatingRecordProvider : IRatingRecordProvider
     {
+        private bool _isCacheSynchronizedWithFiles = true;
         private IReadAllRepository<RatingRecord, DifficultyLevels> _dataService;
         public Dictionary<DifficultyLevels, IEnumerable<RatingRecord>> Cache { private set; get; }
         // #BAD: Only for tests I made cache public for reading. But it shouldn't be public any possible way.
@@ -21,31 +22,33 @@ namespace Kakuro.Data_Access.Data_Providers
             Cache = new Dictionary<DifficultyLevels, IEnumerable<RatingRecord>>();
         }
 
-        // #BAD: too inefficient algorithm. We add record straightfully to files just so entities with properties of game 
-        // completion time could sort, then we read ALL the data and then we save it to the cache.
         public void Add(RatingRecord entity, DifficultyLevels key)
         {
             _dataService.Add(entity, key);
-            var newRatingRecords = _dataService.GetAll(key);
-
-            if (IsKeyInCache(key))
-                Cache.Remove(key);
-
-            Cache.Add(key, newRatingRecords);
+            _isCacheSynchronizedWithFiles = false;
         }
 
         public IEnumerable<RatingRecord> GetAll(DifficultyLevels key)
         {
-            bool isKeyInCache = IsKeyInCache(key);
+            IEnumerable<RatingRecord>? ratingRecords;
 
-            var ratingRecords = isKeyInCache ? Cache[key] : _dataService.GetAll(key);
+            if (_isCacheSynchronizedWithFiles)             // We update cache only when needed: when we added new data last time
+                                                           // AND when we try to read the data.
+            {
+                Cache.TryGetValue(key, out ratingRecords);
 
-            if (!isKeyInCache)
-                Cache.Add(key, ratingRecords);
+                ratingRecords ??= _dataService.GetAll(key);
+            }
+            else
+            {
+                ratingRecords = _dataService.GetAll(key);
+
+                Cache[key] = ratingRecords;
+
+                _isCacheSynchronizedWithFiles = true;
+            }
 
             return ratingRecords;
         }
-
-        private bool IsKeyInCache(DifficultyLevels key) => Cache.ContainsKey(key);
     }
 }
