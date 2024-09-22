@@ -8,7 +8,7 @@ namespace Kakuro.Data_Access.Data_Providers
     public class RatingRecordProvider : IRatingRecordProvider
     {
         private IReadAllRepository<RatingRecord, DifficultyLevels> _dataService;
-        public bool IsCacheSynchronizedWithFiles { private set; get; }
+        public Dictionary<DifficultyLevels, bool> IsCacheSynchronizedWithFiles { private set; get; }
         public Dictionary<DifficultyLevels, IEnumerable<RatingRecord>> Cache { private set; get; }
         // #BAD: Only for tests I made cache and IsCacheSynchronizedWithFiles public for reading. But it shouldn't be public any possible way.
         // It should be available only inside the class.
@@ -20,19 +20,23 @@ namespace Kakuro.Data_Access.Data_Providers
         {
             _dataService = dataService;
             Cache = new Dictionary<DifficultyLevels, IEnumerable<RatingRecord>>();
+            IsCacheSynchronizedWithFiles = new Dictionary<DifficultyLevels, bool>();
+            IsCacheSynchronizedWithFiles.Add(DifficultyLevels.Easy, true);
+            IsCacheSynchronizedWithFiles.Add(DifficultyLevels.Normal, true);
+            IsCacheSynchronizedWithFiles.Add(DifficultyLevels.Hard, true);
         }
 
         public void Add(RatingRecord entity, DifficultyLevels key)
         {
             _dataService.Add(entity, key);
-            IsCacheSynchronizedWithFiles = false;
+            IsCacheSynchronizedWithFiles[key] = false;
         }
 
         public IEnumerable<RatingRecord> GetAll(DifficultyLevels key)
         {
             IEnumerable<RatingRecord>? ratingRecords;
 
-            if (IsCacheSynchronizedWithFiles)
+            if (IsCacheSynchronizedWithFiles[key])
             {
                 Cache.TryGetValue(key, out ratingRecords);
 
@@ -44,7 +48,7 @@ namespace Kakuro.Data_Access.Data_Providers
 
                 Cache[key] = ratingRecords;         // we update cache ONLY when it's not synchronized with data
 
-                IsCacheSynchronizedWithFiles = true;
+                IsCacheSynchronizedWithFiles[key] = true;
             }
 
             return ratingRecords;

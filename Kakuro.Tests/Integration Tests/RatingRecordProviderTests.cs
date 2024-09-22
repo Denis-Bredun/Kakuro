@@ -63,7 +63,7 @@ namespace Kakuro.Tests.Integration_Tests
 
             // Assert
             var cache = _ratingRecordProvider.Cache;
-            Assert.False(_ratingRecordProvider.IsCacheSynchronizedWithFiles);
+            Assert.False(_ratingRecordProvider.IsCacheSynchronizedWithFiles[difficultyLevel]);
             Assert.False(cache.ContainsKey(difficultyLevel));
         }
 
@@ -122,9 +122,9 @@ namespace Kakuro.Tests.Integration_Tests
             // Assert
             Assert.Contains(ratingRecord, records);
             Assert.True(ratingRecordProvider.Cache.ContainsKey(difficultyLevel));
-            Assert.True(ratingRecordProvider.IsCacheSynchronizedWithFiles);
+            Assert.True(ratingRecordProvider.IsCacheSynchronizedWithFiles[difficultyLevel]);
 
-            mockDataService.Verify(m => m.GetAll(It.IsAny<DifficultyLevels>()), Times.Never);
+            mockDataService.Verify(m => m.GetAll(It.IsAny<DifficultyLevels>()), Times.Once); // Once - I mean the first time we call GetAll() just to get Cache synchronized
         }
 
         [Fact]
@@ -146,7 +146,7 @@ namespace Kakuro.Tests.Integration_Tests
 
             // Assert
             Assert.False(ratingRecordProvider.Cache.ContainsKey(difficultyLevel));
-            Assert.False(ratingRecordProvider.IsCacheSynchronizedWithFiles);
+            Assert.False(ratingRecordProvider.IsCacheSynchronizedWithFiles[difficultyLevel]);
 
             // Act
             var records = ratingRecordProvider.GetAll(difficultyLevel).ToList();
@@ -154,7 +154,7 @@ namespace Kakuro.Tests.Integration_Tests
             // Assert
             Assert.Contains(ratingRecord, records);
             Assert.True(ratingRecordProvider.Cache.ContainsKey(difficultyLevel));
-            Assert.True(ratingRecordProvider.IsCacheSynchronizedWithFiles);
+            Assert.True(ratingRecordProvider.IsCacheSynchronizedWithFiles[difficultyLevel]);
 
             mockDataService.Verify(m => m.GetAll(difficultyLevel), Times.Once);
         }
@@ -175,11 +175,155 @@ namespace Kakuro.Tests.Integration_Tests
             // Act
             var recordsBeforeInvalidation = _ratingRecordProvider.GetAll(difficultyLevel).ToList();
             _ratingRecordProvider.Add(new RatingRecord { GameCompletionTime = new TimeOnly(1, 10), GameCompletionDate = new DateOnly(2024, 9, 22) }, difficultyLevel);
+
+            // Assert: we check that cache still contains old records cuz' we didn't call GetAll(), so it's not updated
+            Assert.True(recordsBeforeInvalidation.SequenceEqual(_ratingRecordProvider.Cache[difficultyLevel]));
+
+            // Act: cache is being updated here
             var recordsAfterInvalidation = _ratingRecordProvider.GetAll(difficultyLevel).ToList();
 
-            // Assert
-            Assert.True(recordsBeforeInvalidation.SequenceEqual(_ratingRecordProvider.Cache[difficultyLevel]));
+            // Assert: now our cache equals recordsAfterInvalidation
+            Assert.True(recordsAfterInvalidation.SequenceEqual(_ratingRecordProvider.Cache[difficultyLevel]));
             Assert.NotEqual(recordsBeforeInvalidation, recordsAfterInvalidation);
+        }
+
+        [Fact]
+        public void Should_ReturnEmptyCollection_When_NoRecordsExistForDifficultyLevel()
+        {
+            // Arrange
+            var difficultyLevel = DifficultyLevels.Easy;
+
+            // Act
+            var records = _ratingRecordProvider.GetAll(difficultyLevel);
+
+            // Assert
+            Assert.Empty(records);
+            Assert.True(_ratingRecordProvider.IsCacheSynchronizedWithFiles[difficultyLevel]);
+        }
+
+        [Fact]
+        public void Should_ReturnRecords_When_MultipleRecordsExistForDifficultyLevel()
+        {
+            // Arrange
+            var difficultyLevel = DifficultyLevels.Easy;
+            var ratingRecord1 = new RatingRecord { GameCompletionTime = new TimeOnly(0, 30), GameCompletionDate = new DateOnly(2024, 9, 23) };
+            var ratingRecord2 = new RatingRecord { GameCompletionTime = new TimeOnly(1, 15), GameCompletionDate = new DateOnly(2024, 9, 24) };
+
+            _ratingRecordProvider.Add(ratingRecord1, difficultyLevel);
+            _ratingRecordProvider.Add(ratingRecord2, difficultyLevel);
+
+            // Act
+            var records = _ratingRecordProvider.GetAll(difficultyLevel).ToList();
+
+            // Assert
+            Assert.Contains(ratingRecord1, records);
+            Assert.Contains(ratingRecord2, records);
+            Assert.Equal(2, records.Count);
+        }
+
+        [Fact]
+        public void Should_UpdateCacheCorrectly_When_AddingRecordsWithDifferentDifficultyLevels()
+        {
+            // Arrange
+            var difficultyLevels = new[] { DifficultyLevels.Easy, DifficultyLevels.Normal, DifficultyLevels.Hard };
+            var ratingRecords = new Dictionary<DifficultyLevels, List<RatingRecord>>();
+
+            foreach (var level in difficultyLevels)
+                ratingRecords[level] = GenerateRandomRatingRecords(level, 3);
+
+            // Act
+            foreach (var difficultyLevel in difficultyLevels)
+                foreach (var record in ratingRecords[difficultyLevel])
+                    _ratingRecordProvider.Add(record, difficultyLevel);
+
+            // Assert
+            foreach (var difficultyLevel in difficultyLevels)
+            {
+                var records = _ratingRecordProvider.GetAll(difficultyLevel).ToList();
+
+                Assert.Equal(3, records.Count);
+                Assert.Contains(ratingRecords[difficultyLevel][0], records);
+                Assert.Contains(ratingRecords[difficultyLevel][1], records);
+                Assert.True(_ratingRecordProvider.Cache.ContainsKey(difficultyLevel));
+            }
+        }
+
+        [Fact]
+        public void Should_MaintainCacheState_When_ConsecutiveCallsToGetAllAreMade()
+        {
+            // Arrange
+            var difficultyLevel = DifficultyLevels.Normal;
+            var ratingRecord = new RatingRecord { GameCompletionTime = new TimeOnly(0, 45), GameCompletionDate = new DateOnly(2024, 9, 25) };
+
+            _ratingRecordProvider.Add(ratingRecord, difficultyLevel);
+            _ratingRecordProvider.GetAll(difficultyLevel); // First call to synchronize cache
+
+            // Act
+            var recordsFirstCall = _ratingRecordProvider.GetAll(difficultyLevel).ToList();
+            var recordsSecondCall = _ratingRecordProvider.GetAll(difficultyLevel).ToList();
+
+            // Assert
+            Assert.True(recordsFirstCall.SequenceEqual(recordsSecondCall));
+            Assert.True(_ratingRecordProvider.IsCacheSynchronizedWithFiles[difficultyLevel]);
+        }
+
+        [Fact]
+        public void Should_MaintainCacheState_When_AddingMultipleRecordsForDifferentDifficultyLevels()
+        {
+            // Arrange
+            var difficultyLevels = new[] { DifficultyLevels.Easy, DifficultyLevels.Normal, DifficultyLevels.Hard };
+            var ratingRecords = new Dictionary<DifficultyLevels, List<RatingRecord>>();
+
+            foreach (var level in difficultyLevels)
+                ratingRecords[level] = GenerateRandomRatingRecords(level, 3);
+
+            // Act and Assert for each difficulty level
+            foreach (var difficultyLevel in difficultyLevels)
+                AddRecordsAndValidateCache(difficultyLevel, ratingRecords[difficultyLevel]);
+        }
+
+        private List<RatingRecord> GenerateRandomRatingRecords(DifficultyLevels difficultyLevel, int count)
+        {
+            var random = new Random();
+            var records = new List<RatingRecord>();
+
+            for (int i = 0; i < count; i++)
+            {
+                var gameCompletionTime = new TimeOnly(random.Next(1, 24), random.Next(1, 60), random.Next(1, 60));
+                var gameCompletionDate = DateOnly.FromDateTime(DateTime.Now.AddDays(i));
+
+                records.Add(new RatingRecord
+                {
+                    GameCompletionTime = gameCompletionTime,
+                    GameCompletionDate = gameCompletionDate
+                });
+            }
+
+            return records;
+        }
+
+        private void AddRecordsAndValidateCache(DifficultyLevels difficultyLevel, List<RatingRecord> records)
+        {
+            for (int i = 0; i < records.Count; i++)
+            {
+                // Check cache state before adding
+                if (i == 0)
+                    Assert.False(_ratingRecordProvider.Cache.ContainsKey(difficultyLevel));
+
+                // Act
+                _ratingRecordProvider.Add(records[i], difficultyLevel);
+
+                // Check cache state after adding
+                Assert.False(_ratingRecordProvider.IsCacheSynchronizedWithFiles[difficultyLevel]);
+
+                // Act
+                var retrievedRecords = _ratingRecordProvider.GetAll(difficultyLevel).ToList();
+
+                // Assert
+                Assert.Contains(records[i], retrievedRecords);
+                Assert.True(_ratingRecordProvider.Cache.ContainsKey(difficultyLevel));
+                Assert.True(_ratingRecordProvider.IsCacheSynchronizedWithFiles[difficultyLevel]);
+            }
         }
     }
 }
