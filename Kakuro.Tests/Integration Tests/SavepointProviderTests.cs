@@ -441,7 +441,7 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void GetById_Should_ReturnCorrectCacheValue_AfterAddingAndDeleting()
+        public void Should_ReturnCorrectCacheValue_AfterAddingAndDeleting()
         {
             // Arrange
             for (int i = 1; i <= 10; i++)
@@ -457,6 +457,114 @@ namespace Kakuro.Tests.Integration_Tests
             Assert.Throws<IndexOutOfRangeException>(() => _savepointProvider.GetById(2));
         }
 
+        [Fact]
+        public void Should_UpdateExistingSavepoint_When_ValidEntityIsProvided()
+        {
+            // Arrange
+            var dashboardItems = new List<DashboardItem>
+            {
+                new DashboardItem { Value = 10, Notes = new[] { 1, 2, 3 } },
+                new DashboardItem { Value = 20, Notes = new[] { 4, 5, 6 } }
+            };
 
+            var savepoint1 = new Savepoint { Id = 1, DashboardItems = dashboardItems };
+            var savepoint2 = new Savepoint { Id = 2, DashboardItems = new List<DashboardItem>() };
+
+            _savepointProvider.Add(savepoint1);
+            _savepointProvider.Add(savepoint2);
+
+            // Assert
+            var checkedEntity = _savepointProvider.GetById(1);
+            Assert.Contains(checkedEntity, _savepointProvider.Cache);
+
+            // Act
+            var updatedSavepoint = new Savepoint
+            {
+                Id = 1,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 30, Notes = new[] { 7, 8, 9 } }
+                }
+            };
+
+            _savepointProvider.Update(updatedSavepoint);
+
+            // Assert
+            var result = _savepointProvider.GetById(1);
+            Assert.NotNull(result);
+            Assert.Equal(1, result.Id);
+            Assert.Single(result.DashboardItems);
+            Assert.Equal(30, result.DashboardItems[0].Value);
+            Assert.Equal(new[] { 7, 8, 9 }, result.DashboardItems[0].Notes);
+            Assert.Contains(result, _savepointProvider.Cache);
+        }
+
+        [Fact]
+        public void Should_WhileUpdatingAddToCache_When_SavepointNotInCache()
+        {
+            // Arrange
+            var savepoint1 = new Savepoint
+            {
+                Id = 1,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 10, Notes = new[] { 1, 2 } }
+                }
+            };
+
+            var savepoint2 = new Savepoint
+            {
+                Id = 2,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 20, Notes = new[] { 3, 4 } }
+                }
+            };
+
+            _savepointRepository.Add(savepoint1);
+            _savepointRepository.Add(savepoint2);
+
+            // Act
+            var updatedSavepoint = new Savepoint
+            {
+                Id = 2,
+                DashboardItems = new List<DashboardItem>
+                {
+                    new DashboardItem { Value = 15, Notes = new[] { 5, 6 } }
+                }
+            };
+
+            _savepointProvider.Update(updatedSavepoint);
+
+            // Assert
+            var result = _savepointProvider.Cache.FirstOrDefault(el => el.Id == 2);
+            Assert.NotNull(result);
+            Assert.Equal(2, result.Id);
+            Assert.Single(result.DashboardItems);
+            Assert.Equal(15, result.DashboardItems[0].Value);
+            Assert.Equal(new[] { 5, 6 }, result.DashboardItems[0].Notes);
+        }
+
+        [Fact]
+        public void Should_ThrowNullReferenceException_When_EntityIsNull()
+        {
+            // Act & Assert
+            var exception = Assert.Throws<NullReferenceException>(() => _savepointProvider.Update(null));
+            Assert.Equal("Entity equals null.", exception.Message);
+        }
+
+        [Fact]
+        public void Should_ThrowIndexOutOfRangeException_When_EntityWithIdNotFound()
+        {
+            // Arrange
+            var savepoint = new Savepoint { Id = 1, DashboardItems = new List<DashboardItem>() };
+            _savepointProvider.Add(savepoint);
+
+            var updateEntity = new Savepoint { Id = 2, DashboardItems = new List<DashboardItem>() };
+
+            // Act & Assert
+            var exception = Assert.Throws<IndexOutOfRangeException>(() => _savepointProvider.Update(updateEntity));
+            Assert.Equal("Entity with such ID wasn't found.", exception.Message);
+        }
     }
 }
