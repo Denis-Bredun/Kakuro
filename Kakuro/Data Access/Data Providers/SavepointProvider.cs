@@ -31,11 +31,11 @@ namespace Kakuro.Data_Access.Data_Providers
             return isSaved;
         }
 
-        public void Delete(int id)
+        public Savepoint Delete(int id)
         {
-            var entityToDelte = _dataService.GetById(id);
-            Cache.Remove(entityToDelte);
-            _dataService.Delete(id);
+            var deletedEntity = _dataService.Delete(id);
+            Cache.Remove(deletedEntity);
+            return deletedEntity;
         }
 
         public Savepoint? GetById(int id)

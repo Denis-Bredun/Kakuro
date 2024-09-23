@@ -43,17 +43,21 @@ namespace Kakuro.Data_Access.Repositories
         }
 
         // "el" stands for "element"
-        public void Delete(int id)
+        public Savepoint Delete(int id)
         {
             var savepoints = _jsonFileHandler.Load(_filepath);
 
             if (!IsDuplicateId(savepoints, id))
                 throw new IndexOutOfRangeException("Entity with such ID wasn't found.");
 
+            var deletedSavepoint = savepoints.FirstOrDefault(IsIdEqual(id));
+
             savepoints = savepoints.Where(GetRemoveByIdSelector(id));
             Count--;
 
             _jsonFileHandler.Save(savepoints, _filepath);
+
+            return deletedSavepoint;
         }
 
         public Savepoint? GetById(int id)

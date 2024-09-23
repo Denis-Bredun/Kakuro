@@ -217,110 +217,138 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Delete_Should_RemoveSavepointFromCache_When_ExistsInCache()
+        public void Should_RemoveSavepointFromCache_When_ExistsInCache()
         {
             // Arrange
             var savepoint = new Savepoint { Id = 1, DashboardItems = new List<DashboardItem>() };
             _savepointProvider.Add(savepoint);
 
             // Act
-            _savepointProvider.Delete(1);
+            var deletedSavepoint = _savepointProvider.Delete(1);
 
             // Assert
+            Assert.Equal(1, deletedSavepoint.Id);
             Assert.Empty(_savepointProvider.Cache);
         }
 
         [Fact]
-        public void Delete_Should_ThrowArgumentException_When_SavepointNotFound_And_CheckCache()
+        public void Should_ThrowIndexOutOfRangeException_When_SavepointNotFound()
         {
             // Arrange
             var savepoint = new Savepoint { Id = 1, DashboardItems = new List<DashboardItem>() };
             _savepointProvider.Add(savepoint);
-            _savepointProvider.Delete(1);
+            var deletedSavepoint = _savepointProvider.Delete(1);
 
             // Act & Assert
-            var exception = Assert.Throws<NullReferenceException>(() => _savepointProvider.Delete(2));
-            Assert.Equal("Entity with such ID doesn't exist.", exception.Message);
+            var exception = Assert.Throws<IndexOutOfRangeException>(() => _savepointProvider.Delete(2));
+            Assert.Equal("Entity with such ID wasn't found.", exception.Message);
+
+            Assert.Equal(1, deletedSavepoint.Id);
+            Assert.Empty(_savepointProvider.Cache);
+        }
+
+        [Fact]
+        public void Should_ThrowIndexOutOfRangeException_When_DeletingNonExistentID()
+        {
+            // Arrange
+
+            // Act & Assert
+            var exception = Assert.Throws<IndexOutOfRangeException>(() => _savepointProvider.Delete(99));
+            Assert.Equal("Entity with such ID wasn't found.", exception.Message);
 
             // Assert
             Assert.Empty(_savepointProvider.Cache);
         }
 
         [Fact]
-        public void Delete_Should_ThrowArgumentException_When_DeletingNonExistentID_And_CheckCache()
-        {
-            // Arrange
-
-            // Act & Assert
-            var exception = Assert.Throws<NullReferenceException>(() => _savepointProvider.Delete(99));
-            Assert.Equal("Entity with such ID doesn't exist.", exception.Message);
-
-            // Assert
-            Assert.Empty(_savepointProvider.Cache);
-        }
-
-        [Fact]
-        public void Delete_Should_ThrowArgumentException_When_DeletingNegativeID_And_CheckCache()
+        public void Should_ThrowIndexOutOfRangeException_When_DeletingNegativeID()
         {
             // Arrange
             for (int i = 1; i <= 5; i++)
                 _savepointProvider.Add(new Savepoint { Id = i, DashboardItems = new List<DashboardItem>() });
 
             // Act & Assert
-            var exception = Assert.Throws<NullReferenceException>(() => _savepointProvider.Delete(-1));
-            Assert.Equal("Entity with such ID doesn't exist.", exception.Message);
+            var exception = Assert.Throws<IndexOutOfRangeException>(() => _savepointProvider.Delete(-1));
+            Assert.Equal("Entity with such ID wasn't found.", exception.Message);
 
             // Assert
             Assert.Equal(3, _savepointProvider.Cache.Count);
         }
 
         [Fact]
-        public void Delete_Should_ThrowArgumentException_When_DeletingVeryLargeID_And_CheckCache()
+        public void Should_ThrowIndexOutOfRangeException_When_DeletingVeryLargeID()
         {
             // Arrange
             for (int i = 1; i <= 5; i++)
                 _savepointProvider.Add(new Savepoint { Id = i, DashboardItems = new List<DashboardItem>() });
 
             // Act & Assert
-            var exception = Assert.Throws<NullReferenceException>(() => _savepointProvider.Delete(9999));
-            Assert.Equal("Entity with such ID doesn't exist.", exception.Message);
+            var exception = Assert.Throws<IndexOutOfRangeException>(() => _savepointProvider.Delete(9999));
+            Assert.Equal("Entity with such ID wasn't found.", exception.Message);
 
             // Assert
             Assert.Equal(3, _savepointProvider.Cache.Count);
         }
 
         [Fact]
-        public void Delete_Should_RemoveLastElement_And_CheckCache()
+        public void Should_RemoveLastElement_When_ThereAreMaxEntities()
         {
             // Arrange
             for (int i = 1; i <= 10; i++)
                 _savepointProvider.Add(new Savepoint { Id = i, DashboardItems = new List<DashboardItem>() });
 
             // Act
-            _savepointProvider.Delete(10);
+            var deletedSavepoint = _savepointProvider.Delete(10);
 
             // Assert
             Assert.Equal(2, _savepointProvider.Cache.Count);
-            var exception = Assert.Throws<NullReferenceException>(() => _savepointProvider.GetById(10));
+            Assert.Equal(10, deletedSavepoint.Id);
+            var exception = Assert.Throws<IndexOutOfRangeException>(() => _savepointProvider.GetById(10));
             Assert.Equal("Entity with such ID doesn't exist.", exception.Message);
             Assert.DoesNotContain(_savepointProvider.Cache, sp => sp.Id == 10);
         }
 
         [Fact]
-        public void Delete_Should_RemoveFirstElement_And_CheckCache()
+        public void Should_RemoveFirstElement_When_ThereAreMaxEntities()
         {
             // Arrange
             for (int i = 1; i <= 10; i++)
                 _savepointProvider.Add(new Savepoint { Id = i, DashboardItems = new List<DashboardItem>() });
 
             // Act
-            _savepointProvider.Delete(1);
+            var deletedSavepoint = _savepointProvider.Delete(1);
 
             // Assert
             Assert.Equal(3, _savepointProvider.Cache.Count);
-            var exception = Assert.Throws<NullReferenceException>(() => _savepointProvider.GetById(1));
+            Assert.Equal(1, deletedSavepoint.Id);
+            var exception = Assert.Throws<IndexOutOfRangeException>(() => _savepointProvider.GetById(1));
             Assert.Equal("Entity with such ID doesn't exist.", exception.Message);
             Assert.DoesNotContain(_savepointProvider.Cache, sp => sp.Id == 1);
+        }
+
+        [Fact]
+        public void Should_DeleteProperly_When_MultipleDelete()
+        {
+            // Arrange
+            for (int i = 1; i <= 10; i++)
+                _savepointProvider.Add(new Savepoint { Id = i, DashboardItems = new List<DashboardItem>() });
+
+            // Act
+            _savepointProvider.Delete(3);
+            Assert.Equal(3, _savepointProvider.Cache.Count);
+            Assert.DoesNotContain(_savepointProvider.Cache, sp => sp.Id == 3);
+
+            _savepointProvider.Delete(10);
+            Assert.Equal(2, _savepointProvider.Cache.Count);
+            Assert.DoesNotContain(_savepointProvider.Cache, sp => sp.Id == 10);
+
+            _savepointProvider.Delete(1);
+            Assert.Equal(2, _savepointProvider.Cache.Count);
+            Assert.DoesNotContain(_savepointProvider.Cache, sp => sp.Id == 1);
+
+            _savepointProvider.Delete(8);
+            Assert.Single(_savepointProvider.Cache);
+            Assert.DoesNotContain(_savepointProvider.Cache, sp => sp.Id == 8);
         }
     }
 }
