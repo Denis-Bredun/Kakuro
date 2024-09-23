@@ -232,7 +232,7 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_ThrowIndexOutOfRangeException_When_SavepointNotFound()
+        public void Should_ThrowIndexOutOfRangeException_When_DeletingAndSavepointNotFound()
         {
             // Arrange
             var savepoint = new Savepoint { Id = 1, DashboardItems = new List<DashboardItem>() };
@@ -350,5 +350,113 @@ namespace Kakuro.Tests.Integration_Tests
             Assert.Single(_savepointProvider.Cache);
             Assert.DoesNotContain(_savepointProvider.Cache, sp => sp.Id == 8);
         }
+
+        [Fact]
+        public void Should_ReturnSavepoint_When_Cached()
+        {
+            // Arrange
+            var savepoint = new Savepoint { Id = 1, DashboardItems = new List<DashboardItem>() };
+            _savepointProvider.Add(savepoint);
+
+            // Act
+            var result = _savepointProvider.GetById(1);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(savepoint.Id, result.Id);
+        }
+
+        [Fact]
+        public void Should_ReturnSavepoint_When_NotInCache_ButInDataService()
+        {
+            // Arrange
+            var savepoint = new Savepoint { Id = 2, DashboardItems = new List<DashboardItem>() };
+            _savepointRepository.Add(savepoint); // We're adding without cache
+
+            // Act
+            var result = _savepointProvider.GetById(2);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(savepoint.Id, result.Id);
+        }
+
+        [Fact]
+        public void Should_AddToCache_When_RetrievingFromDataService()
+        {
+            // Arrange
+            var savepoint = new Savepoint { Id = 3, DashboardItems = new List<DashboardItem>() };
+            _savepointRepository.Add(savepoint); // We're adding without cache
+
+            // Act
+            var result = _savepointProvider.GetById(3);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(savepoint.Id, result.Id);
+            Assert.Contains(result, _savepointProvider.Cache);
+        }
+
+        [Fact]
+        public void Should_ThrowIndexOutOfRangeException_When_GettingAndSavepointNotFound()
+        {
+            // Act & Assert
+            var exception = Assert.Throws<IndexOutOfRangeException>(() => _savepointProvider.GetById(999));
+            Assert.Equal("Entity with such ID doesn't exist.", exception.Message);
+        }
+
+        [Fact]
+        public void Should_ReturnSavepoint_When_GettingAfterAdding()
+        {
+            // Arrange
+            for (int i = 1; i <= 10; i++)
+                _savepointProvider.Add(new Savepoint { Id = i, DashboardItems = new List<DashboardItem>() });
+
+            // Act
+            var result = _savepointProvider.GetById(5);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(5, result.Id);
+        }
+
+        [Fact]
+        public void Should_ReturnUpdatedSavepoint_When_GettingAfterUpdating()
+        {
+            // Arrange
+            for (int i = 1; i <= 10; i++)
+                _savepointProvider.Add(new Savepoint { Id = i, DashboardItems = new List<DashboardItem>() });
+
+            var updatedSavepoint = new Savepoint { Id = 5, DashboardItems = new List<DashboardItem> { new DashboardItem() } };
+            _savepointProvider.Update(updatedSavepoint);
+
+            // Act
+            var result = _savepointProvider.GetById(5);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(5, result.Id);
+            Assert.NotNull(result.DashboardItems);
+            Assert.Single(result.DashboardItems);
+        }
+
+        [Fact]
+        public void GetById_Should_ReturnCorrectCacheValue_AfterAddingAndDeleting()
+        {
+            // Arrange
+            for (int i = 1; i <= 10; i++)
+                _savepointProvider.Add(new Savepoint { Id = i, DashboardItems = new List<DashboardItem>() });
+            var resultDeleted = _savepointProvider.Delete(2);
+
+            // Act
+            var result = _savepointProvider.GetById(1);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal(1, result.Id);
+            Assert.Throws<IndexOutOfRangeException>(() => _savepointProvider.GetById(2));
+        }
+
+
     }
 }
