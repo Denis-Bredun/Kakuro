@@ -33,8 +33,9 @@ namespace Kakuro.Data_Access.Data_Providers
 
         public void Delete(int id)
         {
+            var entityToDelte = _dataService.GetById(id);
+            Cache.Remove(entityToDelte);
             _dataService.Delete(id);
-            Cache.Remove(GetById(id));
         }
 
         public Savepoint? GetById(int id)

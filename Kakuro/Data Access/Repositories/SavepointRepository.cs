@@ -48,7 +48,7 @@ namespace Kakuro.Data_Access.Repositories
             var savepoints = _jsonFileHandler.Load(_filepath);
 
             if (!IsDuplicateId(savepoints, id))
-                throw new ArgumentException("Savepoint with such ID wasn't found.");
+                throw new IndexOutOfRangeException("Entity with such ID wasn't found.");
 
             savepoints = savepoints.Where(GetRemoveByIdSelector(id));
             Count--;
@@ -63,7 +63,7 @@ namespace Kakuro.Data_Access.Repositories
             var foundSavepoint = savepoints.FirstOrDefault(IsIdEqual(id));
 
             if (foundSavepoint == null)
-                throw new NullReferenceException("Entity with such ID doesn't exist.");
+                throw new IndexOutOfRangeException("Entity with such ID doesn't exist.");
             else
                 return foundSavepoint;
         }
@@ -88,7 +88,7 @@ namespace Kakuro.Data_Access.Repositories
             if (entity == null)
                 throw new NullReferenceException("Entity equals null.");
             if (!IsDuplicateId(savepoints, entity.Id))
-                throw new ArgumentException("Savepoint with such ID wasn't found.");
+                throw new IndexOutOfRangeException("Entity with such ID wasn't found.");
         }
 
         private bool IsInvalidState(IEnumerable<Savepoint> savepoints, int id)
