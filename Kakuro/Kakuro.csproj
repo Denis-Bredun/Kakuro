@@ -9,10 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Prism.Core" Version="9.0.537" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Events\" />
     <Folder Include="Base Classes\" />
     <Folder Include="Styles\" />
