@@ -12,7 +12,6 @@
     <Folder Include="Events\" />
     <Folder Include="Base Classes\" />
     <Folder Include="Styles\" />
-    <Folder Include="Views\" />
   </ItemGroup>
 
 </Project>
