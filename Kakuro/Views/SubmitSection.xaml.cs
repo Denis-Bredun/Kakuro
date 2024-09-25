@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Kakuro.Views
 {
     /// <summary>
-    /// Interaction logic for Dashboard.xaml
+    /// Interaction logic for SubmitSection.xaml
     /// </summary>
-    public partial class Dashboard : UserControl
+    public partial class SubmitSection : UserControl
     {
-        public Dashboard()
+        public SubmitSection()
         {
             InitializeComponent();
         }
