@@ -6,7 +6,18 @@
         xmlns:local="clr-namespace:Kakuro"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    
-    
-    
+
+
+    <TabControl>
+
+        <TabItem Header="TabItem">
+            <Grid Background="#FFE5E5E5"/>
+        </TabItem>
+        <TabItem Header="TabItem">
+            <Grid Background="#FFE5E5E5"/>
+        </TabItem>
+    </TabControl>
+
+
+
 </Window>

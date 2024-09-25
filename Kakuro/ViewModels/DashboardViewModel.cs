@@ -6,6 +6,8 @@ namespace Kakuro.ViewModels
     {
         public ObservableCollection<DashboardItemViewModel> Dashboard { get; }
 
+
+
         public DashboardViewModel()
         {
             Dashboard = new ObservableCollection<DashboardItemViewModel>();
