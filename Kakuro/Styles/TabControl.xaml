@@ -1,6 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Kakuro">
+                    xmlns:local="clr-namespace:Kakuro.Styles">
+
+    <local:HalfWidthConverter x:Key="halfWidthConverter"/>
+
+    <!-- #BAD: We should separate the converter resources.-->
 
     <Style TargetType="{x:Type TabControl}">
         <Setter Property="ItemContainerStyle">
@@ -10,7 +14,7 @@
                         <Setter.Value>
                             <Binding RelativeSource="{RelativeSource AncestorType={x:Type TabControl}}" 
                                      Path="ActualWidth" 
-                                     Converter="{StaticResource HalfWidthConverter}"/>
+                                     Converter="{StaticResource halfWidthConverter}"/>
                         </Setter.Value>
                     </Setter>
                 </Style>

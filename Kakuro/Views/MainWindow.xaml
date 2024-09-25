@@ -8,13 +8,14 @@
         Title="MainWindow" Height="450" Width="800">
 
 
-    <TabControl>
+    <TabControl TabStripPlacement="Top">
 
-        <TabItem Header="TabItem">
-            <Grid Background="#FFE5E5E5"/>
+        
+        <TabItem Header="Game">
+            <Grid Background="Red"/>
         </TabItem>
-        <TabItem Header="TabItem">
-            <Grid Background="#FFE5E5E5"/>
+        <TabItem Header="Rating record">
+            <Grid Background="Violet"/>
         </TabItem>
     </TabControl>
 
