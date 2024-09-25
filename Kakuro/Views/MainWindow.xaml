@@ -5,17 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Kakuro"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Kakuro" Height="565" Width="914" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
 
 
-    <TabControl TabStripPlacement="Top">
+    <TabControl>
 
-        
-        <TabItem Header="Game">
-            <Grid Background="Red"/>
+        <TabItem Header="Game" Width="447">
+            <Grid>
+                
+            </Grid>
         </TabItem>
-        <TabItem Header="Rating record">
-            <Grid Background="Violet"/>
+        <TabItem Header="Rating table" Width="447">
+            <Grid>
+                
+            </Grid>
         </TabItem>
     </TabControl>
 

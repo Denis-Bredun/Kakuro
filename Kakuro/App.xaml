@@ -4,9 +4,8 @@
     <Application.Resources>
 
         <ResourceDictionary>
-            
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Styles/TabControl.xaml"/>
+                
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 
