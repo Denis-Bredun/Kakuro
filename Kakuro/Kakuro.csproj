@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <Folder Include="Events\" />
-    <Folder Include="Base Classes\" />
   </ItemGroup>
 
 </Project>

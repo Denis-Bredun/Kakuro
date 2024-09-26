@@ -1,4 +1,5 @@
-﻿using Kakuro.Models;
+﻿using Kakuro.Base_Classes;
+using Kakuro.Models;
 
 namespace Kakuro.ViewModels
 {

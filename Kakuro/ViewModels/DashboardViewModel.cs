@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using Kakuro.Base_Classes;
+using System.Collections.ObjectModel;
 
 namespace Kakuro.ViewModels
 {

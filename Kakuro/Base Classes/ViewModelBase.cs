@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Kakuro.ViewModels
+namespace Kakuro.Base_Classes
 {
     public class ViewModelBase : INotifyPropertyChanged
     {

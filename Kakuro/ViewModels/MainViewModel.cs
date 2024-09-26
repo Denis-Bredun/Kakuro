@@ -1,4 +1,6 @@
-﻿namespace Kakuro.ViewModels
+﻿using Kakuro.Base_Classes;
+
+namespace Kakuro.ViewModels
 {
     public class MainViewModel : ViewModelBase
     {
