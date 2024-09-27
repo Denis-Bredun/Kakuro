@@ -34,8 +34,8 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 5 },
-                    new DashboardItem { Value = 3 }
+                    new DashboardItem { DisplayValue = 5 },
+                    new DashboardItem { DisplayValue = 3 }
                 }
             };
 
@@ -48,8 +48,8 @@ namespace Kakuro.Tests.Integration_Tests
             var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Single(savedSavepoints);
             Assert.Equal(savepoint.Id, savedSavepoints[0].Id);
-            Assert.Equal(savepoint.DashboardItems[0].Value, savedSavepoints[0].DashboardItems[0].Value);
-            Assert.Equal(savepoint.DashboardItems[1].Value, savedSavepoints[0].DashboardItems[1].Value);
+            Assert.Equal(savepoint.DashboardItems[0].DisplayValue, savedSavepoints[0].DashboardItems[0].DisplayValue);
+            Assert.Equal(savepoint.DashboardItems[1].DisplayValue, savedSavepoints[0].DashboardItems[1].DisplayValue);
         }
 
         [Fact]
@@ -77,8 +77,8 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } },
-                    new DashboardItem { Value = 4, Notes = new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } },
+                    new DashboardItem { DisplayValue = 4, Notes = new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 } }
                 }
             };
 
@@ -87,8 +87,8 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 1,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 8, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } },
-                    new DashboardItem { Value = 10, Notes = new[] { 3, 2, 1, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 8, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } },
+                    new DashboardItem { DisplayValue = 10, Notes = new[] { 3, 2, 1, 0, 0, 0, 0, 0, 0 } }
                 }
             };
 
@@ -104,15 +104,15 @@ namespace Kakuro.Tests.Integration_Tests
             Assert.Equal(2, savedSavepoints.Count);
 
             Assert.Equal(savepoint1.Id, savedSavepoints[0].Id);
-            Assert.Equal(savepoint1.DashboardItems[0].Value, savedSavepoints[0].DashboardItems[0].Value);
+            Assert.Equal(savepoint1.DashboardItems[0].DisplayValue, savedSavepoints[0].DashboardItems[0].DisplayValue);
             Assert.Equal(savepoint1.DashboardItems[0].Notes, savedSavepoints[0].DashboardItems[0].Notes);
-            Assert.Equal(savepoint1.DashboardItems[1].Value, savedSavepoints[0].DashboardItems[1].Value);
+            Assert.Equal(savepoint1.DashboardItems[1].DisplayValue, savedSavepoints[0].DashboardItems[1].DisplayValue);
             Assert.Equal(savepoint1.DashboardItems[1].Notes, savedSavepoints[0].DashboardItems[1].Notes);
 
             Assert.Equal(savepoint2.Id, savedSavepoints[1].Id);
-            Assert.Equal(savepoint2.DashboardItems[0].Value, savedSavepoints[1].DashboardItems[0].Value);
+            Assert.Equal(savepoint2.DashboardItems[0].DisplayValue, savedSavepoints[1].DashboardItems[0].DisplayValue);
             Assert.Equal(savepoint2.DashboardItems[0].Notes, savedSavepoints[1].DashboardItems[0].Notes);
-            Assert.Equal(savepoint2.DashboardItems[1].Value, savedSavepoints[1].DashboardItems[1].Value);
+            Assert.Equal(savepoint2.DashboardItems[1].DisplayValue, savedSavepoints[1].DashboardItems[1].DisplayValue);
             Assert.Equal(savepoint2.DashboardItems[1].Notes, savedSavepoints[1].DashboardItems[1].Notes);
         }
 
@@ -146,7 +146,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
 
@@ -170,7 +170,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = null, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = null, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
 
@@ -182,7 +182,7 @@ namespace Kakuro.Tests.Integration_Tests
 
             var savedSavepoints = _jsonFileHandler.Load(_filepath).ToList();
             Assert.Single(savedSavepoints);
-            Assert.Null(savedSavepoints[0].DashboardItems[0].Value);
+            Assert.Null(savedSavepoints[0].DashboardItems[0].DisplayValue);
         }
 
         [Fact]
@@ -194,7 +194,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
 
@@ -203,7 +203,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 8, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 8, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
                 }
             };
 
@@ -219,7 +219,7 @@ namespace Kakuro.Tests.Integration_Tests
             var savedSavepoint = savedSavepoints.First();
             Assert.Equal(savepoint1.Id, savedSavepoint.Id);
             Assert.Equal(savepoint1.DashboardItems.Count, savedSavepoint.DashboardItems.Count);
-            Assert.Equal(savepoint1.DashboardItems[0].Value, savedSavepoint.DashboardItems[0].Value);
+            Assert.Equal(savepoint1.DashboardItems[0].DisplayValue, savedSavepoint.DashboardItems[0].DisplayValue);
             Assert.Equal(savepoint1.DashboardItems[0].Notes, savedSavepoint.DashboardItems[0].Notes);
         }
 
@@ -235,7 +235,7 @@ namespace Kakuro.Tests.Integration_Tests
                     Id = i,
                     DashboardItems = new List<DashboardItem>
                     {
-                        new DashboardItem { Value = i, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                        new DashboardItem { DisplayValue = i, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                     }
                 };
                 _savepointRepository.Add(savepoint);
@@ -246,7 +246,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 10,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 10, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 10, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
 
@@ -318,7 +318,7 @@ namespace Kakuro.Tests.Integration_Tests
 
             _savepointRepository.Add(savepoint1);
             _savepointRepository.Add(savepoint2);
-            var updatedSavepoint = new Savepoint { Id = 0, DashboardItems = new List<DashboardItem> { new DashboardItem { Value = 5 } } };
+            var updatedSavepoint = new Savepoint { Id = 0, DashboardItems = new List<DashboardItem> { new DashboardItem { DisplayValue = 5 } } };
             _savepointRepository.Update(updatedSavepoint);
 
             // Act
@@ -500,7 +500,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             var savepoint2 = new Savepoint
@@ -508,7 +508,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,  // Same Id as savepoint1
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 5, Notes = new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 5, Notes = new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 } }
                 }
             };
 
@@ -520,7 +520,7 @@ namespace Kakuro.Tests.Integration_Tests
             // Assert
             var updatedSavepoint = _savepointRepository.GetById(0);
             Assert.NotNull(updatedSavepoint);
-            Assert.Equal(5, updatedSavepoint.DashboardItems.First().Value);
+            Assert.Equal(5, updatedSavepoint.DashboardItems.First().DisplayValue);
             Assert.Equal(new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 }, updatedSavepoint.DashboardItems.First().Notes);
         }
 
@@ -533,7 +533,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             _savepointRepository.Add(savepoint);
@@ -545,7 +545,7 @@ namespace Kakuro.Tests.Integration_Tests
             Assert.Equal("Entity equals null.", exception.Message);
             var savedSavepoint = _savepointRepository.GetById(0);
             Assert.NotNull(savedSavepoint);
-            Assert.Equal(2, savedSavepoint.DashboardItems.First().Value);
+            Assert.Equal(2, savedSavepoint.DashboardItems.First().DisplayValue);
         }
 
         [Fact]
@@ -558,7 +558,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 1,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 5, Notes = new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 5, Notes = new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 } }
                 }
             };
 
@@ -581,7 +581,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             _savepointRepository.Add(savepoint1);
@@ -610,7 +610,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             var updatedSavepoint = new Savepoint
@@ -618,8 +618,8 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 5, Notes = new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 } },
-                    new DashboardItem { Value = 10, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 5, Notes = new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 } },
+                    new DashboardItem { DisplayValue = 10, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             _savepointRepository.Add(savepoint1);
@@ -631,9 +631,9 @@ namespace Kakuro.Tests.Integration_Tests
             var actualSavepoint = _savepointRepository.GetById(0);
             Assert.NotNull(actualSavepoint);
             Assert.Equal(2, actualSavepoint.DashboardItems.Count);
-            Assert.Equal(5, actualSavepoint.DashboardItems.First().Value);
+            Assert.Equal(5, actualSavepoint.DashboardItems.First().DisplayValue);
             Assert.Equal(new[] { 7, 8, 9, 0, 0, 0, 0, 0, 0 }, actualSavepoint.DashboardItems.First().Notes);
-            Assert.Equal(10, actualSavepoint.DashboardItems.Last().Value);
+            Assert.Equal(10, actualSavepoint.DashboardItems.Last().DisplayValue);
             Assert.Equal(new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 }, actualSavepoint.DashboardItems.Last().Notes);
         }
 
@@ -646,7 +646,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             var wrongIdSavepoint = new Savepoint
@@ -654,7 +654,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 1,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 10, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 10, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             _savepointRepository.Add(savepoint1);
@@ -666,7 +666,7 @@ namespace Kakuro.Tests.Integration_Tests
             Assert.Equal("Entity with such ID wasn't found.", exception.Message);
             var actualSavepoint = _savepointRepository.GetById(0);
             Assert.NotNull(actualSavepoint);
-            Assert.Equal(2, actualSavepoint.DashboardItems.First().Value);
+            Assert.Equal(2, actualSavepoint.DashboardItems.First().DisplayValue);
             Assert.Equal(new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 }, actualSavepoint.DashboardItems.First().Notes);
         }
 
@@ -679,7 +679,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             var updatedSavepoint = new Savepoint
@@ -687,7 +687,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 5 }
+                    new DashboardItem { DisplayValue = 5 }
                 }
             };
             _savepointRepository.Add(savepoint1);
@@ -699,7 +699,7 @@ namespace Kakuro.Tests.Integration_Tests
             var actualSavepoint = _savepointRepository.GetById(0);
             Assert.NotNull(actualSavepoint);
             Assert.Single(actualSavepoint.DashboardItems);
-            Assert.Equal(5, actualSavepoint.DashboardItems.First().Value);
+            Assert.Equal(5, actualSavepoint.DashboardItems.First().DisplayValue);
             Assert.Equal(0, actualSavepoint.DashboardItems.First().Notes[0]);
         }
 
@@ -712,7 +712,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             _savepointRepository.Add(savepoint);
@@ -722,7 +722,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 0,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
 
@@ -744,7 +744,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 1,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 5, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 5, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             _savepointRepository.Add(savepoint);
@@ -767,7 +767,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 1,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 5, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 5, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             _savepointRepository.Add(existingSavepoint);
@@ -788,7 +788,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 1,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 5, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 5, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             _savepointRepository.Add(existingSavepoint);
@@ -819,7 +819,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 1,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 5, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 5, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             var savepoint2 = new Savepoint
@@ -827,7 +827,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 2,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 10, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 10, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             _savepointRepository.Add(savepoint1);
@@ -856,7 +856,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 1,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 5, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 5, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             var savepoint2 = new Savepoint
@@ -864,7 +864,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 1, // Duplicate ID
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 10, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
+                    new DashboardItem { DisplayValue = 10, Notes = new[] { 4, 5, 6, 0, 0, 0, 0, 0, 0 } }
                 }
             };
             _savepointRepository.Add(savepoint1);

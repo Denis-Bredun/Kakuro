@@ -1,4 +1,5 @@
 ﻿using Kakuro.Base_Classes;
+using Kakuro.Enums;
 using Kakuro.Models;
 
 namespace Kakuro.ViewModels
@@ -9,13 +10,36 @@ namespace Kakuro.ViewModels
 
         // #PRIORITY: make validations for Value and Notes, so user couldn't enter smth except for 1-9 numbers
 
-        public string Value
+        public string DisplayValue
         {
-            get => ConvertIntToString(_dashboardItem.Value);
+            get => ConvertIntToString(_dashboardItem.DisplayValue);
             set
             {
-                _dashboardItem.Value = ConvertStringToInt(value);
-                OnPropertyChanged("Value");
+                _dashboardItem.DisplayValue = ConvertStringToInt(value);
+                OnPropertyChanged("DisplayValue");
+            }
+        }
+
+        public string HiddenValue
+        {
+            get => ConvertIntToString(_dashboardItem.HiddenValue);
+            set
+            {
+                _dashboardItem.HiddenValue = ConvertStringToInt(value);
+                OnPropertyChanged("HiddenValue");
+            }
+        }
+
+        public string CellType
+        {
+            get => _dashboardItem.CellType.ToString();
+            set
+            {
+                if (Enum.TryParse(value, out CellType cellType))
+                {
+                    _dashboardItem.CellType = cellType;
+                    OnPropertyChanged("CellType");
+                }
             }
         }
 

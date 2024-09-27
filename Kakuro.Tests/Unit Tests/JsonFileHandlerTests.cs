@@ -290,8 +290,8 @@ namespace Kakuro.Tests.Unit_Tests
                     Id = 1,
                     DashboardItems = new List<DashboardItem>
                     {
-                        new DashboardItem { Value = 100, Notes = [1, 2, 3] },
-                        new DashboardItem { Value = 200, Notes = [4, 5, 6] }
+                        new DashboardItem { DisplayValue = 100, Notes = [1, 2, 3] },
+                        new DashboardItem { DisplayValue = 200, Notes = [4, 5, 6] }
                     }
                 },
                 new Savepoint
@@ -299,8 +299,8 @@ namespace Kakuro.Tests.Unit_Tests
                     Id = 2,
                     DashboardItems = new List<DashboardItem>
                     {
-                        new DashboardItem { Value = null, Notes = [7, 8, 9] },
-                        new DashboardItem { Value = 300, Notes = null }
+                        new DashboardItem { DisplayValue = null, Notes = [7, 8, 9] },
+                        new DashboardItem { DisplayValue = 300, Notes = null }
                     }
                 }
             };
@@ -326,7 +326,7 @@ namespace Kakuro.Tests.Unit_Tests
                     Id = 0,
                     DashboardItems = new List<DashboardItem>
                     {
-                        new DashboardItem { Value = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
+                        new DashboardItem { DisplayValue = 2, Notes = new[] { 1, 2, 3, 0, 0, 0, 0, 0, 0 } }
                     }
                 }
             };

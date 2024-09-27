@@ -192,8 +192,8 @@ namespace Kakuro.Tests.Integration_Tests
             // Arrange
             var dashboardItems = new List<DashboardItem>
             {
-                new DashboardItem { Value = 1, Notes = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 } },
-                new DashboardItem { Value = 2, Notes = new int[] { 9, 8, 7, 6, 5, 4, 3, 2, 1 } }
+                new DashboardItem { DisplayValue = 1, Notes = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 } },
+                new DashboardItem { DisplayValue = 2, Notes = new int[] { 9, 8, 7, 6, 5, 4, 3, 2, 1 } }
             };
 
             var savepoint = new Savepoint { Id = 1, DashboardItems = dashboardItems };
@@ -208,11 +208,11 @@ namespace Kakuro.Tests.Integration_Tests
             Assert.Equal(2, savedSavepoint.DashboardItems.Count);
 
             var savedItem1 = savedSavepoint.DashboardItems[0];
-            Assert.Equal(1, savedItem1.Value);
+            Assert.Equal(1, savedItem1.DisplayValue);
             Assert.True(savedItem1.Notes.SequenceEqual(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 }));
 
             var savedItem2 = savedSavepoint.DashboardItems[1];
-            Assert.Equal(2, savedItem2.Value);
+            Assert.Equal(2, savedItem2.DisplayValue);
             Assert.True(savedItem2.Notes.SequenceEqual(new int[] { 9, 8, 7, 6, 5, 4, 3, 2, 1 }));
         }
 
@@ -463,8 +463,8 @@ namespace Kakuro.Tests.Integration_Tests
             // Arrange
             var dashboardItems = new List<DashboardItem>
             {
-                new DashboardItem { Value = 10, Notes = new[] { 1, 2, 3 } },
-                new DashboardItem { Value = 20, Notes = new[] { 4, 5, 6 } }
+                new DashboardItem { DisplayValue = 10, Notes = new[] { 1, 2, 3 } },
+                new DashboardItem { DisplayValue = 20, Notes = new[] { 4, 5, 6 } }
             };
 
             var savepoint1 = new Savepoint { Id = 1, DashboardItems = dashboardItems };
@@ -483,7 +483,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 1,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 30, Notes = new[] { 7, 8, 9 } }
+                    new DashboardItem { DisplayValue = 30, Notes = new[] { 7, 8, 9 } }
                 }
             };
 
@@ -494,7 +494,7 @@ namespace Kakuro.Tests.Integration_Tests
             Assert.NotNull(result);
             Assert.Equal(1, result.Id);
             Assert.Single(result.DashboardItems);
-            Assert.Equal(30, result.DashboardItems[0].Value);
+            Assert.Equal(30, result.DashboardItems[0].DisplayValue);
             Assert.Equal(new[] { 7, 8, 9 }, result.DashboardItems[0].Notes);
             Assert.Contains(result, _savepointProvider.Cache);
         }
@@ -508,7 +508,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 1,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 10, Notes = new[] { 1, 2 } }
+                    new DashboardItem { DisplayValue = 10, Notes = new[] { 1, 2 } }
                 }
             };
 
@@ -517,7 +517,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 2,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 20, Notes = new[] { 3, 4 } }
+                    new DashboardItem { DisplayValue = 20, Notes = new[] { 3, 4 } }
                 }
             };
 
@@ -530,7 +530,7 @@ namespace Kakuro.Tests.Integration_Tests
                 Id = 2,
                 DashboardItems = new List<DashboardItem>
                 {
-                    new DashboardItem { Value = 15, Notes = new[] { 5, 6 } }
+                    new DashboardItem { DisplayValue = 15, Notes = new[] { 5, 6 } }
                 }
             };
 
@@ -541,7 +541,7 @@ namespace Kakuro.Tests.Integration_Tests
             Assert.NotNull(result);
             Assert.Equal(2, result.Id);
             Assert.Single(result.DashboardItems);
-            Assert.Equal(15, result.DashboardItems[0].Value);
+            Assert.Equal(15, result.DashboardItems[0].DisplayValue);
             Assert.Equal(new[] { 5, 6 }, result.DashboardItems[0].Notes);
         }
 
