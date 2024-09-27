@@ -3,16 +3,8 @@ using Kakuro.Models;
 
 namespace Kakuro.Tests.Unit_Tests
 {
-    public class DashboardItemTests : IDisposable
+    public class DashboardItemTests
     {
-        private const string DIRECTORY_PATH = "..\\..\\..\\Unit Tests\\Files\\DashboardItemTests\\";
-
-        public void Dispose()
-        {
-            if (Directory.Exists(DIRECTORY_PATH))
-                Directory.Delete(DIRECTORY_PATH, true);
-        }
-
         [Fact]
         public void Constructor_ShouldInitializeNotesArrayAndCellType_When_Called()
         {

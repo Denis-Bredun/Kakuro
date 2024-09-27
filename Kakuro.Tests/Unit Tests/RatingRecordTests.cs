@@ -2,16 +2,8 @@
 
 namespace Kakuro.Tests.Unit_Tests
 {
-    public class RatingRecordTests : IDisposable
+    public class RatingRecordTests
     {
-        private const string DIRECTORY_PATH = "..\\..\\..\\Unit Tests\\Files\\RatingRecordTests\\";
-
-        public void Dispose()
-        {
-            if (Directory.Exists(DIRECTORY_PATH))
-                Directory.Delete(DIRECTORY_PATH, true);
-        }
-
         [Fact]
         public void Should_ThrowArgumentNullException_When_OtherIsNull()
         {
