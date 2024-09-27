@@ -4,6 +4,7 @@ using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Kakuro.Models;
 using System.Collections.ObjectModel;
+using DoubleObservableCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.Models.DashboardItem>>;
 
 namespace Kakuro.Commands
 {
@@ -19,9 +20,9 @@ namespace Kakuro.Commands
                                    // sums of the numbers.
 
         private IDashboardTemplateProvider _templateProvider;
-        private ObservableCollection<DashboardItem> _dashboard;
+        private DoubleObservableCollection _dashboard;
 
-        public ApplyDifficultyCommand(DashboardTemplateProvider templateProvider, ObservableCollection<DashboardItem> dashboard)
+        public ApplyDifficultyCommand(DashboardTemplateProvider templateProvider, DoubleObservableCollection dashboard)
         {
             _dashboard ??= dashboard;
             _templateProvider = templateProvider;
@@ -41,7 +42,7 @@ namespace Kakuro.Commands
 
             var values = GenerateValues(template);
 
-
+            InitializeDashboard(dashboardSize);
         }
 
         private int DetermineTheDashboardSize(DifficultyLevels difficultyLevel) => difficultyLevel switch
@@ -108,5 +109,16 @@ namespace Kakuro.Commands
         private bool IsUniqueLeft(int[,] values, int i, int j, int value) => values[i, j - 1] != value;
 
         private bool IsUniqueRight(int[,] values, int i, int j, int value) => values[i, j + 1] != value;
+
+        private void InitializeDashboard(int dashboardSize)
+        {
+            for (int i = 0; i < dashboardSize; i++)
+            {
+                _dashboard.Add(new ObservableCollection<DashboardItem>());
+
+                for (int j = 0; j < dashboardSize; j++)
+                    _dashboard[j].Add(new DashboardItem());
+            }
+        }
     }
 }

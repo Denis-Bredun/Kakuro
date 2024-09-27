@@ -6,17 +6,17 @@ namespace Kakuro.Models
     {
         private const int MAX_COUNT_OF_NOTES = 9;
         public int? DisplayValue { get; set; }
-        public int? HiddenValue { get; set; }
+        public int? HiddenValue { get; set; } // we need this so we could show right answers using settings
         public CellType CellType { get; set; }
         public int[]? Notes { get; set; }
         public int? SumRight { get; set; }
         public int? SumBottom { get; set; }
 
 
-        public DashboardItem(CellType cellType = CellType.ValueCell)
+        public DashboardItem()
         {
             Notes = new int[MAX_COUNT_OF_NOTES];
-            CellType = cellType;
+            CellType = CellType.EmptyCell;
         }
 
         public override bool Equals(object? obj)

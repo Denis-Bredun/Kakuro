@@ -1,17 +1,18 @@
 ﻿using Kakuro.Base_Classes;
-using System.Collections.ObjectModel;
+
+using DoubleObservableCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.Models.DashboardItem>>;
 
 namespace Kakuro.ViewModels
 {
     public class DashboardViewModel : ViewModelBase
     {
-        public ObservableCollection<DashboardItemViewModel> Dashboard { get; }
+        public DoubleObservableCollection Dashboard { get; }
 
 
 
         public DashboardViewModel()
         {
-            Dashboard = new ObservableCollection<DashboardItemViewModel>();
+            Dashboard = new DoubleObservableCollection();
         }
     }
 }

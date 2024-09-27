@@ -14,7 +14,7 @@ namespace Kakuro.Tests.Unit_Tests
             // Assert
             Assert.NotNull(dashboardItem.Notes);
             Assert.Equal(9, dashboardItem.Notes.Length);
-            Assert.Equal(CellType.ValueCell, dashboardItem.CellType);
+            Assert.Equal(CellType.EmptyCell, dashboardItem.CellType);
         }
 
         [Fact]
