@@ -120,5 +120,7 @@ namespace Kakuro.Commands
                     _dashboard[j].Add(new DashboardItem());
             }
         }
+
+        // #BAD: Logic about generating MUSTN'T be in this class!
     }
 }
