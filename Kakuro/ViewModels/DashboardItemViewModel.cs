@@ -31,6 +31,26 @@ namespace Kakuro.ViewModels
             }
         }
 
+        public string SumRight
+        {
+            get => ConvertIntToString(_dashboardItem.SumRight);
+            set
+            {
+                _dashboardItem.SumRight = ConvertStringToInt(value);
+                OnPropertyChanged("SumRight");
+            }
+        }
+
+        public string SumBottom
+        {
+            get => ConvertIntToString(_dashboardItem.SumBottom);
+            set
+            {
+                _dashboardItem.SumBottom = ConvertStringToInt(value);
+                OnPropertyChanged("SumBottom");
+            }
+        }
+
         public DashboardItemViewModel(DashboardItem dashboardItem)
         {
             _dashboardItem = dashboardItem;
