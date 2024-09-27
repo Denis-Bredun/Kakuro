@@ -49,7 +49,7 @@ namespace Kakuro.Commands
             DifficultyLevels.Easy => EASY_LEVEL_SIZE,
             DifficultyLevels.Normal => NORMAL_LEVEL_SIZE,
             DifficultyLevels.Hard => HARD_LEVEL_SIZE,
-            _ => throw new NotImplementedException()
+            _ => throw new ArgumentException()
         };
 
         private int[,] GenerateValues(string[,] template)

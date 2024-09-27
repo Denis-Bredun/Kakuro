@@ -102,7 +102,7 @@ namespace Kakuro.Tests.Unit_Tests
             var invalidDifficulty = (DifficultyLevels)999;
 
             // Act & Assert
-            Assert.Throws<NotImplementedException>(() => _provider.GenerateTemplate(invalidDifficulty));
+            Assert.Throws<ArgumentException>(() => _provider.GenerateTemplate(invalidDifficulty));
         }
 
     }

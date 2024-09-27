@@ -10,7 +10,7 @@ namespace Kakuro.Data_Access.Data_Providers
             DifficultyLevels.Easy => GenerateEasyTemplate(),
             DifficultyLevels.Normal => GenerateNormalTemplate(),
             DifficultyLevels.Hard => GenerateHardTemplate(),
-            _ => throw new NotImplementedException()
+            _ => throw new ArgumentException()
         };
 
         private string[,] GenerateEasyTemplate() => new string[,]
