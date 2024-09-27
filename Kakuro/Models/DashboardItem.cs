@@ -13,7 +13,7 @@ namespace Kakuro.Models
         public int? SumBottom { get; set; }
 
 
-        public DashboardItem(CellType cellType)
+        public DashboardItem(CellType cellType = CellType.ValueCell)
         {
             Notes = new int[MAX_COUNT_OF_NOTES];
             CellType = cellType;
