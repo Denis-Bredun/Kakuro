@@ -1,5 +1,7 @@
 ﻿using Kakuro.Base_Classes;
+using Kakuro.Data_Access.Data_Providers;
 using Kakuro.Enums;
+using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Kakuro.Models;
 using System.Collections.ObjectModel;
 
@@ -17,10 +19,12 @@ namespace Kakuro.Commands
                                    // sums of the numbers.
 
         private ObservableCollection<DashboardItem> _dashboard;
+        private IDashboardTemplateProvider _templateProvider;
 
-        public ApplyDifficultyCommand(ObservableCollection<DashboardItem> dashboard)
+        public ApplyDifficultyCommand(DashboardTemplateProvider templateProvider, ObservableCollection<DashboardItem> dashboard)
         {
             _dashboard ??= dashboard;
+            _templateProvider = templateProvider;
         }
 
         public override void Execute(object? parameter)
