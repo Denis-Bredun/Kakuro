@@ -62,9 +62,6 @@ namespace Kakuro.Commands
             int dashboardSize = template.GetLength(0);
             int[,] values = new int[dashboardSize, dashboardSize];
 
-
-
-
             for (int i = 0; i < dashboardSize; i++)
                 for (int j = 0; j < dashboardSize; j++)
                     if (template[i, j] == "*")

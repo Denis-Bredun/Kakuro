@@ -1,11 +1,12 @@
 ﻿using Kakuro.Data_Access.Data_Providers;
 using Kakuro.Enums;
+using Kakuro.Interfaces.Data_Access.Data_Providers;
 
 namespace Kakuro.Tests.Unit_Tests
 {
     public class DashboardTemplateProviderTests
     {
-        private readonly DashboardTemplateProvider _provider;
+        private readonly IDashboardTemplateProvider _provider;
 
         public DashboardTemplateProviderTests()
         {
