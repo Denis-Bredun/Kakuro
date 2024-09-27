@@ -18,8 +18,8 @@ namespace Kakuro.Commands
                                    // elements on the right, top, left and bottom, on which we write the
                                    // sums of the numbers.
 
-        private ObservableCollection<DashboardItem> _dashboard;
         private IDashboardTemplateProvider _templateProvider;
+        private ObservableCollection<DashboardItem> _dashboard;
 
         public ApplyDifficultyCommand(DashboardTemplateProvider templateProvider, ObservableCollection<DashboardItem> dashboard)
         {
@@ -37,9 +37,11 @@ namespace Kakuro.Commands
 
             int dashboardSize = DetermineTheDashboardSize(difficultyLevel) + BORDER_ITEMS_SIZE * COUNT_OF_PARALLEL_SIDES;
 
-            // Template generating...
+            var template = _templateProvider.GenerateTemplate(difficultyLevel);
 
-            // Dashboard generating...
+            var values = GenerateValues(template);
+
+
         }
 
         private int DetermineTheDashboardSize(DifficultyLevels difficultyLevel) => difficultyLevel switch
@@ -49,5 +51,65 @@ namespace Kakuro.Commands
             DifficultyLevels.Hard => HARD_LEVEL_SIZE,
             _ => throw new NotImplementedException()
         };
+
+        private int[,] GenerateValues(string[,] template)
+        {
+            // We need 1st and 3rd rules of Kakuro for generating:
+            // 1.Each cell can contain numbers from 1 through 9
+            // 2.The clues in the black cells tells the sum of the numbers next to that clue. (on the right or down)
+            // 3.The numbers in consecutive white cells must be unique.
+
+            int dashboardSize = template.GetLength(0);
+            int[,] values = new int[dashboardSize, dashboardSize];
+
+
+
+
+            for (int i = 0; i < dashboardSize; i++)
+                for (int j = 0; j < dashboardSize; j++)
+                    if (template[i, j] == "*")
+                        values[i, j] = GenerateValueTillItsUnique(values, i, j);
+
+            return values;
+        }
+
+        private int GenerateValueTillItsUnique(int[,] values, int i, int j)
+        {
+            Random random = new Random();
+            int value = 0;
+            bool isUnique = false;
+
+            do
+            {
+                isUnique = true;
+
+                value = random.Next(1, 10);
+
+                CheckGeneratedValueForUniqueness(ref isUnique, values, i, j, value);
+
+            } while (!isUnique);
+
+            return value;
+        }
+
+        private void CheckGeneratedValueForUniqueness(ref bool isUnique, int[,] values, int i, int j, int value)
+        {
+            if (!IsUniqueAbove(values, i, j, value))
+                isUnique = false;
+            if (!IsUniqueBelow(values, i, j, value))
+                isUnique = false;
+            if (!IsUniqueLeft(values, i, j, value))
+                isUnique = false;
+            if (!IsUniqueRight(values, i, j, value))
+                isUnique = false;
+        }
+
+        private bool IsUniqueAbove(int[,] values, int i, int j, int value) => values[i - 1, j] != value;
+
+        private bool IsUniqueBelow(int[,] values, int i, int j, int value) => values[i + 1, j] != value;
+
+        private bool IsUniqueLeft(int[,] values, int i, int j, int value) => values[i, j - 1] != value;
+
+        private bool IsUniqueRight(int[,] values, int i, int j, int value) => values[i, j + 1] != value;
     }
 }
