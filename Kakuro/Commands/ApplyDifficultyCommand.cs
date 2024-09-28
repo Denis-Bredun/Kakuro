@@ -134,7 +134,7 @@ namespace Kakuro.Commands
                 for (int j = 0; j < dashboardSize; j++)
                     if (values[i, j] != 0)
                     {
-                        currentElement = _dashboard.ElementAt(i).ElementAt(j);
+                        currentElement = _dashboard[i][j];
                         currentElement.HiddenValue = values[i, j];
                         currentElement.CellType = CellType.ValueCell;
                     }
@@ -148,12 +148,64 @@ namespace Kakuro.Commands
 
         private void CalculateBottomSums()
         {
+            DashboardItemViewModel currentElement;
+            int bottomSum = 0;
+            bool wasSumCollected = false;
 
+            for (int i = 0; i < _dashboard.Count; i++)
+            {
+                for (int j = _dashboard.Count - 1; j >= 0; j++)
+                {
+                    currentElement = _dashboard[j][i];
+
+                    if (currentElement.CellType == CellType.ValueCell)
+                    {
+                        bottomSum += currentElement.HiddenValue;
+                        wasSumCollected = true;
+                    }
+                    else
+                    {
+                        if (wasSumCollected)
+                        {
+                            currentElement.SumBottom = bottomSum.ToString();
+                            currentElement.CellType = CellType.SumCell;
+                            bottomSum = 0;
+                            wasSumCollected = false;
+                        }
+                    }
+                }
+            }
         }
 
         private void CalculateRightSums()
         {
+            DashboardItemViewModel currentElement;
+            int rightSum = 0;
+            bool wasSumCollected = false;
 
+            for (int i = 0; i < _dashboard.Count; i++)
+            {
+                for (int j = _dashboard.Count - 1; j >= 0; j++)
+                {
+                    currentElement = _dashboard[i][j];
+
+                    if (currentElement.CellType == CellType.ValueCell)
+                    {
+                        rightSum += currentElement.HiddenValue;
+                        wasSumCollected = true;
+                    }
+                    else
+                    {
+                        if (wasSumCollected)
+                        {
+                            currentElement.SumRight = rightSum.ToString();
+                            currentElement.CellType = CellType.SumCell;
+                            rightSum = 0;
+                            wasSumCollected = false;
+                        }
+                    }
+                }
+            }
         }
 
         // #BAD: Logic about generating MUSTN'T be in this class!
