@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Interfaces\Data Access\Data Providers\IDashboardProvider.cs~RF1dbb930c.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Events\" />
   </ItemGroup>
 
