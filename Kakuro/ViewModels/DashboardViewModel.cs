@@ -13,7 +13,7 @@ namespace Kakuro.ViewModels
         public int CountOfRows => Dashboard.Count;
         public int CountOfColumns => Dashboard.Count;
 
-        private DifficultyLevels DEFAULT_LEVEL = DifficultyLevels.Easy;
+        private const DifficultyLevels DEFAULT_LEVEL = DifficultyLevels.Easy;
 
         public ICommand ApplyDifficultyCommand { get; }
 

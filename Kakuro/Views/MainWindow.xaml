@@ -10,15 +10,14 @@
 
     <TabControl>
 
-        <TabItem Header="Game" Width="595">
-
+        <TabItem Header="Game" 
+                 Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource TabItemWidthConverter}}">
             <view:GameTab/>
-
         </TabItem>
-        <TabItem Header="Rating table" Width="595">
 
+        <TabItem Header="Rating table" 
+                 Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource TabItemWidthConverter}}">
             <view:RatingTableTab/>
-
         </TabItem>
     </TabControl>
 
