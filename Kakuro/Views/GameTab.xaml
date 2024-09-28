@@ -15,6 +15,6 @@
             <ColumnDefinition Width="5.5*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <view:GameSection Grid.Column="2"/>
+        <view:GameSection Grid.Column="2" DataContext="{Binding DashboardViewModel}"/>
     </Grid>
 </UserControl>
