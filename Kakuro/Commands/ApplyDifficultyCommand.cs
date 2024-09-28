@@ -15,7 +15,11 @@ namespace Kakuro.Commands
 
         public override void Execute(object? parameter)
         {
-            var difficultyLevel = (DifficultyLevels)parameter;
+            if (parameter == null)
+                throw new NullReferenceException("Parameter for ApplyDifficultyCommand is null!");
+
+            if (!Enum.TryParse<DifficultyLevels>(parameter.ToString(), out var difficultyLevel))
+                throw new ArgumentException("Parameter for ApplyDifficultyCommand is of incorrect type!");
 
             _dashboardProvider.GenerateDashboard(difficultyLevel);
         }

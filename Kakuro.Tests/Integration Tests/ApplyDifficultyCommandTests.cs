@@ -1,8 +1,9 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Commands;
 using Kakuro.Data_Access.Data_Providers;
+using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
-
+using Moq;
 using DashboardItemCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.ViewModels.DashboardItemViewModel>>;
 
 namespace Kakuro.Tests.Integration_Tests
@@ -27,6 +28,57 @@ namespace Kakuro.Tests.Integration_Tests
             _dashboardItemCollection.Clear();
         }
 
+        [Fact]
+        public void Should_CallGenerateDashboard_When_Executed()
+        {
+            // Arrange
+            var difficultyLevel = DifficultyLevels.Normal;
+            var dashboardProviderMock = new Mock<IDashboardProvider>();
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
 
+            // Act
+            applyDifficultyCommand.Execute(difficultyLevel);
+
+            // Assert
+            dashboardProviderMock.Verify(dp => dp.GenerateDashboard(difficultyLevel), Times.Once);
+        }
+
+        [Fact]
+        public void Should_Initialize_When_DashboardProviderProvided()
+        {
+            // Arrange
+            var dashboardProviderMock = new Mock<IDashboardProvider>();
+
+            // Act
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
+
+            // Assert
+            Assert.NotNull(applyDifficultyCommand);
+        }
+
+        [Fact]
+        public void Should_ThrowNullReferenceException_When_ParameterIsNull()
+        {
+            // Arrange
+            var dashboardProviderMock = new Mock<IDashboardProvider>();
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
+
+            // Act & Assert
+            var exception = Assert.Throws<NullReferenceException>(() => applyDifficultyCommand.Execute(null));
+            Assert.Equal("Parameter for ApplyDifficultyCommand is null!", exception.Message);
+        }
+
+        [Fact]
+        public void Should_ThrowArgumentException_When_ParameterIsInvalid()
+        {
+            // Arrange
+            var dashboardProviderMock = new Mock<IDashboardProvider>();
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
+            var invalidParameter = new object();
+
+            // Act & Assert
+            var exception = Assert.Throws<ArgumentException>(() => applyDifficultyCommand.Execute(invalidParameter));
+            Assert.Equal("Parameter for ApplyDifficultyCommand is of incorrect type!", exception.Message);
+        }
     }
 }
