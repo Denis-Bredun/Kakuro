@@ -142,6 +142,17 @@ namespace Kakuro.Commands
 
         private void CalculateSums()
         {
+            CalculateBottomSums();
+            CalculateRightSums();
+        }
+
+        private void CalculateBottomSums()
+        {
+
+        }
+
+        private void CalculateRightSums()
+        {
 
         }
 
