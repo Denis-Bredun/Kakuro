@@ -1,9 +1,9 @@
-﻿using Kakuro.Base_Classes;
-using Kakuro.Commands;
+﻿using Kakuro.Commands;
 using Kakuro.Data_Access.Data_Providers;
 using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Moq;
+using System.Windows.Input;
 using DashboardItemCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.ViewModels.DashboardItemViewModel>>;
 
 namespace Kakuro.Tests.Integration_Tests
@@ -13,7 +13,7 @@ namespace Kakuro.Tests.Integration_Tests
         private IDashboardTemplateProvider _dashboardTemplateProvider;
         private DashboardItemCollection _dashboardItemCollection;
         private IDashboardProvider _dashboardProvider;
-        private RelayCommand _applyDifficultyCommand;
+        private ICommand _applyDifficultyCommand;
 
         public ApplyDifficultyCommandTests()
         {
