@@ -16,7 +16,6 @@ namespace Kakuro.Models
         public DashboardItem()
         {
             Notes = new int[MAX_COUNT_OF_NOTES];
-            CellType = CellType.EmptyCell;
         }
 
         public override bool Equals(object? obj)

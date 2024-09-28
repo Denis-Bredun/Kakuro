@@ -90,7 +90,7 @@ namespace Kakuro.Data_Access.Data_Providers
                 _dashboard.Add(new ObservableCollection<DashboardItemViewModel>());
 
                 for (int j = 0; j < dashboardSize; j++)
-                    _dashboard[j].Add(new DashboardItemViewModel(new DashboardItem()));
+                    _dashboard[i].Add(new DashboardItemViewModel(new DashboardItem()));
             }
         }
 
@@ -140,7 +140,7 @@ namespace Kakuro.Data_Access.Data_Providers
 
             for (int i = 0; i < _dashboard.Count; i++)
             {
-                for (int j = _dashboard.Count - 1; j >= 0; j++)
+                for (int j = _dashboard.Count - 1; j >= 0; j--)
                 {
                     currentElement = isVerticalSum ? _dashboard[j][i] : _dashboard[i][j];
 
@@ -149,19 +149,17 @@ namespace Kakuro.Data_Access.Data_Providers
                         sum += currentElement.HiddenValue;
                         wasSumCollected = true;
                     }
-                    else
+                    else if (wasSumCollected)
                     {
-                        if (wasSumCollected)
-                        {
-                            if (isVerticalSum)
-                                currentElement.SumBottom = sum.ToString();
-                            else
-                                currentElement.SumRight = sum.ToString();
+                        if (isVerticalSum)
+                            currentElement.SumBottom = sum;
+                        else
+                            currentElement.SumRight = sum;
 
-                            currentElement.CellType = CellType.SumCell;
-                            sum = 0;
-                            wasSumCollected = false;
-                        }
+                        currentElement.CellType = CellType.SumCell;
+                        sum = 0;
+                        wasSumCollected = false;
+
                     }
                 }
             }

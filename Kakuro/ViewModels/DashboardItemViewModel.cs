@@ -36,9 +36,9 @@ namespace Kakuro.ViewModels
 
         public CellType CellType { get; set; }
 
-        public string SumRight { get; set; }
+        public int SumRight { get; set; }
 
-        public string SumBottom { get; set; }
+        public int SumBottom { get; set; }
 
         public DashboardItemViewModel(DashboardItem dashboardItem)
         {
