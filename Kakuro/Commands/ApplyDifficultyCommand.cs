@@ -8,12 +8,12 @@ namespace Kakuro.Commands
 {
     public class ApplyDifficultyCommand : RelayCommand
     {
-        private IDashboardGeneratorProvider _dashboardGeneratorProvider;
+        private IDashboardProvider _dashboardProvider;
         private DashboardItemCollection _dashboard;
 
-        public ApplyDifficultyCommand(IDashboardGeneratorProvider dashboardGeneratorProvider, DashboardItemCollection dashboard)
+        public ApplyDifficultyCommand(IDashboardProvider dashboardProvider, DashboardItemCollection dashboard)
         {
-            _dashboardGeneratorProvider ??= dashboardGeneratorProvider;
+            _dashboardProvider ??= dashboardProvider;
             _dashboard ??= dashboard;
         }
 
@@ -21,9 +21,7 @@ namespace Kakuro.Commands
         {
             var difficultyLevel = (DifficultyLevels)parameter;
 
-            _dashboard.Clear();
-
-            _dashboardGeneratorProvider.FillDashboardWithValuesAndSums(difficultyLevel);
+            _dashboardProvider.GenerateDashboard(difficultyLevel);
         }
     }
 }

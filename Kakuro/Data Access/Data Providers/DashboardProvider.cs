@@ -8,26 +8,28 @@ using DashboardItemCollection = System.Collections.ObjectModel.ObservableCollect
 
 namespace Kakuro.Data_Access.Data_Providers
 {
-    public class DashboardGeneratorProvider : IDashboardGeneratorProvider
+    public class DashboardProvider : IDashboardProvider
     {
         private IDashboardTemplateProvider _templateProvider;
         private DashboardItemCollection _dashboard;
 
-        public DashboardGeneratorProvider(IDashboardTemplateProvider templateProvider, DashboardItemCollection dashboard)
+        public DashboardProvider(IDashboardTemplateProvider templateProvider, DashboardItemCollection dashboard)
         {
             _dashboard ??= dashboard;
             _templateProvider ??= templateProvider;
         }
 
-        public void FillDashboardWithValuesAndSums(DifficultyLevels difficultyLevel)
+        public void GenerateDashboard(DifficultyLevels difficultyLevel)
         {
+            _dashboard.Clear();
+
             var template = _templateProvider.GenerateTemplate(difficultyLevel);
 
             var values = GenerateValues(template);
 
-            InitializeDashboard(values.GetLength(0));
+            CreateDashboard(values.GetLength(0));
 
-            FillDashboardWithValues(values);
+            InitializeDashboard(values);
         }
 
         private int[,] GenerateValues(string[,] template)
@@ -52,31 +54,25 @@ namespace Kakuro.Data_Access.Data_Providers
         {
             Random random = new Random();
             int value = 0;
-            bool isUnique = false;
+            bool isUnique;
 
             do
             {
-                isUnique = true;
+                isUnique = false;
 
                 value = random.Next(1, 10);
 
-                CheckGeneratedValueForUniqueness(ref isUnique, values, i, j, value);
+                isUnique = IsValueUnique(values, i, j, value);
 
             } while (!isUnique);
 
             return value;
         }
 
-        private void CheckGeneratedValueForUniqueness(ref bool isUnique, int[,] values, int i, int j, int value)
+        private bool IsValueUnique(int[,] values, int i, int j, int value)
         {
-            if (!IsUniqueAbove(values, i, j, value))
-                isUnique = false;
-            if (!IsUniqueBelow(values, i, j, value))
-                isUnique = false;
-            if (!IsUniqueLeft(values, i, j, value))
-                isUnique = false;
-            if (!IsUniqueRight(values, i, j, value))
-                isUnique = false;
+            return IsUniqueAbove(values, i, j, value) && IsUniqueBelow(values, i, j, value)
+                && IsUniqueLeft(values, i, j, value) && IsUniqueRight(values, i, j, value);
         }
 
         private bool IsUniqueAbove(int[,] values, int i, int j, int value) => values[i - 1, j] != value;
@@ -87,7 +83,7 @@ namespace Kakuro.Data_Access.Data_Providers
 
         private bool IsUniqueRight(int[,] values, int i, int j, int value) => values[i, j + 1] != value;
 
-        private void InitializeDashboard(int dashboardSize)
+        private void CreateDashboard(int dashboardSize)
         {
             for (int i = 0; i < dashboardSize; i++)
             {
@@ -96,6 +92,13 @@ namespace Kakuro.Data_Access.Data_Providers
                 for (int j = 0; j < dashboardSize; j++)
                     _dashboard[j].Add(new DashboardItemViewModel(new DashboardItem()));
             }
+        }
+
+        private void InitializeDashboard(int[,] values)
+        {
+            FillDashboardWithValues(values);
+
+            CalculateSums();
         }
 
         private void FillDashboardWithValues(int[,] values)
@@ -121,59 +124,42 @@ namespace Kakuro.Data_Access.Data_Providers
 
         private void CalculateBottomSums()
         {
-            DashboardItemViewModel currentElement;
-            int bottomSum = 0;
-            bool wasSumCollected = false;
-
-            for (int i = 0; i < _dashboard.Count; i++)
-            {
-                for (int j = _dashboard.Count - 1; j >= 0; j++)
-                {
-                    currentElement = _dashboard[j][i];
-
-                    if (currentElement.CellType == CellType.ValueCell)
-                    {
-                        bottomSum += currentElement.HiddenValue;
-                        wasSumCollected = true;
-                    }
-                    else
-                    {
-                        if (wasSumCollected)
-                        {
-                            currentElement.SumBottom = bottomSum.ToString();
-                            currentElement.CellType = CellType.SumCell;
-                            bottomSum = 0;
-                            wasSumCollected = false;
-                        }
-                    }
-                }
-            }
+            SumCalculatingTemplate(true);
         }
 
         private void CalculateRightSums()
         {
+            SumCalculatingTemplate(false);
+        }
+
+        private void SumCalculatingTemplate(bool isVerticalSum)
+        {
             DashboardItemViewModel currentElement;
-            int rightSum = 0;
+            int sum = 0;
             bool wasSumCollected = false;
 
             for (int i = 0; i < _dashboard.Count; i++)
             {
                 for (int j = _dashboard.Count - 1; j >= 0; j++)
                 {
-                    currentElement = _dashboard[i][j];
+                    currentElement = isVerticalSum ? _dashboard[j][i] : _dashboard[i][j];
 
                     if (currentElement.CellType == CellType.ValueCell)
                     {
-                        rightSum += currentElement.HiddenValue;
+                        sum += currentElement.HiddenValue;
                         wasSumCollected = true;
                     }
                     else
                     {
                         if (wasSumCollected)
                         {
-                            currentElement.SumRight = rightSum.ToString();
+                            if (isVerticalSum)
+                                currentElement.SumBottom = sum.ToString();
+                            else
+                                currentElement.SumRight = sum.ToString();
+
                             currentElement.CellType = CellType.SumCell;
-                            rightSum = 0;
+                            sum = 0;
                             wasSumCollected = false;
                         }
                     }
