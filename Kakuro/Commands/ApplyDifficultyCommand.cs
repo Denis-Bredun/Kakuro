@@ -3,8 +3,10 @@ using Kakuro.Data_Access.Data_Providers;
 using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Kakuro.Models;
+using Kakuro.ViewModels;
 using System.Collections.ObjectModel;
-using DoubleObservableCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.Models.DashboardItem>>;
+
+using DashboardItemCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.ViewModels.DashboardItemViewModel>>;
 
 namespace Kakuro.Commands
 {
@@ -20,9 +22,9 @@ namespace Kakuro.Commands
                                    // sums of the numbers.
 
         private IDashboardTemplateProvider _templateProvider;
-        private DoubleObservableCollection _dashboard;
+        private DashboardItemCollection _dashboard;
 
-        public ApplyDifficultyCommand(DashboardTemplateProvider templateProvider, DoubleObservableCollection dashboard)
+        public ApplyDifficultyCommand(DashboardTemplateProvider templateProvider, DashboardItemCollection dashboard)
         {
             _dashboard ??= dashboard;
             _templateProvider = templateProvider;
@@ -43,6 +45,8 @@ namespace Kakuro.Commands
             var values = GenerateValues(template);
 
             InitializeDashboard(dashboardSize);
+
+            FillDashboardWithValues(values);
         }
 
         private int DetermineTheDashboardSize(DifficultyLevels difficultyLevel) => difficultyLevel switch
@@ -114,11 +118,31 @@ namespace Kakuro.Commands
         {
             for (int i = 0; i < dashboardSize; i++)
             {
-                _dashboard.Add(new ObservableCollection<DashboardItem>());
+                _dashboard.Add(new ObservableCollection<DashboardItemViewModel>());
 
                 for (int j = 0; j < dashboardSize; j++)
-                    _dashboard[j].Add(new DashboardItem());
+                    _dashboard[j].Add(new DashboardItemViewModel(new DashboardItem()));
             }
+        }
+
+        private void FillDashboardWithValues(int[,] values)
+        {
+            int dashboardSize = values.GetLength(0);
+            DashboardItemViewModel currentElement;
+
+            for (int i = 0; i < dashboardSize; i++)
+                for (int j = 0; j < dashboardSize; j++)
+                    if (values[i, j] != 0)
+                    {
+                        currentElement = _dashboard.ElementAt(i).ElementAt(j);
+                        currentElement.HiddenValue = values[i, j];
+                        currentElement.CellType = CellType.ValueCell;
+                    }
+        }
+
+        private void CalculateSums()
+        {
+
         }
 
         // #BAD: Logic about generating MUSTN'T be in this class!

@@ -20,29 +20,6 @@ namespace Kakuro.ViewModels
             }
         }
 
-        public string HiddenValue
-        {
-            get => ConvertIntToString(_dashboardItem.HiddenValue);
-            set
-            {
-                _dashboardItem.HiddenValue = ConvertStringToInt(value);
-                OnPropertyChanged("HiddenValue");
-            }
-        }
-
-        public string CellType
-        {
-            get => _dashboardItem.CellType.ToString();
-            set
-            {
-                if (Enum.TryParse(value, out CellType cellType))
-                {
-                    _dashboardItem.CellType = cellType;
-                    OnPropertyChanged("CellType");
-                }
-            }
-        }
-
         public string[] Notes
         {
             get => _dashboardItem.Notes.Select(el => ConvertIntToString(el)).ToArray();
@@ -55,25 +32,13 @@ namespace Kakuro.ViewModels
             }
         }
 
-        public string SumRight
-        {
-            get => ConvertIntToString(_dashboardItem.SumRight);
-            set
-            {
-                _dashboardItem.SumRight = ConvertStringToInt(value);
-                OnPropertyChanged("SumRight");
-            }
-        }
+        public int HiddenValue { get; set; }
 
-        public string SumBottom
-        {
-            get => ConvertIntToString(_dashboardItem.SumBottom);
-            set
-            {
-                _dashboardItem.SumBottom = ConvertStringToInt(value);
-                OnPropertyChanged("SumBottom");
-            }
-        }
+        public CellType CellType { get; set; }
+
+        public string SumRight { get; set; }
+
+        public string SumBottom { get; set; }
 
         public DashboardItemViewModel(DashboardItem dashboardItem)
         {
