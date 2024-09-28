@@ -6,16 +6,16 @@
         xmlns:local="clr-namespace:Kakuro" 
         xmlns:view="clr-namespace:Kakuro.Views"
         mc:Ignorable="d"
-        Title="Kakuro" Height="565" Width="914" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
+        Title="Kakuro" Height="723" Width="1210" WindowStartupLocation="CenterScreen" SizeToContent="Height">
 
     <TabControl>
 
-        <TabItem Header="Game" Width="447">
+        <TabItem Header="Game" Width="595">
 
             <view:GameTab/>
 
         </TabItem>
-        <TabItem Header="Rating table" Width="447">
+        <TabItem Header="Rating table" Width="595">
 
             <view:RatingTableTab/>
 
