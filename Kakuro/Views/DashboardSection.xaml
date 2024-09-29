@@ -5,65 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Kakuro.Views"
              xmlns:viewmodels="clr-namespace:Kakuro.ViewModels"
-             xmlns:converters="clr-namespace:Kakuro.Converters"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-
-    <UserControl.Resources>
-        <converters:SumConverter x:Key="SumConverter" />
-
-        <DataTemplate x:Key="DataTemplate_Level2">
-            <Button Height="40" Width="40">
-                <Button.Style>
-                    <Style TargetType="Button">
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding CellType}" Value="EmptyCell">
-                                <Setter Property="Background" Value="Black" />
-                                <Setter Property="BorderBrush" Value="Black" />
-                                <Setter Property="Content" Value="" />
-                            </DataTrigger>
-
-                            <DataTrigger Binding="{Binding CellType}" Value="ValueCell">
-                                <Setter Property="Background" Value="White" />
-                                <Setter Property="BorderBrush" Value="Black" />
-                                <Setter Property="Content" Value="{Binding HiddenValue}" />
-                            </DataTrigger>
-
-                            <DataTrigger Binding="{Binding CellType}" Value="SumCell">
-                                <Setter Property="Background" Value="Black" />
-                                <Setter Property="BorderBrush" Value="Black" />
-                                <Setter Property="Foreground" Value="White" />
-                                <Setter Property="FontSize" Value="13" />
-                                <Setter Property="Content">
-                                    <Setter.Value>
-                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <TextBlock.Text>
-                                                <MultiBinding Converter="{StaticResource SumConverter}">
-                                                    <Binding Path="SumRight" />
-                                                    <Binding Path="SumBottom" />
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                    </Setter.Value>
-                                </Setter>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Button.Style>
-            </Button>
-        </DataTemplate>
-
-        <DataTemplate x:Key="DataTemplate_Level1">
-            <ItemsControl ItemsSource="{Binding}" ItemTemplate="{DynamicResource DataTemplate_Level2}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel Orientation="Horizontal"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </DataTemplate>
-
-    </UserControl.Resources>
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -73,8 +16,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid Grid.Column="1" HorizontalAlignment="Center">
-            <ItemsControl x:Name="lst" ItemsSource="{Binding Dashboard}" ItemTemplate="{DynamicResource DataTemplate_Level1}"/>
+            <ItemsControl x:Name="Dashboard" ItemsSource="{Binding Dashboard}" ItemTemplate="{DynamicResource Rows_Template}"/>
         </Grid>
-
     </Grid>
 </UserControl>
