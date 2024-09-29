@@ -509,7 +509,7 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void GetDashboardCount_Should_ReturnCorrectCount_AfterAddingItems()
+        public void GetDashboardCount_Should_ReturnCorrectCount_After_AddingItems()
         {
             // Arrange
             var item1 = new DashboardItemViewModel(new DashboardItem());
@@ -526,7 +526,7 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void GetDashboardCount_Should_ReturnCorrectCount_AfterRemovingItems()
+        public void GetDashboardCount_Should_ReturnCorrectCount_After_RemovingItems()
         {
             // Arrange
             var item1 = new DashboardItemViewModel(new DashboardItem());
