@@ -20,14 +20,12 @@
                             <DataTrigger Binding="{Binding CellType}" Value="EmptyCell">
                                 <Setter Property="Background" Value="Black" />
                                 <Setter Property="BorderBrush" Value="Black" />
-                                <Setter Property="BorderThickness" Value="1" />
                                 <Setter Property="Content" Value="" />
                             </DataTrigger>
 
                             <DataTrigger Binding="{Binding CellType}" Value="ValueCell">
                                 <Setter Property="Background" Value="White" />
                                 <Setter Property="BorderBrush" Value="Black" />
-                                <Setter Property="BorderThickness" Value="1" />
                                 <Setter Property="Content" Value="{Binding HiddenValue}" />
                             </DataTrigger>
 
@@ -35,7 +33,7 @@
                                 <Setter Property="Background" Value="Black" />
                                 <Setter Property="BorderBrush" Value="Black" />
                                 <Setter Property="Foreground" Value="White" />
-                                <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="FontSize" Value="13" />
                                 <Setter Property="Content">
                                     <Setter.Value>
                                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">

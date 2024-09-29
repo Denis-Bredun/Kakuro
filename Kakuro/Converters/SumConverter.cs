@@ -13,7 +13,18 @@ namespace Kakuro.Converters
             string sumRight = values[0].ToString();
             string sumBottom = values[1].ToString();
 
-            return $"{sumBottom}\\{sumRight}";
+            string additionalSpaces = GetSpaces(sumBottom);
+
+            return $"╲{sumRight}\n{sumBottom}{additionalSpaces} ╲";
+        }
+
+        private string GetSpaces(string sumBottom)
+        {
+            int defaultSpaces = 4;
+            int spaceReductionFactor = 2;
+
+            int spaces = defaultSpaces - spaceReductionFactor * sumBottom.Length;
+            return spaces > 0 ? new string(' ', spaces) : string.Empty;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
