@@ -11,7 +11,7 @@
     <UserControl.Resources>
         <!-- Template for individual cells -->
         <DataTemplate x:Key="DataTemplate_Level2">
-            <Button Content="{Binding DisplayValue}" Height="40" Width="40">
+            <Button Height="40" Width="40">
                 <Button.Style>
                     <Style TargetType="Button">
                         <Style.Triggers>
@@ -20,6 +20,8 @@
                                 <Setter Property="Background" Value="Black" />
                                 <Setter Property="BorderBrush" Value="Black" />
                                 <Setter Property="BorderThickness" Value="1" />
+                                <!-- No content for EmptyCell -->
+                                <Setter Property="Content" Value="" />
                             </DataTrigger>
 
                             <!-- If CellType is ValueCell -->
@@ -27,6 +29,8 @@
                                 <Setter Property="Background" Value="White" />
                                 <Setter Property="BorderBrush" Value="Black" />
                                 <Setter Property="BorderThickness" Value="1" />
+                                <!-- Bind content to HiddenValue for ValueCell -->
+                                <Setter Property="Content" Value="{Binding HiddenValue}" />
                             </DataTrigger>
 
                             <!-- If CellType is SumCell -->
@@ -34,6 +38,7 @@
                                 <Setter Property="Background" Value="Yellow" />
                                 <Setter Property="BorderBrush" Value="Black" />
                                 <Setter Property="BorderThickness" Value="1" />
+                                <Setter Property="Content" Value="{Binding SumRight}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
