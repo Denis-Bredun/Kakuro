@@ -9,11 +9,11 @@ namespace Kakuro.ViewModels
 {
     public class DashboardViewModel : ViewModelBase
     {
+        private const DifficultyLevels DEFAULT_DIFFICULTY = DifficultyLevels.Easy;
+
         public DashboardItemCollection Dashboard { get; }
         public int CountOfRows => Dashboard.Count;
         public int CountOfColumns => Dashboard.Count;
-
-        private const DifficultyLevels DEFAULT_LEVEL = DifficultyLevels.Easy;
 
         public ICommand ApplyDifficultyCommand { get; }
 
@@ -21,7 +21,8 @@ namespace Kakuro.ViewModels
         {
             Dashboard = new DashboardItemCollection();
             ApplyDifficultyCommand = new ApplyDifficultyCommand(new DashboardProvider(new DashboardTemplateProvider(), Dashboard)); // #BAD: we need DI! I already have a commend about it
-            ApplyDifficultyCommand.Execute(DEFAULT_LEVEL);
+
+            ApplyDifficultyCommand.Execute(DEFAULT_DIFFICULTY);
         }
     }
 }
