@@ -2,7 +2,10 @@
 using Kakuro.Data_Access.Data_Providers;
 using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
+using Kakuro.Models;
+using Kakuro.ViewModels;
 using Moq;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using DashboardItemCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.ViewModels.DashboardItemViewModel>>;
 
@@ -20,7 +23,7 @@ namespace Kakuro.Tests.Integration_Tests
             _dashboardItemCollection = new DashboardItemCollection();
             _dashboardTemplateProvider = new DashboardTemplateProvider();
             _dashboardProvider = new DashboardProvider(_dashboardTemplateProvider, _dashboardItemCollection);
-            _applyDifficultyCommand = new ApplyDifficultyCommand(_dashboardProvider);
+            _applyDifficultyCommand = new ApplyDifficultyCommand(_dashboardProvider, _dashboardItemCollection);
         }
 
         public void Dispose()
@@ -34,7 +37,7 @@ namespace Kakuro.Tests.Integration_Tests
             // Arrange
             var difficultyLevel = DifficultyLevels.Normal;
             var dashboardProviderMock = new Mock<IDashboardProvider>();
-            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object, _dashboardItemCollection);
 
             // Act
             applyDifficultyCommand.Execute(difficultyLevel);
@@ -50,7 +53,7 @@ namespace Kakuro.Tests.Integration_Tests
             var dashboardProviderMock = new Mock<IDashboardProvider>();
 
             // Act
-            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object, _dashboardItemCollection);
 
             // Assert
             Assert.NotNull(applyDifficultyCommand);
@@ -61,7 +64,7 @@ namespace Kakuro.Tests.Integration_Tests
         {
             // Arrange
             var dashboardProviderMock = new Mock<IDashboardProvider>();
-            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object, _dashboardItemCollection);
 
             // Act & Assert
             var exception = Assert.Throws<NullReferenceException>(() => applyDifficultyCommand.Execute(null));
@@ -73,7 +76,7 @@ namespace Kakuro.Tests.Integration_Tests
         {
             // Arrange
             var dashboardProviderMock = new Mock<IDashboardProvider>();
-            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object, _dashboardItemCollection);
             var invalidParameter = new object();
 
             // Act & Assert
@@ -87,8 +90,23 @@ namespace Kakuro.Tests.Integration_Tests
             // Arrange
             var difficultyLevel = DifficultyLevels.Normal;
             var dashboardProviderMock = new Mock<IDashboardProvider>();
-            dashboardProviderMock.SetupSequence(dp => dp.GetDashboardCount()).Returns(0).Returns(12); // Normal difficulty size - 10 + sum of sizes of borders from 2 sides - 2 = 12
-            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object, _dashboardItemCollection);
+
+            dashboardProviderMock
+                .Setup(dp => dp.GenerateDashboard(difficultyLevel))
+                .Callback(() =>
+                {
+                    int fullDashboardSize = (int)difficultyLevel + 2; // 2 - two elements from 2 side borders
+                    for (int i = 0; i < fullDashboardSize; i++)
+                    {
+                        var row = new ObservableCollection<DashboardItemViewModel>();
+                        for (int j = 0; j < fullDashboardSize; j++)
+                        {
+                            row.Add(new DashboardItemViewModel(new DashboardItem()));
+                        }
+                        _dashboardItemCollection.Add(row);
+                    }
+                });
 
             // Act
             applyDifficultyCommand.Execute(difficultyLevel); // First call

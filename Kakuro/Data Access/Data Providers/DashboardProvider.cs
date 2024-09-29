@@ -164,10 +164,5 @@ namespace Kakuro.Data_Access.Data_Providers
                 }
             }
         }
-
-        public int GetDashboardCount()
-        {
-            return _dashboard.Count;
-        }
     }
 }

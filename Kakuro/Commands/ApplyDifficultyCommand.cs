@@ -1,16 +1,19 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
+using DashboardItemCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.ViewModels.DashboardItemViewModel>>;
 
 namespace Kakuro.Commands
 {
     public class ApplyDifficultyCommand : RelayCommand
     {
         private IDashboardProvider _dashboardProvider;
+        private DashboardItemCollection _dashboard;
 
-        public ApplyDifficultyCommand(IDashboardProvider dashboardProvider)
+        public ApplyDifficultyCommand(IDashboardProvider dashboardProvider, DashboardItemCollection dashboard)
         {
             _dashboardProvider ??= dashboardProvider;
+            _dashboard ??= dashboard;
         }
 
         public override void Execute(object? parameter)
@@ -28,10 +31,11 @@ namespace Kakuro.Commands
         private bool DoesNotDashboardExistForDifficulty(DifficultyLevels difficultyLevel)
         {
             const int TOTAL_BORDER_SIZE_FROM_TWO_SIDES = 2;
-            int onlyDashboardSize = (int)difficultyLevel;
-            int fullDashboardSize = onlyDashboardSize + TOTAL_BORDER_SIZE_FROM_TWO_SIDES;
 
-            int currentDashboardSize = _dashboardProvider.GetDashboardCount();
+            int dashboardSizeOnDifficulty = (int)difficultyLevel;
+            int fullDashboardSize = dashboardSizeOnDifficulty + TOTAL_BORDER_SIZE_FROM_TWO_SIDES;
+
+            int currentDashboardSize = _dashboard.Count;
 
             return fullDashboardSize != currentDashboardSize;
         }

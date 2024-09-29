@@ -20,7 +20,7 @@ namespace Kakuro.ViewModels
         public DashboardViewModel()
         {
             Dashboard = new DashboardItemCollection();
-            ApplyDifficultyCommand = new ApplyDifficultyCommand(new DashboardProvider(new DashboardTemplateProvider(), Dashboard)); // #BAD: we need DI! I already have a commend about it
+            ApplyDifficultyCommand = new ApplyDifficultyCommand(new DashboardProvider(new DashboardTemplateProvider(), Dashboard), Dashboard); // #BAD: we need DI! I already have a commend about it
 
             ApplyDifficultyCommand.Execute(DEFAULT_DIFFICULTY);
         }

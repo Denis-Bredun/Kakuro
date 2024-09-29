@@ -1,9 +1,6 @@
 ﻿using Kakuro.Data_Access.Data_Providers;
 using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
-using Kakuro.Models;
-using Kakuro.ViewModels;
-using System.Collections.ObjectModel;
 using DashboardItemCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.ViewModels.DashboardItemViewModel>>;
 
 namespace Kakuro.Tests.Integration_Tests
@@ -495,51 +492,6 @@ namespace Kakuro.Tests.Integration_Tests
             // Assert
             Assert.NotEqual(initialDashboard, updatedDashboard);
             Assert.NotEqual(initialDashboard.Length, updatedDashboard.Length);
-        }
-
-        [Fact]
-        public void GetDashboardCount_Should_ReturnZero_When_Initialized()
-        {
-            // Arrange
-            // Act
-            var count = _dashboardProvider.GetDashboardCount();
-
-            // Assert
-            Assert.Equal(0, count);
-        }
-
-        [Fact]
-        public void GetDashboardCount_Should_ReturnCorrectCount_After_AddingItems()
-        {
-            // Arrange
-            var item1 = new DashboardItemViewModel(new DashboardItem());
-            var item2 = new DashboardItemViewModel(new DashboardItem());
-
-            _dashboardItemCollection.Add(new ObservableCollection<DashboardItemViewModel> { item1 });
-            _dashboardItemCollection.Add(new ObservableCollection<DashboardItemViewModel> { item2 });
-
-            // Act
-            var count = _dashboardProvider.GetDashboardCount();
-
-            // Assert
-            Assert.Equal(2, count);
-        }
-
-        [Fact]
-        public void GetDashboardCount_Should_ReturnCorrectCount_After_RemovingItems()
-        {
-            // Arrange
-            var item1 = new DashboardItemViewModel(new DashboardItem());
-            var item2 = new DashboardItemViewModel(new DashboardItem());
-            _dashboardItemCollection.Add(new ObservableCollection<DashboardItemViewModel> { item1 });
-            _dashboardItemCollection.Add(new ObservableCollection<DashboardItemViewModel> { item2 });
-
-            // Act
-            _dashboardItemCollection.RemoveAt(0);
-            var count = _dashboardProvider.GetDashboardCount();
-
-            // Assert
-            Assert.Equal(1, count);
         }
     }
 }
