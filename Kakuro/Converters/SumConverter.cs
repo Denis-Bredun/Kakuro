@@ -15,7 +15,7 @@ namespace Kakuro.Converters
 
             string additionalSpaces = GetSpaces(sumBottom);
 
-            return $"╲{sumRight}\n{sumBottom}{additionalSpaces} ╲";
+            return $"╲{sumRight}\n{sumBottom}{additionalSpaces}╲";
         }
 
         private string GetSpaces(string sumBottom)
@@ -24,7 +24,7 @@ namespace Kakuro.Converters
             int spaceReductionFactor = 2;
 
             int spaces = defaultSpaces - spaceReductionFactor * sumBottom.Length;
-            return spaces > 0 ? new string(' ', spaces) : string.Empty;
+            return spaces > 0 ? new string(' ', spaces) + " " : " ";
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
