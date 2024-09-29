@@ -80,5 +80,22 @@ namespace Kakuro.Tests.Integration_Tests
             var exception = Assert.Throws<ArgumentException>(() => applyDifficultyCommand.Execute(invalidParameter));
             Assert.Equal("Parameter for ApplyDifficultyCommand is of incorrect type!", exception.Message);
         }
+
+        [Fact]
+        public void Should_Not_CallGenerateDashboard_Twice_For_SameDifficultyLevel()
+        {
+            // Arrange
+            var difficultyLevel = DifficultyLevels.Normal;
+            var dashboardProviderMock = new Mock<IDashboardProvider>();
+            dashboardProviderMock.SetupSequence(dp => dp.GetDashboardCount()).Returns(0).Returns(12); // Normal difficulty size - 10 + sum of sizes of borders from 2 sides - 2 = 12
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
+
+            // Act
+            applyDifficultyCommand.Execute(difficultyLevel); // First call
+            applyDifficultyCommand.Execute(difficultyLevel); // Second call (should not generate again)
+
+            // Assert
+            dashboardProviderMock.Verify(dp => dp.GenerateDashboard(difficultyLevel), Times.Once);
+        }
     }
 }
