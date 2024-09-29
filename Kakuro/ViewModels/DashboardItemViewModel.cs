@@ -20,6 +20,36 @@ namespace Kakuro.ViewModels
             }
         }
 
+        public string HiddenValue
+        {
+            get => ConvertIntToString(_dashboardItem.HiddenValue);
+            set
+            {
+                _dashboardItem.HiddenValue = ConvertStringToInt(value);
+                OnPropertyChanged("HiddenValue");
+            }
+        }
+
+        public string SumRight
+        {
+            get => ConvertIntToString(_dashboardItem.SumRight);
+            set
+            {
+                _dashboardItem.SumRight = ConvertStringToInt(value);
+                OnPropertyChanged("SumRight");
+            }
+        }
+
+        public string SumBottom
+        {
+            get => ConvertIntToString(_dashboardItem.SumBottom);
+            set
+            {
+                _dashboardItem.SumBottom = ConvertStringToInt(value);
+                OnPropertyChanged("SumBottom");
+            }
+        }
+
         public string[] Notes
         {
             get => _dashboardItem.Notes.Select(el => ConvertIntToString(el)).ToArray();
@@ -32,13 +62,15 @@ namespace Kakuro.ViewModels
             }
         }
 
-        public int HiddenValue { get; set; }
-
-        public CellType CellType { get; set; }
-
-        public int SumRight { get; set; }
-
-        public int SumBottom { get; set; }
+        public CellType CellType
+        {
+            get => _dashboardItem.CellType;
+            set
+            {
+                _dashboardItem.CellType = value;
+                OnPropertyChanged("CellType");
+            }
+        }
 
         public DashboardItemViewModel(DashboardItem dashboardItem)
         {

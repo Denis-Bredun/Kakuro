@@ -42,7 +42,7 @@ namespace Kakuro.Tests.Integration_Tests
                 {
                     for (int j = 0; j < _dashboardItemCollection[i].Count; j++)
                     {
-                        if (_dashboardItemCollection[i][j].HiddenValue != 0)
+                        if (_dashboardItemCollection[i][j].HiddenValue != "")
                             Assert.Equal("*", template[i, j]);
                         else
                             Assert.Empty(template[i, j]);
@@ -68,19 +68,19 @@ namespace Kakuro.Tests.Integration_Tests
                 {
                     if (easyTemplate[i, j] == "*" && hardTemplate[i, j] == "")
                     {
-                        Assert.NotEqual(0, _dashboardItemCollection[i][j].HiddenValue);
+                        Assert.NotEqual("", _dashboardItemCollection[i][j].HiddenValue);
                     }
                     else if (easyTemplate[i, j] == "" && hardTemplate[i, j] == "*")
                     {
-                        Assert.Equal(0, _dashboardItemCollection[i][j].HiddenValue);
+                        Assert.Equal("", _dashboardItemCollection[i][j].HiddenValue);
                     }
                     else if (easyTemplate[i, j] == "" && hardTemplate[i, j] == "")
                     {
-                        Assert.Equal(0, _dashboardItemCollection[i][j].HiddenValue);
+                        Assert.Equal("", _dashboardItemCollection[i][j].HiddenValue);
                     }
                     else
                     {
-                        Assert.NotEqual(0, _dashboardItemCollection[i][j].HiddenValue);
+                        Assert.NotEqual("", _dashboardItemCollection[i][j].HiddenValue);
                     }
                 }
             }
@@ -126,7 +126,7 @@ namespace Kakuro.Tests.Integration_Tests
                 _dashboardProvider.GenerateDashboard(difficulty);
 
                 // Assert
-                var hasNonZeroValue = _dashboardItemCollection.Any(row => row.Any(item => item.HiddenValue != 0));
+                var hasNonZeroValue = _dashboardItemCollection.Any(row => row.Any(item => item.HiddenValue != ""));
                 Assert.True(hasNonZeroValue);
             }
         }
@@ -162,12 +162,12 @@ namespace Kakuro.Tests.Integration_Tests
 
                     if (currentElement.CellType == CellType.ValueCell)
                     {
-                        calculatedSum += currentElement.HiddenValue;
+                        calculatedSum += Convert.ToInt32(currentElement.HiddenValue);
                         wasSumCollected = true;
                     }
                     else if (wasSumCollected)
                     {
-                        var sumToCheck = isVerticalSum ? currentElement.SumBottom : currentElement.SumRight;
+                        var sumToCheck = isVerticalSum ? Convert.ToInt32(currentElement.SumBottom) : Convert.ToInt32(currentElement.SumRight);
 
                         if (sumToCheck != calculatedSum)
                         {
@@ -201,14 +201,14 @@ namespace Kakuro.Tests.Integration_Tests
                     {
                         var currentElement = _dashboardItemCollection[i][j];
 
-                        if (currentElement.HiddenValue != 0)
+                        if (currentElement.HiddenValue != "")
                         {
                             if (currentElement.CellType != CellType.ValueCell)
                             {
                                 areCellTypesCorrect = false;
                             }
                         }
-                        else if (currentElement.SumBottom != 0 || currentElement.SumRight != 0)
+                        else if (currentElement.SumBottom != "" || currentElement.SumRight != "")
                         {
                             if (currentElement.CellType != CellType.SumCell)
                             {
@@ -294,7 +294,7 @@ namespace Kakuro.Tests.Integration_Tests
 
                         if (currentElement.CellType == CellType.ValueCell)
                         {
-                            int currentValue = currentElement.HiddenValue;
+                            int currentValue = string.IsNullOrEmpty(currentElement.HiddenValue) ? 0 : Convert.ToInt32(currentElement.HiddenValue);
 
                             if (!IsValueUnique(i, j, currentValue))
                             {
@@ -322,22 +322,30 @@ namespace Kakuro.Tests.Integration_Tests
 
         private bool IsUniqueAbove(int i, int j, int value)
         {
-            return _dashboardItemCollection[i - 1][j].HiddenValue != value;
+            int valueAbove = string.IsNullOrEmpty(_dashboardItemCollection[i - 1][j].HiddenValue) ? 0 : Convert.ToInt32(_dashboardItemCollection[i - 1][j].HiddenValue);
+
+            return valueAbove != value;
         }
 
         private bool IsUniqueBelow(int i, int j, int value)
         {
-            return _dashboardItemCollection[i + 1][j].HiddenValue != value;
+            int valueBelow = string.IsNullOrEmpty(_dashboardItemCollection[i + 1][j].HiddenValue) ? 0 : Convert.ToInt32(_dashboardItemCollection[i + 1][j].HiddenValue);
+
+            return valueBelow != value;
         }
 
         private bool IsUniqueLeft(int i, int j, int value)
         {
-            return _dashboardItemCollection[i][j - 1].HiddenValue != value;
+            int valueLeft = string.IsNullOrEmpty(_dashboardItemCollection[i][j - 1].HiddenValue) ? 0 : Convert.ToInt32(_dashboardItemCollection[i][j - 1].HiddenValue);
+
+            return valueLeft != value;
         }
 
         private bool IsUniqueRight(int i, int j, int value)
         {
-            return _dashboardItemCollection[i][j + 1].HiddenValue != value;
+            int valueRight = string.IsNullOrEmpty(_dashboardItemCollection[i][j + 1].HiddenValue) ? 0 : Convert.ToInt32(_dashboardItemCollection[i][j + 1].HiddenValue);
+
+            return valueRight != value;
         }
 
         [Fact]
@@ -359,7 +367,7 @@ namespace Kakuro.Tests.Integration_Tests
 
                         if (currentElement.CellType == CellType.SumCell)
                         {
-                            Assert.True(currentElement.SumBottom != 0 || currentElement.SumRight != 0);
+                            Assert.True(currentElement.SumBottom != "" || currentElement.SumRight != "");
                         }
                     }
                 }
@@ -421,9 +429,9 @@ namespace Kakuro.Tests.Integration_Tests
 
                         if (currentElement.CellType == CellType.EmptyCell)
                         {
-                            Assert.Equal(0, currentElement.HiddenValue);
-                            Assert.Equal(0, currentElement.SumBottom);
-                            Assert.Equal(0, currentElement.SumRight);
+                            Assert.Equal("", currentElement.HiddenValue);
+                            Assert.Equal("", currentElement.SumBottom);
+                            Assert.Equal("", currentElement.SumRight);
                         }
                     }
                 }
@@ -445,9 +453,9 @@ namespace Kakuro.Tests.Integration_Tests
                 {
                     foreach (var item in row)
                     {
-                        if (item.HiddenValue != 0)
+                        if (item.HiddenValue != "")
                         {
-                            Assert.InRange(item.HiddenValue, 1, 9);
+                            Assert.InRange(Convert.ToInt32(item.HiddenValue), 1, 9);
                         }
                     }
                 }
@@ -471,7 +479,7 @@ namespace Kakuro.Tests.Integration_Tests
                     {
                         if (item.CellType == CellType.SumCell)
                         {
-                            Assert.Equal(0, item.HiddenValue);
+                            Assert.Equal("", item.HiddenValue);
                         }
                     }
                 }

@@ -111,7 +111,7 @@ namespace Kakuro.Data_Access.Data_Providers
                     if (values[i, j] != 0)
                     {
                         currentElement = _dashboard[i][j];
-                        currentElement.HiddenValue = values[i, j];
+                        currentElement.HiddenValue = values[i, j].ToString();
                         currentElement.CellType = CellType.ValueCell;
                     }
         }
@@ -146,15 +146,15 @@ namespace Kakuro.Data_Access.Data_Providers
 
                     if (currentElement.CellType == CellType.ValueCell)
                     {
-                        sum += currentElement.HiddenValue;
+                        sum += Convert.ToInt32(currentElement.HiddenValue);
                         wasSumCollected = true;
                     }
                     else if (wasSumCollected)
                     {
                         if (isVerticalSum)
-                            currentElement.SumBottom = sum;
+                            currentElement.SumBottom = sum.ToString();
                         else
-                            currentElement.SumRight = sum;
+                            currentElement.SumRight = sum.ToString();
 
                         currentElement.CellType = CellType.SumCell;
                         sum = 0;
