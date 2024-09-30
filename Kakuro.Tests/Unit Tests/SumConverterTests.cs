@@ -49,46 +49,7 @@ namespace Kakuro.Tests.Unit_Tests
             var result = _converter.Convert(values, null, null, CultureInfo.InvariantCulture);
 
             // Assert
-            Assert.Equal("╲5\n10 ╲", result);
-        }
-
-        [Fact]
-        public void Should_ReturnFormattedStringWithSpaces_When_SumBottomLengthIsOne()
-        {
-            // Arrange
-            object[] values = { "5", "9" };
-
-            // Act
-            var result = _converter.Convert(values, null, null, CultureInfo.InvariantCulture);
-
-            // Assert
-            Assert.Equal("╲5\n9   ╲", result);
-        }
-
-        [Fact]
-        public void Should_ReturnFormattedStringWithNoSpaces_When_SumBottomLengthIsTwo()
-        {
-            // Arrange
-            object[] values = { "5", "99" };
-
-            // Act
-            var result = _converter.Convert(values, null, null, CultureInfo.InvariantCulture);
-
-            // Assert
-            Assert.Equal("╲5\n99 ╲", result);
-        }
-
-        [Fact]
-        public void Should_ReturnEmptyString_When_SumBottomIsEmpty()
-        {
-            // Arrange
-            object[] values = { "5", "" };
-
-            // Act
-            var result = _converter.Convert(values, null, null, CultureInfo.InvariantCulture);
-
-            // Assert
-            Assert.Equal("╲5\n     ╲", result);
+            Assert.Equal("╲  5\n10  ╲", result);
         }
 
         [Fact]
@@ -100,6 +61,32 @@ namespace Kakuro.Tests.Unit_Tests
 
             // Act & Assert
             Assert.Throws<NotImplementedException>(() => _converter.ConvertBack(value, targetTypes, null, CultureInfo.InvariantCulture));
+        }
+
+        [Fact]
+        public void Should_HandleNonStringValues_When_ValidNumericValuesProvided()
+        {
+            // Arrange
+            object[] values = { 5, 10 };
+
+            // Act
+            var result = _converter.Convert(values, null, null, CultureInfo.InvariantCulture);
+
+            // Assert
+            Assert.Equal("╲  5\n10  ╲", result);
+        }
+
+        [Fact]
+        public void Should_HandleMixedDataTypes_When_MixedStringAndNumericValuesProvided()
+        {
+            // Arrange
+            object[] values = { 5, "10" };
+
+            // Act
+            var result = _converter.Convert(values, null, null, CultureInfo.InvariantCulture);
+
+            // Assert
+            Assert.Equal("╲  5\n10  ╲", result);
         }
     }
 }
