@@ -5,24 +5,20 @@
     <converters:SumConverter x:Key="SumConverter" />
 
     <DataTemplate x:Key="Elements_Template">
-        <TextBox Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center">
-            <TextBox.Style>
-                <Style TargetType="TextBox">
+        <Button Height="40" Width="40">
+            <Button.Style>
+                <Style TargetType="Button">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding CellType}" Value="EmptyCell">
                             <Setter Property="Background" Value="Black" />
                             <Setter Property="BorderBrush" Value="Black" />
-                            <Setter Property="Text" Value="" />
-                            <Setter Property="IsReadOnly" Value="True" />
+                            <Setter Property="Content" Value="" />
                         </DataTrigger>
 
                         <DataTrigger Binding="{Binding CellType}" Value="ValueCell">
                             <Setter Property="Background" Value="White" />
                             <Setter Property="BorderBrush" Value="Black" />
-                            <Setter Property="MaxLength" Value="1" />
-                            <Setter Property="VerticalContentAlignment" Value="Center" />
-                            <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="Text" Value="{Binding DisplayValue, UpdateSourceTrigger=PropertyChanged}" />
+                            <Setter Property="Content" Value="{Binding HiddenValue}" />
                         </DataTrigger>
 
                         <DataTrigger Binding="{Binding CellType}" Value="SumCell">
@@ -30,20 +26,23 @@
                             <Setter Property="BorderBrush" Value="Black" />
                             <Setter Property="Foreground" Value="White" />
                             <Setter Property="FontSize" Value="13" />
-                            <Setter Property="Text">
+                            <Setter Property="Content">
                                 <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource SumConverter}">
-                                        <Binding Path="SumRight" />
-                                        <Binding Path="SumBottom" />
-                                    </MultiBinding>
+                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <TextBlock.Text>
+                                            <MultiBinding Converter="{StaticResource SumConverter}">
+                                                <Binding Path="SumRight" />
+                                                <Binding Path="SumBottom" />
+                                            </MultiBinding>
+                                        </TextBlock.Text>
+                                    </TextBlock>
                                 </Setter.Value>
                             </Setter>
-                            <Setter Property="IsReadOnly" Value="True" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </TextBox.Style>
-        </TextBox>
+            </Button.Style>
+        </Button>
     </DataTemplate>
 
     <DataTemplate x:Key="Rows_Template">
