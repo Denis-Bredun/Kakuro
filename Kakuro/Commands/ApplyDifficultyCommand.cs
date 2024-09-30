@@ -1,7 +1,6 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
-using DashboardItemCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.ViewModels.DashboardItemViewModel>>;
 
 namespace Kakuro.Commands
 {

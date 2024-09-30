@@ -7,7 +7,6 @@ using Kakuro.ViewModels;
 using Moq;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
-using DashboardItemCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.ViewModels.DashboardItemViewModel>>;
 
 namespace Kakuro.Tests.Integration_Tests
 {

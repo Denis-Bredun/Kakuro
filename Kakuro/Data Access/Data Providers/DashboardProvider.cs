@@ -4,8 +4,6 @@ using Kakuro.Models;
 using Kakuro.ViewModels;
 using System.Collections.ObjectModel;
 
-using DashboardItemCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.ViewModels.DashboardItemViewModel>>;
-
 namespace Kakuro.Data_Access.Data_Providers
 {
     public class DashboardProvider : IDashboardProvider
@@ -90,7 +88,11 @@ namespace Kakuro.Data_Access.Data_Providers
                 _dashboard.Add(new ObservableCollection<DashboardItemViewModel>());
 
                 for (int j = 0; j < dashboardSize; j++)
-                    _dashboard[i].Add(new DashboardItemViewModel(new DashboardItem()));
+                {
+                    var dashboardItem = new DashboardItem();
+                    var wrapper = new DashboardItemViewModel(dashboardItem);
+                    _dashboard[i].Add(wrapper);
+                }
             }
         }
 

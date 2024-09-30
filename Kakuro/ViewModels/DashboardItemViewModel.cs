@@ -1,10 +1,11 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
+using Kakuro.Interfaces.ViewModels;
 using Kakuro.Models;
 
 namespace Kakuro.ViewModels
 {
-    public class DashboardItemViewModel : ViewModelBase
+    public class DashboardItemViewModel : ViewModelBase, IDashboardItemViewModel
     {
         private DashboardItem _dashboardItem;
 

@@ -1,15 +1,18 @@
-﻿using System.Windows;
+﻿using Kakuro.ViewModels;
+using System.Windows;
 
 namespace Kakuro
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private MainViewModel _mainViewModel;
+
+        public MainWindow(MainViewModel mainViewModel)
         {
             InitializeComponent();
+
+            _mainViewModel = mainViewModel;
+            DataContext = _mainViewModel;
         }
     }
 }

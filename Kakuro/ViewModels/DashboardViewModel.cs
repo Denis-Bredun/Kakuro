@@ -1,13 +1,13 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Commands;
-using Kakuro.Data_Access.Data_Providers;
 using Kakuro.Enums;
+using Kakuro.Interfaces.Data_Access.Data_Providers;
+using Kakuro.Interfaces.ViewModels;
 using System.Windows.Input;
-using DashboardItemCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.ViewModels.DashboardItemViewModel>>;
 
 namespace Kakuro.ViewModels
 {
-    public class DashboardViewModel : ViewModelBase
+    public class DashboardViewModel : ViewModelBase, IDashboardViewModel
     {
         private const DifficultyLevels DEFAULT_DIFFICULTY = DifficultyLevels.Easy;
 
@@ -17,10 +17,10 @@ namespace Kakuro.ViewModels
 
         public ICommand ApplyDifficultyCommand { get; }
 
-        public DashboardViewModel()
+        public DashboardViewModel(IDashboardProvider dashboardProvider, DashboardItemCollection dashboard)
         {
-            Dashboard = new DashboardItemCollection();
-            ApplyDifficultyCommand = new ApplyDifficultyCommand(new DashboardProvider(new DashboardTemplateProvider(), Dashboard), Dashboard); // #BAD: we need DI! I already have a commend about it
+            Dashboard = dashboard;
+            ApplyDifficultyCommand = new ApplyDifficultyCommand(dashboardProvider, Dashboard);
 
             ApplyDifficultyCommand.Execute(DEFAULT_DIFFICULTY);
         }
