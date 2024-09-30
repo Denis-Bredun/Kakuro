@@ -83,9 +83,9 @@ namespace Kakuro.ViewModels
             {
                 enteredValue = string.IsNullOrEmpty(value) ? 0 : Convert.ToInt32(value);
             }
-            catch (Exception)
+            catch (Exception) // validation
             {
-                int? previousValue = _dashboardItem.DisplayValue;
+                int? previousValue = _dashboardItem.DisplayValue;       // so user can't enter letters and symbols like '(', '*', e.t.c. Only numbers from 1 to 9
                 return previousValue.HasValue ? previousValue.Value : 0;
             }
 

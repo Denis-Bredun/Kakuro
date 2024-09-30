@@ -9,7 +9,6 @@
             <TextBox.Style>
                 <Style TargetType="TextBox">
                     <Style.Triggers>
-                        <!-- Пустая ячейка -->
                         <DataTrigger Binding="{Binding CellType}" Value="EmptyCell">
                             <Setter Property="Background" Value="Black" />
                             <Setter Property="BorderBrush" Value="Black" />
@@ -17,7 +16,6 @@
                             <Setter Property="IsReadOnly" Value="True" />
                         </DataTrigger>
 
-                        <!-- Ячейка со значением -->
                         <DataTrigger Binding="{Binding CellType}" Value="ValueCell">
                             <Setter Property="Background" Value="White" />
                             <Setter Property="BorderBrush" Value="Black" />
@@ -27,7 +25,6 @@
                             <Setter Property="Text" Value="{Binding DisplayValue, UpdateSourceTrigger=PropertyChanged}" />
                         </DataTrigger>
 
-                        <!-- Суммирующая ячейка -->
                         <DataTrigger Binding="{Binding CellType}" Value="SumCell">
                             <Setter Property="Background" Value="Black" />
                             <Setter Property="BorderBrush" Value="Black" />
