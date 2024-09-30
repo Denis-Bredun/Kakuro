@@ -9,8 +9,6 @@ namespace Kakuro.ViewModels
     {
         private DashboardItem _dashboardItem;
 
-        // #PRIORITY: make validations for Value and Notes, so user couldn't enter smth except for 1-9 numbers
-
         public string DisplayValue
         {
             get => ConvertIntToString(_dashboardItem.DisplayValue);
@@ -80,7 +78,18 @@ namespace Kakuro.ViewModels
 
         private int ConvertStringToInt(string value)
         {
-            return string.IsNullOrEmpty(value) ? 0 : Convert.ToInt32(value);
+            int enteredValue;
+            try
+            {
+                enteredValue = string.IsNullOrEmpty(value) ? 0 : Convert.ToInt32(value);
+            }
+            catch (Exception)
+            {
+                int? previousValue = _dashboardItem.DisplayValue;
+                return previousValue.HasValue ? previousValue.Value : 0;
+            }
+
+            return enteredValue;
         }
 
         private string ConvertIntToString(int? value)
