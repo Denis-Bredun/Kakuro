@@ -15,7 +15,7 @@ namespace Kakuro.Data_Access.Data_Providers
                 _ => throw new ArgumentException()
             };
 
-            return RotateTemplateRandomly(template);
+            return RotateTemplateRandomly(template); // #BAD: the ways of template being generated should be documented
         }
 
         private string[,] GenerateEasyTemplate()
