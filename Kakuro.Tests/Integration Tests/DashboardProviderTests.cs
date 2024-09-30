@@ -23,69 +23,6 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_FitTemplate_When_GeneratedWithConcreteDifficulty()
-        {
-            // Arrange
-            var difficulties = Enum.GetValues(typeof(DifficultyLevels));
-
-            foreach (DifficultyLevels difficulty in difficulties)
-            {
-                // Arrange
-                var template = _dashboardTemplateProvider.GenerateTemplate(difficulty);
-
-                // Act
-                _dashboardProvider.GenerateDashboard(difficulty);
-
-                // Assert
-                for (int i = 0; i < _dashboardItemCollection.Count; i++)
-                {
-                    for (int j = 0; j < _dashboardItemCollection[i].Count; j++)
-                    {
-                        if (_dashboardItemCollection[i][j].HiddenValue != "")
-                            Assert.Equal("*", template[i, j]);
-                        else
-                            Assert.Empty(template[i, j]);
-                    }
-                }
-            }
-        }
-
-        [Fact]
-        public void Should_NotMatchOtherDifficultyTemplate_When_GeneratedWithConcreteDifficulty()
-        {
-            // Arrange
-            var easyTemplate = _dashboardTemplateProvider.GenerateTemplate(DifficultyLevels.Easy);
-            var hardTemplate = _dashboardTemplateProvider.GenerateTemplate(DifficultyLevels.Hard);
-
-            // Act
-            _dashboardProvider.GenerateDashboard(DifficultyLevels.Easy);
-
-            // Assert
-            for (int i = 0; i < _dashboardItemCollection.Count; i++)
-            {
-                for (int j = 0; j < _dashboardItemCollection[i].Count; j++)
-                {
-                    if (easyTemplate[i, j] == "*" && hardTemplate[i, j] == "")
-                    {
-                        Assert.NotEqual("", _dashboardItemCollection[i][j].HiddenValue);
-                    }
-                    else if (easyTemplate[i, j] == "" && hardTemplate[i, j] == "*")
-                    {
-                        Assert.Equal("", _dashboardItemCollection[i][j].HiddenValue);
-                    }
-                    else if (easyTemplate[i, j] == "" && hardTemplate[i, j] == "")
-                    {
-                        Assert.Equal("", _dashboardItemCollection[i][j].HiddenValue);
-                    }
-                    else
-                    {
-                        Assert.NotEqual("", _dashboardItemCollection[i][j].HiddenValue);
-                    }
-                }
-            }
-        }
-
-        [Fact]
         public void Should_MatchTemplateSize_After_ConsecutiveGenerationsWithDifferentDifficulties()
         {
             // Arrange
@@ -237,9 +174,6 @@ namespace Kakuro.Tests.Integration_Tests
 
             foreach (DifficultyLevels difficulty in difficulties)
             {
-                // Arrange
-                var template = _dashboardTemplateProvider.GenerateTemplate(difficulty);
-
                 // Act
                 _dashboardProvider.GenerateDashboard(difficulty);
 
@@ -249,22 +183,14 @@ namespace Kakuro.Tests.Integration_Tests
                     for (int j = 0; j < _dashboardItemCollection[i].Count; j++)
                     {
                         var currentElement = _dashboardItemCollection[i][j];
-                        var templateValue = template[i, j];
 
-                        if (templateValue == "*")
-                        {
-                            if (currentElement.CellType != CellType.ValueCell)
-                            {
-                                areCellTypesCorrect = false;
-                            }
-                        }
-                        else // templateValue == ""
-                        {
-                            if (currentElement.CellType != CellType.SumCell && currentElement.CellType != CellType.EmptyCell)
-                            {
-                                areCellTypesCorrect = false;
-                            }
-                        }
+                        if (currentElement.HiddenValue == "" && currentElement.SumBottom == ""
+                            && currentElement.SumRight == "" && currentElement.CellType != CellType.EmptyCell)
+                            areCellTypesCorrect = false;
+                        else if ((currentElement.SumBottom != "" || currentElement.SumRight != "") && currentElement.CellType != CellType.SumCell)
+                            areCellTypesCorrect = false;
+                        else if (currentElement.HiddenValue != "" && currentElement.CellType != CellType.ValueCell)
+                            areCellTypesCorrect = false;
                     }
                 }
             }
@@ -371,42 +297,6 @@ namespace Kakuro.Tests.Integration_Tests
                     }
                 }
             }
-        }
-
-        [Fact]
-        public void Should_HaveExpectedNumberOfNonZeroValues_When_DashboardIsGenerated()
-        {
-            // Arrange
-            var expectedCounts = new Dictionary<DifficultyLevels, int>
-            {
-                { DifficultyLevels.Easy, CountStarsInTemplate(DifficultyLevels.Easy) },
-                { DifficultyLevels.Normal, CountStarsInTemplate(DifficultyLevels.Normal) },
-                { DifficultyLevels.Hard, CountStarsInTemplate(DifficultyLevels.Hard) }
-            };
-
-            foreach (var difficulty in expectedCounts.Keys)
-            {
-                // Act
-                _dashboardProvider.GenerateDashboard(difficulty);
-
-                // Assert
-                var nonZeroCount = _dashboardItemCollection.Sum(row => row.Count(item => item.CellType == CellType.ValueCell));
-                Assert.Equal(expectedCounts[difficulty], nonZeroCount);
-            }
-        }
-
-        private int CountStarsInTemplate(DifficultyLevels difficulty)
-        {
-            string[,] template = _dashboardTemplateProvider.GenerateTemplate(difficulty);
-
-            int starCount = 0;
-
-            for (int i = 0; i < template.GetLength(0); i++)
-                for (int j = 0; j < template.GetLength(1); j++)
-                    if (template[i, j] == "*")
-                        starCount++;
-
-            return starCount;
         }
 
         [Fact]

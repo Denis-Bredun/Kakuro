@@ -22,7 +22,7 @@ namespace Kakuro.Tests.Integration_Tests
             _dashboardItemCollection = new DashboardItemCollection();
             _dashboardTemplateProvider = new DashboardTemplateProvider();
             _dashboardProvider = new DashboardProvider(_dashboardTemplateProvider, _dashboardItemCollection);
-            _applyDifficultyCommand = new ApplyDifficultyCommand(_dashboardProvider, _dashboardItemCollection);
+            _applyDifficultyCommand = new ApplyDifficultyCommand(_dashboardProvider);
         }
 
         public void Dispose()
@@ -36,7 +36,7 @@ namespace Kakuro.Tests.Integration_Tests
             // Arrange
             var difficultyLevel = DifficultyLevels.Normal;
             var dashboardProviderMock = new Mock<IDashboardProvider>();
-            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object, _dashboardItemCollection);
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
 
             // Act
             applyDifficultyCommand.Execute(difficultyLevel);
@@ -52,7 +52,7 @@ namespace Kakuro.Tests.Integration_Tests
             var dashboardProviderMock = new Mock<IDashboardProvider>();
 
             // Act
-            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object, _dashboardItemCollection);
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
 
             // Assert
             Assert.NotNull(applyDifficultyCommand);
@@ -63,7 +63,7 @@ namespace Kakuro.Tests.Integration_Tests
         {
             // Arrange
             var dashboardProviderMock = new Mock<IDashboardProvider>();
-            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object, _dashboardItemCollection);
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
 
             // Act & Assert
             var exception = Assert.Throws<NullReferenceException>(() => applyDifficultyCommand.Execute(null));
@@ -75,7 +75,7 @@ namespace Kakuro.Tests.Integration_Tests
         {
             // Arrange
             var dashboardProviderMock = new Mock<IDashboardProvider>();
-            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object, _dashboardItemCollection);
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
             var invalidParameter = new object();
 
             // Act & Assert
@@ -84,12 +84,12 @@ namespace Kakuro.Tests.Integration_Tests
         }
 
         [Fact]
-        public void Should_Not_CallGenerateDashboard_Twice_For_SameDifficultyLevel()
+        public void Should_CallGenerateDashboard_Twice_For_SameDifficultyLevel()
         {
             // Arrange
             var difficultyLevel = DifficultyLevels.Normal;
             var dashboardProviderMock = new Mock<IDashboardProvider>();
-            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object, _dashboardItemCollection);
+            var applyDifficultyCommand = new ApplyDifficultyCommand(dashboardProviderMock.Object);
 
             dashboardProviderMock
                 .Setup(dp => dp.GenerateDashboard(difficultyLevel))
@@ -109,10 +109,10 @@ namespace Kakuro.Tests.Integration_Tests
 
             // Act
             applyDifficultyCommand.Execute(difficultyLevel); // First call
-            applyDifficultyCommand.Execute(difficultyLevel); // Second call (should not generate again)
+            applyDifficultyCommand.Execute(difficultyLevel); // Second call 
 
             // Assert
-            dashboardProviderMock.Verify(dp => dp.GenerateDashboard(difficultyLevel), Times.Once);
+            dashboardProviderMock.Verify(dp => dp.GenerateDashboard(difficultyLevel), Times.Exactly(2));
         }
     }
 }
