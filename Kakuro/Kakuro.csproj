@@ -9,15 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Interfaces\Data Access\Data Providers\IDashboardProvider.cs~RF1dbb930c.TMP" />
-    <None Remove="Views\DashboardSection.xaml~RF47c66d8.TMP" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Events\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Autofac" Version="8.1.0" />
   </ItemGroup>
 
