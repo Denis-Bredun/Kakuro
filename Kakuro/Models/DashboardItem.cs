@@ -17,7 +17,7 @@ namespace Kakuro.Models
         {
             Notes = new int[MAX_COUNT_OF_NOTES];
         }
-
+        // #BAD: i shall write tests for this model
         public override bool Equals(object? obj)
         {
             if (obj is DashboardItem other)

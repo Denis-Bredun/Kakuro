@@ -7,6 +7,7 @@ using System.Windows.Input;
 
 namespace Kakuro.ViewModels
 {
+    // #BAD: tests should be written
     public class DashboardViewModel : ViewModelBase, IDashboardViewModel
     {
         private const DifficultyLevels DEFAULT_DIFFICULTY = DifficultyLevels.Easy;

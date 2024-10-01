@@ -3,6 +3,7 @@ using Kakuro.Interfaces.ViewModels;
 
 namespace Kakuro.ViewModels
 {
+    // #BAD: tests should be written
     public class MainViewModel : ViewModelBase
     {
         public IDashboardViewModel DashboardViewModel { get; }

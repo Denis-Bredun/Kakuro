@@ -18,6 +18,8 @@ namespace Kakuro.Data_Access.Data_Providers
             return RotateTemplateRandomly(template); // #BAD: the ways of template being generated should be documented
         }
 
+        // #BAD: i shall add test that checks if borders contain *
+
         private string[,] GenerateEasyTemplate()
         {
             string[][,] templates =

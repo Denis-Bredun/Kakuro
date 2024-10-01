@@ -5,6 +5,7 @@ using Kakuro.Models;
 
 namespace Kakuro.ViewModels
 {
+    // #BAD: tests should be written
     public class DashboardItemViewModel : ViewModelBase, IDashboardItemViewModel
     {
         private DashboardItem _dashboardItem;

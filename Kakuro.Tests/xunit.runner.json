@@ -2,3 +2,4 @@
   "methodDisplay": "method",
   "parallelizeTestCollections": false
 }
+// #BAD: i shall make tests structurized
