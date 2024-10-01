@@ -1,8 +1,7 @@
-﻿using Kakuro.Base_Classes;
+﻿using Autofac;
+using Kakuro.Base_Classes;
 using Kakuro.Commands;
 using Kakuro.Enums;
-using Kakuro.Interfaces.Data_Access.Data_Providers;
-using Kakuro.Interfaces.Game_Tools;
 using Kakuro.Interfaces.ViewModels;
 using System.Windows.Input;
 
@@ -20,11 +19,11 @@ namespace Kakuro.ViewModels
         public ICommand ApplyDifficultyCommand { get; }
         public ICommand VerifySolutionCommand { get; }
 
-        public DashboardViewModel(IDashboardProvider dashboardProvider, ISolutionVerifier solutionVerifier, DashboardItemCollection dashboard)
+        public DashboardViewModel(ILifetimeScope scope, DashboardItemCollection dashboard)
         {
             Dashboard = dashboard;
-            ApplyDifficultyCommand = new ApplyDifficultyCommand(dashboardProvider);
-            VerifySolutionCommand = new VerifySolutionCommand(solutionVerifier);
+            ApplyDifficultyCommand = scope.Resolve<ApplyDifficultyCommand>();
+            VerifySolutionCommand = scope.Resolve<VerifySolutionCommand>();
 
             ApplyDifficultyCommand.Execute(DEFAULT_DIFFICULTY);
         }

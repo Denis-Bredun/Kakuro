@@ -1,11 +1,8 @@
 ﻿using Autofac;
+using Kakuro.Commands;
 using Kakuro.Data_Access.Data_Providers;
-using Kakuro.Data_Access.Repositories;
 using Kakuro.Data_Access.Tools;
-using Kakuro.Enums;
 using Kakuro.Game_Tools;
-using Kakuro.Interfaces.Data_Access.Data_Providers;
-using Kakuro.Interfaces.Data_Access.Repositories;
 using Kakuro.Interfaces.Data_Access.Tools;
 using Kakuro.Interfaces.Game_Tools;
 using Kakuro.Interfaces.ViewModels;
@@ -20,42 +17,35 @@ namespace Kakuro.StartUp
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<MainWindow>().AsSelf();
+            builder.RegisterType<MainWindow>().AsSelf().SingleInstance();
 
             builder.Register(c => new DashboardItemCollection())
                    .AsSelf()
                    .SingleInstance();
 
+
             // ViewModels
-            builder.RegisterType<MainViewModel>().AsSelf();
+            builder.RegisterType<MainViewModel>().AsSelf().SingleInstance();
             builder.RegisterType<DashboardItemViewModel>().As<IDashboardItemViewModel>();
             builder.RegisterType<DashboardViewModel>()
-                   .As<IDashboardViewModel>()
-                   .WithParameter((pi, ctx) => pi.ParameterType == typeof(IDashboardProvider),
-                                  (pi, ctx) => ctx.Resolve<IDashboardProvider>())
-                   .WithParameter((pi, ctx) => pi.ParameterType == typeof(ISolutionVerifier),
-                                  (pi, ctx) => ctx.Resolve<ISolutionVerifier>())
-                   .WithParameter((pi, ctx) => pi.ParameterType == typeof(DashboardItemCollection),
-                                  (pi, ctx) => ctx.Resolve<DashboardItemCollection>());
+           .As<IDashboardViewModel>()
+           .SingleInstance();
 
+            // Commands
+            builder.RegisterType<ApplyDifficultyCommand>().AsSelf().SingleInstance();
+            builder.RegisterType<VerifySolutionCommand>().AsSelf().SingleInstance();
 
             // Data Access
-            builder.RegisterType<DashboardProvider>()
-                   .As<IDashboardProvider>()
-                   .WithParameter((pi, ctx) => pi.ParameterType == typeof(DashboardItemCollection),
-                                  (pi, ctx) => ctx.Resolve<DashboardItemCollection>());
-            builder.RegisterType<DashboardTemplateProvider>().As<IDashboardTemplateProvider>();
-            builder.RegisterType<RatingRecordProvider>().As<RatingRecordProvider>();
-            builder.RegisterType<SavepointProvider>().As<ISavepointProvider>();
-            builder.RegisterType<RatingRecordRepository>().As<IReadAllRepository<RatingRecord, DifficultyLevels>>();
-            builder.RegisterType<SavepointRepository>().As<IRepository<Savepoint>>();
-            builder.RegisterType<JsonFileHandler<RatingRecord>>().As<IJsonFileHandler<RatingRecord>>();
-            builder.RegisterType<JsonFileHandler<Savepoint>>().As<IJsonFileHandler<Savepoint>>();
+            builder.RegisterAssemblyTypes(typeof(DashboardProvider).Assembly)
+           .Where(t => t.Name.EndsWith("Provider") || t.Name.EndsWith("Repository"))
+           .AsImplementedInterfaces()
+           .SingleInstance();
+            builder.RegisterType<JsonFileHandler<RatingRecord>>().As<IJsonFileHandler<RatingRecord>>().SingleInstance();
+            builder.RegisterType<JsonFileHandler<Savepoint>>().As<IJsonFileHandler<Savepoint>>().SingleInstance();
 
             // Game Tools:
-            builder.RegisterType<SolutionVerifier>().As<ISolutionVerifier>()
-                .WithParameter((pi, ctx) => pi.ParameterType == typeof(DashboardItemCollection),
-                                  (pi, ctx) => ctx.Resolve<DashboardItemCollection>());
+            builder.RegisterType<SolutionVerifier>().As<ISolutionVerifier>().SingleInstance();
+            builder.RegisterType<OperationNotifier>().As<IOperationNotifier>().SingleInstance();
 
 
             return builder.Build();
