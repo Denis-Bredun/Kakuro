@@ -13,6 +13,6 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Column="1">Submit</Button>
+        <Button Grid.Column="1" Command="{Binding VerifySolutionCommand}">Submit</Button>
     </Grid>
 </UserControl>

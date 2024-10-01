@@ -3,9 +3,11 @@ using Kakuro.Data_Access.Data_Providers;
 using Kakuro.Data_Access.Repositories;
 using Kakuro.Data_Access.Tools;
 using Kakuro.Enums;
+using Kakuro.Game_Tools;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Kakuro.Interfaces.Data_Access.Repositories;
 using Kakuro.Interfaces.Data_Access.Tools;
+using Kakuro.Interfaces.Game_Tools;
 using Kakuro.Interfaces.ViewModels;
 using Kakuro.Models;
 using Kakuro.ViewModels;
@@ -31,6 +33,8 @@ namespace Kakuro.StartUp
                    .As<IDashboardViewModel>()
                    .WithParameter((pi, ctx) => pi.ParameterType == typeof(IDashboardProvider),
                                   (pi, ctx) => ctx.Resolve<IDashboardProvider>())
+                   .WithParameter((pi, ctx) => pi.ParameterType == typeof(ISolutionVerifier),
+                                  (pi, ctx) => ctx.Resolve<ISolutionVerifier>())
                    .WithParameter((pi, ctx) => pi.ParameterType == typeof(DashboardItemCollection),
                                   (pi, ctx) => ctx.Resolve<DashboardItemCollection>());
 
@@ -47,6 +51,12 @@ namespace Kakuro.StartUp
             builder.RegisterType<SavepointRepository>().As<IRepository<Savepoint>>();
             builder.RegisterType<JsonFileHandler<RatingRecord>>().As<IJsonFileHandler<RatingRecord>>();
             builder.RegisterType<JsonFileHandler<Savepoint>>().As<IJsonFileHandler<Savepoint>>();
+
+            // Game Tools:
+            builder.RegisterType<SolutionVerifier>().As<ISolutionVerifier>()
+                .WithParameter((pi, ctx) => pi.ParameterType == typeof(DashboardItemCollection),
+                                  (pi, ctx) => ctx.Resolve<DashboardItemCollection>());
+
 
             return builder.Build();
         }

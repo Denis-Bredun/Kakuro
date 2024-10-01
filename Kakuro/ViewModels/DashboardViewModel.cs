@@ -2,6 +2,7 @@
 using Kakuro.Commands;
 using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
+using Kakuro.Interfaces.Game_Tools;
 using Kakuro.Interfaces.ViewModels;
 using System.Windows.Input;
 
@@ -17,11 +18,13 @@ namespace Kakuro.ViewModels
         public int CountOfColumns => Dashboard.Count;
 
         public ICommand ApplyDifficultyCommand { get; }
+        public ICommand VerifySolutionCommand { get; }
 
-        public DashboardViewModel(IDashboardProvider dashboardProvider, DashboardItemCollection dashboard)
+        public DashboardViewModel(IDashboardProvider dashboardProvider, ISolutionVerifier solutionVerifier, DashboardItemCollection dashboard)
         {
             Dashboard = dashboard;
             ApplyDifficultyCommand = new ApplyDifficultyCommand(dashboardProvider);
+            VerifySolutionCommand = new VerifySolutionCommand(solutionVerifier);
 
             ApplyDifficultyCommand.Execute(DEFAULT_DIFFICULTY);
         }
