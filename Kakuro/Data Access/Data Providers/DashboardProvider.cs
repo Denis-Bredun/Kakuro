@@ -10,9 +10,11 @@ namespace Kakuro.Data_Access.Data_Providers
     {
         private IDashboardTemplateProvider _templateProvider;
         private DashboardItemCollection _dashboard;
+        private Random _random;
 
         public DashboardProvider(IDashboardTemplateProvider templateProvider, DashboardItemCollection dashboard)
         {
+            _random = new Random();
             _dashboard ??= dashboard;
             _templateProvider ??= templateProvider;
         }
@@ -23,66 +25,15 @@ namespace Kakuro.Data_Access.Data_Providers
 
             var template = _templateProvider.GenerateTemplate(difficultyLevel);
 
-            var values = GenerateValues(template);
+            CreateDashboard(template);
 
-            CreateDashboard(values.GetLength(0));
-
-            InitializeDashboard(values);
+            CalculateSumsAndValues();
         }
 
-        private int[,] GenerateValues(string[,] template)
+        private void CreateDashboard(string[,] dashboard)
         {
-            // We need 1st and 3rd rules of Kakuro for generating:
-            // 1.Each cell can contain numbers from 1 through 9
-            // 2.The clues in the black cells tells the sum of the numbers next to that clue. (on the right or down)
-            // 3.The numbers in consecutive white cells must be unique.
+            int dashboardSize = dashboard.GetLength(0);
 
-            int dashboardSize = template.GetLength(0);
-            int[,] values = new int[dashboardSize, dashboardSize];
-
-            for (int i = 0; i < dashboardSize; i++)
-                for (int j = 0; j < dashboardSize; j++)
-                    if (template[i, j] == "*")
-                        values[i, j] = GenerateValueTillItsUnique(values, i, j);
-
-            return values;
-        }
-
-        private int GenerateValueTillItsUnique(int[,] values, int i, int j)
-        {
-            Random random = new Random();
-            int value = 0;
-            bool isUnique;
-
-            do
-            {
-                isUnique = false;
-
-                value = random.Next(1, 10);
-
-                isUnique = IsValueUnique(values, i, j, value);
-
-            } while (!isUnique);
-
-            return value;
-        }
-
-        private bool IsValueUnique(int[,] values, int i, int j, int value)
-        {
-            return IsUniqueAbove(values, i, j, value) && IsUniqueBelow(values, i, j, value)
-                && IsUniqueLeft(values, i, j, value) && IsUniqueRight(values, i, j, value);
-        }
-
-        private bool IsUniqueAbove(int[,] values, int i, int j, int value) => values[i - 1, j] != value;
-
-        private bool IsUniqueBelow(int[,] values, int i, int j, int value) => values[i + 1, j] != value;
-
-        private bool IsUniqueLeft(int[,] values, int i, int j, int value) => values[i, j - 1] != value;
-
-        private bool IsUniqueRight(int[,] values, int i, int j, int value) => values[i, j + 1] != value;
-
-        private void CreateDashboard(int dashboardSize)
-        {
             for (int i = 0; i < dashboardSize; i++)
             {
                 _dashboard.Add(new ObservableCollection<DashboardItemViewModel>());
@@ -91,50 +42,34 @@ namespace Kakuro.Data_Access.Data_Providers
                 {
                     var dashboardItem = new DashboardItem();
                     var wrapper = new DashboardItemViewModel(dashboardItem);
+
+                    if (!IsElementOnBorder(i, j, dashboardSize) && dashboard[i, j] == "*")
+                        wrapper.CellType = CellType.ValueCell;
+
                     _dashboard[i].Add(wrapper);
                 }
             }
         }
 
-        private void InitializeDashboard(int[,] values)
+        private bool IsElementOnBorder(int i, int j, int dashboardSize) => i == 0 || j == 0 || i == dashboardSize - 1 || j == dashboardSize - 1;
+
+        private void CalculateSumsAndValues()
         {
-            FillDashboardWithValues(values);
-
-            CalculateSums();
-        }
-
-        private void FillDashboardWithValues(int[,] values)
-        {
-            int dashboardSize = values.GetLength(0);
-            DashboardItemViewModel currentElement;
-
-            for (int i = 0; i < dashboardSize; i++)
-                for (int j = 0; j < dashboardSize; j++)
-                    if (values[i, j] != 0)
-                    {
-                        currentElement = _dashboard[i][j];
-                        currentElement.HiddenValue = values[i, j].ToString();
-                        currentElement.CellType = CellType.ValueCell;
-                    }
-        }
-
-        private void CalculateSums()
-        {
-            CalculateBottomSums();
+            CalculateBottomSums(true);
             CalculateRightSums();
         }
 
-        private void CalculateBottomSums()
+        private void CalculateBottomSums(bool generateNewValues = false)
         {
-            SumCalculatingTemplate(true);
+            SumCalculatingTemplate(true, generateNewValues);
         }
 
-        private void CalculateRightSums()
+        private void CalculateRightSums(bool generateNewValues = false)
         {
-            SumCalculatingTemplate(false);
+            SumCalculatingTemplate(false, generateNewValues);
         }
 
-        private void SumCalculatingTemplate(bool isVerticalSum)
+        private void SumCalculatingTemplate(bool isVerticalSum, bool generateNewValues)
         {
             DashboardItemViewModel currentElement;
             int sum = 0;
@@ -148,6 +83,14 @@ namespace Kakuro.Data_Access.Data_Providers
 
                     if (currentElement.CellType == CellType.ValueCell)
                     {
+                        if (generateNewValues)
+                        {
+                            if (isVerticalSum)
+                                GenerateValueTillItsUnique(j, i);
+                            else
+                                GenerateValueTillItsUnique(i, j);
+                        }
+
                         sum += Convert.ToInt32(currentElement.HiddenValue);
                         wasSumCollected = true;
                     }
@@ -166,5 +109,39 @@ namespace Kakuro.Data_Access.Data_Providers
                 }
             }
         }
+
+        private void GenerateValueTillItsUnique(int i, int j)
+        {
+            int value = 0;
+            bool isUnique;
+
+            do
+            {
+                isUnique = false;
+
+                value = _random.Next(1, 10);
+
+                isUnique = IsValueUnique(i, j, value);
+
+            } while (!isUnique);
+
+            _dashboard[i][j].HiddenValue = value.ToString();
+        }
+
+        private bool IsValueUnique(int i, int j, int value)
+        {
+            return IsUniqueAbove(i, j, value) && IsUniqueBelow(i, j, value)
+                && IsUniqueLeft(i, j, value) && IsUniqueRight(i, j, value);
+        }
+
+        private bool IsUniqueAbove(int i, int j, int value) => ConvertDashboardValueToInt(_dashboard[i - 1][j].HiddenValue) != value;
+
+        private bool IsUniqueBelow(int i, int j, int value) => ConvertDashboardValueToInt(_dashboard[i + 1][j].HiddenValue) != value;
+
+        private bool IsUniqueLeft(int i, int j, int value) => ConvertDashboardValueToInt(_dashboard[i][j - 1].HiddenValue) != value;
+
+        private bool IsUniqueRight(int i, int j, int value) => ConvertDashboardValueToInt(_dashboard[i][j - 1].HiddenValue) != value;
+
+        private int ConvertDashboardValueToInt(string value) => string.IsNullOrEmpty(value) ? 0 : Convert.ToInt32(value);
     }
 }
