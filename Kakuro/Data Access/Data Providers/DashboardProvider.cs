@@ -112,6 +112,11 @@ namespace Kakuro.Data_Access.Data_Providers
 
         private void GenerateValueTillItsUnique(int i, int j)
         {
+            // We need 1st and 3rd rules of Kakuro for generating:
+            // 1.Each cell can contain numbers from 1 through 9
+            // 2.The clues in the black cells tells the sum of the numbers next to that clue. (on the right or down)
+            // 3.The numbers in consecutive white cells must be unique.
+
             int value = 0;
             bool isUnique;
 
