@@ -13,9 +13,9 @@ namespace Kakuro.Game_Tools
         {
             _dashboard = dashboard;
         }
-        public bool VerifyDashboardValues(out string message)
+        public bool ValidateDashboard(out string message)
         {
-            if (!ValidateDashboard(out message))
+            if (!ValidateSums(out message))
                 return false;
 
             message = "Game is completed!"; // #BAD: i need to make the font of message in MessageBox - bigger
@@ -25,14 +25,14 @@ namespace Kakuro.Game_Tools
         // #BAD: we need to make sure that we bind not to the field values of class,
         // but to the values ​​in the text fields themselves
 
-        private bool ValidateDashboard(out string message)
+        private bool ValidateSums(out string message)
         {
-            bool areVerticalSumsCorrect = ValidateSums(true, out message, true);
+            bool areVerticalSumsCorrect = ValidateConcreteSum(true, out message, true);
 
             if (!areVerticalSumsCorrect)
                 return false;
 
-            bool areHorizontalSumsCorrect = ValidateSums(false, out message);
+            bool areHorizontalSumsCorrect = ValidateConcreteSum(false, out message);
 
             if (!areHorizontalSumsCorrect)
                 return false;
@@ -40,7 +40,7 @@ namespace Kakuro.Game_Tools
             return true;
         }
 
-        private bool ValidateSums(bool isVerticalSum, out string message, bool shouldCheckValues = false)
+        private bool ValidateConcreteSum(bool isVerticalSum, out string message, bool shouldCheckValues = false)
         {
             for (int i = 0; i < _dashboard.Count; i++)
             {

@@ -2,6 +2,6 @@
 {
     public interface ISolutionVerifier
     {
-        bool VerifyDashboardValues(out string message);
+        bool ValidateDashboard(out string message);
     }
 }

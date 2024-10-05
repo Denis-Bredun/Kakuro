@@ -18,7 +18,7 @@ namespace Kakuro.Commands
         public override void Execute(object? parameter)
         {
             string message, failMessage = "", successMessage = "";
-            bool isSolutionCorrect = _solutionVerifier.VerifyDashboardValues(out message);
+            bool isSolutionCorrect = _solutionVerifier.ValidateDashboard(out message);
 
             if (isSolutionCorrect)
                 successMessage = message;
