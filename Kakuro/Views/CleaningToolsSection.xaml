@@ -16,6 +16,6 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.Column="1">Full Clean</Button>
-        <Button Grid.Column="3">New Game</Button>
+        <Button Grid.Column="3" Command="{Binding NewGameCommand}" CommandParameter="{Binding ChoosenDifficulty}">New Game</Button>
     </Grid>
 </UserControl>

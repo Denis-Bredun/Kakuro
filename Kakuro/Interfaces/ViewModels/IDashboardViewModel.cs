@@ -1,12 +1,14 @@
-﻿using System.Windows.Input;
+﻿using Kakuro.Enums;
+using System.Windows.Input;
 
 namespace Kakuro.Interfaces.ViewModels
 {
     public interface IDashboardViewModel
     {
         DashboardItemCollection Dashboard { get; }
-        int CountOfRows { get; }
-        int CountOfColumns { get; }
-        ICommand ApplyDifficultyCommand { get; }
+        DifficultyLevels ChoosenDifficulty { get; set; }
+        public ICommand ApplyDifficultyCommand { get; }
+        public ICommand NewGameCommand { get; }
+        public ICommand VerifySolutionCommand { get; }
     }
 }

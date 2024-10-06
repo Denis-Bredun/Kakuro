@@ -10,22 +10,35 @@ namespace Kakuro.ViewModels
     // #BAD: tests should be written
     public class DashboardViewModel : ViewModelBase, IDashboardViewModel
     {
-        private const DifficultyLevels DEFAULT_DIFFICULTY = DifficultyLevels.Easy;
+        private DifficultyLevels _choosenDifficulty;
 
         public DashboardItemCollection Dashboard { get; }
-        public int CountOfRows => Dashboard.Count;
-        public int CountOfColumns => Dashboard.Count;
+        public DifficultyLevels ChoosenDifficulty
+        {
+            get => _choosenDifficulty;
+            set
+            {
+                _choosenDifficulty = value;
+                OnPropertyChanged("ChoosenDifficulty");
+            }
+        }
 
         public ICommand ApplyDifficultyCommand { get; }
+        public ICommand NewGameCommand { get; }
         public ICommand VerifySolutionCommand { get; }
 
         public DashboardViewModel(ILifetimeScope scope, DashboardItemCollection dashboard)
         {
+            ChoosenDifficulty = DifficultyLevels.Easy;
             Dashboard = dashboard;
-            ApplyDifficultyCommand = scope.Resolve<ApplyDifficultyCommand>();
-            VerifySolutionCommand = scope.Resolve<VerifySolutionCommand>();
 
-            ApplyDifficultyCommand.Execute(DEFAULT_DIFFICULTY);
+            VerifySolutionCommand = scope.Resolve<VerifySolutionCommand>();
+            ApplyDifficultyCommand = scope.Resolve<ApplyDifficultyCommand>();
+            NewGameCommand = ApplyDifficultyCommand;
+            ((ApplyDifficultyCommand)ApplyDifficultyCommand).DashboardViewModel = this; // #BAD: I don't think that the way we set DashboardViewModel outside the class
+                                                                                        // is a good practice
+
+            ApplyDifficultyCommand.Execute(ChoosenDifficulty);
         }
     }
 }
