@@ -10,5 +10,6 @@ namespace Kakuro.Interfaces.ViewModels
         public ICommand ApplyDifficultyCommand { get; }
         public ICommand NewGameCommand { get; }
         public ICommand VerifySolutionCommand { get; }
+        public ICommand CleanDashboardCommand { get; }
     }
 }

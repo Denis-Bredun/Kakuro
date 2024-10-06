@@ -26,6 +26,7 @@ namespace Kakuro.ViewModels
         public ICommand ApplyDifficultyCommand { get; }
         public ICommand NewGameCommand { get; }
         public ICommand VerifySolutionCommand { get; }
+        public ICommand CleanDashboardCommand { get; }
 
         public DashboardViewModel(ILifetimeScope scope, DashboardItemCollection dashboard)
         {
@@ -34,6 +35,7 @@ namespace Kakuro.ViewModels
 
             VerifySolutionCommand = scope.Resolve<VerifySolutionCommand>();
             ApplyDifficultyCommand = scope.Resolve<ApplyDifficultyCommand>();
+            CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
             NewGameCommand = ApplyDifficultyCommand;
             ((ApplyDifficultyCommand)ApplyDifficultyCommand).DashboardViewModel = this; // #BAD: I don't think that the way we set DashboardViewModel outside the class
                                                                                         // is a good practice
