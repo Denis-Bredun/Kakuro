@@ -5,6 +5,7 @@ using Kakuro.Interfaces.ViewModels;
 
 namespace Kakuro.Commands
 {
+    // #BAD: tests shall be REwritten
     public class ApplyDifficultyCommand : RelayCommand
     {
         private readonly IDashboardProvider _dashboardProvider;

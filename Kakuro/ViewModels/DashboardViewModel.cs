@@ -13,6 +13,7 @@ namespace Kakuro.ViewModels
     {
         private DifficultyLevels _choosenDifficulty;
         private IDashboardItemViewModel _selectedCell;
+        private bool _isMakingNotes;
 
         public DashboardItemCollection Dashboard { get; }
 
@@ -31,8 +32,28 @@ namespace Kakuro.ViewModels
             get => _selectedCell;
             set
             {
-                _selectedCell = value;
-                OnPropertyChanged("SelectedCell");
+                if (_selectedCell != null)
+                    _selectedCell.IsSelected = false;
+
+                if (value != null && value.CellType == CellType.ValueCell)
+                {
+                    _selectedCell = value;
+                    _selectedCell.IsSelected = true;
+                }
+                else
+                    _selectedCell = null;
+
+                OnPropertyChanged(nameof(SelectedCell));
+            }
+        }
+
+        public bool IsMakingNotes
+        {
+            get => _isMakingNotes;
+            set
+            {
+                _isMakingNotes = value;
+                OnPropertyChanged(nameof(IsMakingNotes));
             }
         }
 

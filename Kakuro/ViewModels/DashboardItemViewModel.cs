@@ -50,15 +50,37 @@ namespace Kakuro.ViewModels
             }
         }
 
-        public string[] Notes
+        public string[,] Notes
         {
-            get => _dashboardItem.Notes.Select(el => ConvertIntToString(el)).ToArray();
+            get
+            {
+                var notesArray = new string[3, 3];
+
+                for (int i = 0; i < 3; i++)
+                    for (int j = 0; j < 3; j++)
+                        notesArray[i, j] = ConvertIntToString(_dashboardItem.Notes[i, j]);
+
+                return notesArray;
+            }
             set
             {
-                for (int i = 0; i < _dashboardItem.Notes.Length; i++)
-                {
-                    _dashboardItem.Notes[i] = ConvertStringToInt(value[i]);
-                }
+                for (int i = 0; i < 3; i++)
+                    for (int j = 0; j < 3; j++)
+                        _dashboardItem.Notes[i, j] = ConvertStringToInt(value[i, j]);
+
+                OnPropertyChanged("Notes");
+            }
+        }
+
+        private bool _isSelected;
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                OnPropertyChanged("IsSelected");
             }
         }
 

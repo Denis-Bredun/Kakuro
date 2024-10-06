@@ -3,6 +3,7 @@ using Kakuro.ViewModels;
 
 namespace Kakuro.Commands
 {
+    // #BAD: tests shall be written
     public class EraseSelectedCellCommand : RelayCommand
     {
         private readonly DashboardViewModel _dashboardViewModel;

@@ -3,6 +3,7 @@ using Kakuro.Interfaces.ViewModels;
 
 namespace Kakuro.Commands
 {
+    // #BAD: tests shall be written
     public class CellGotFocusCommand : RelayCommand
     {
         private readonly Action<IDashboardItemViewModel> _execute;

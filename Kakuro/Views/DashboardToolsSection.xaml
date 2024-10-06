@@ -16,6 +16,6 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.Column="1" Command="{Binding EraseSelectedCellCommand}">Erase</Button>
-        <Button Grid.Column="3">Make notes</Button>
+        <ToggleButton Grid.Column="3" IsChecked="{Binding IsMakingNotes}">Make notes</ToggleButton>
     </Grid>
 </UserControl>

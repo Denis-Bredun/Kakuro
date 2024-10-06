@@ -2,6 +2,7 @@
 
 namespace Kakuro.Commands
 {
+    // #BAD: tests shall be written
     public class CleanDashboardCommand : RelayCommand
     {
         private DashboardItemCollection _dashboard;

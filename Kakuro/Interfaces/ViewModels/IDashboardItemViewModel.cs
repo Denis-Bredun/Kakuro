@@ -8,7 +8,8 @@ namespace Kakuro.Interfaces.ViewModels
         string HiddenValue { get; set; }
         string SumRight { get; set; }
         string SumBottom { get; set; }
-        string[] Notes { get; set; }
+        string[,] Notes { get; set; }
         CellType CellType { get; set; }
+        bool IsSelected { get; set; }
     }
 }
