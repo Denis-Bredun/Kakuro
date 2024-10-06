@@ -32,7 +32,6 @@ namespace Kakuro.StartUp
            .SingleInstance();
 
             // Commands
-            builder.RegisterType<ApplyDifficultyCommand>().AsSelf().SingleInstance();
             builder.RegisterType<CleanDashboardCommand>().AsSelf().SingleInstance();
             builder.RegisterType<VerifySolutionCommand>().AsSelf().SingleInstance();
 

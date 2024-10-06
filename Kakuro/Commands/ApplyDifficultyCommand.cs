@@ -7,12 +7,13 @@ namespace Kakuro.Commands
 {
     public class ApplyDifficultyCommand : RelayCommand
     {
-        private IDashboardProvider _dashboardProvider;
-        public IDashboardViewModel DashboardViewModel { get; set; } // #BAD: shall we pass it as parameter in constructor?
+        private readonly IDashboardProvider _dashboardProvider;
+        private readonly IDashboardViewModel _dashboardViewModel;
 
-        public ApplyDifficultyCommand(IDashboardProvider dashboardProvider)
+        public ApplyDifficultyCommand(IDashboardProvider dashboardProvider, IDashboardViewModel dashboardViewModel)
         {
             _dashboardProvider ??= dashboardProvider;
+            _dashboardViewModel ??= dashboardViewModel;
         }
 
         public override void Execute(object? parameter)
@@ -23,10 +24,7 @@ namespace Kakuro.Commands
             if (!Enum.TryParse<DifficultyLevels>(parameter.ToString(), out var difficultyLevel))
                 throw new ArgumentException("Parameter for ApplyDifficultyCommand is of incorrect type!");
 
-            if (DashboardViewModel == null)
-                throw new NullReferenceException("DashboardViewModel in ApplyDifficultyCommand is null!");
-
-            DashboardViewModel.ChoosenDifficulty = difficultyLevel;
+            _dashboardViewModel.ChoosenDifficulty = difficultyLevel;
 
             _dashboardProvider.GenerateDashboard(difficultyLevel);
         }

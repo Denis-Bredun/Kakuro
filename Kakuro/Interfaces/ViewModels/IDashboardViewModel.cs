@@ -7,9 +7,11 @@ namespace Kakuro.Interfaces.ViewModels
     {
         DashboardItemCollection Dashboard { get; }
         DifficultyLevels ChoosenDifficulty { get; set; }
-        public ICommand ApplyDifficultyCommand { get; }
-        public ICommand NewGameCommand { get; }
-        public ICommand VerifySolutionCommand { get; }
-        public ICommand CleanDashboardCommand { get; }
+        ICommand ApplyDifficultyCommand { get; }
+        ICommand NewGameCommand { get; }
+        ICommand VerifySolutionCommand { get; }
+        ICommand CleanDashboardCommand { get; }
+        ICommand EraseSelectedCellCommand { get; }
+        ICommand CellGotFocusCommand { get; }
     }
 }
