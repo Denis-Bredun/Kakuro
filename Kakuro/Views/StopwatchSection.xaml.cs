@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Kakuro.Views
 {
     /// <summary>
-    /// Interaction logic for DashboardToolsSection.xaml
+    /// Interaction logic for StopwatchSection.xaml
     /// </summary>
-    public partial class DashboardToolsSection : UserControl
+    public partial class StopwatchSection : UserControl
     {
-        public DashboardToolsSection()
+        public StopwatchSection()
         {
             InitializeComponent();
         }

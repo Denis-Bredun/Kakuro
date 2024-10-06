@@ -12,8 +12,6 @@ namespace Kakuro.ViewModels
     public class DashboardViewModel : ViewModelBase, IDashboardViewModel
     {
         private DifficultyLevels _choosenDifficulty;
-        private IDashboardItemViewModel _selectedCell;
-        private bool _isMakingNotes;
 
         public DashboardItemCollection Dashboard { get; }
 
@@ -27,42 +25,10 @@ namespace Kakuro.ViewModels
             }
         }
 
-        public IDashboardItemViewModel SelectedCell
-        {
-            get => _selectedCell;
-            set
-            {
-                if (_selectedCell != null)
-                    _selectedCell.IsSelected = false;
-
-                if (value != null && value.CellType == CellType.ValueCell)
-                {
-                    _selectedCell = value;
-                    _selectedCell.IsSelected = true;
-                }
-                else
-                    _selectedCell = null;
-
-                OnPropertyChanged(nameof(SelectedCell));
-            }
-        }
-
-        public bool IsMakingNotes
-        {
-            get => _isMakingNotes;
-            set
-            {
-                _isMakingNotes = value;
-                OnPropertyChanged(nameof(IsMakingNotes));
-            }
-        }
-
         public ICommand ApplyDifficultyCommand { get; }
         public ICommand NewGameCommand { get; }
         public ICommand VerifySolutionCommand { get; }
         public ICommand CleanDashboardCommand { get; }
-        public ICommand EraseSelectedCellCommand { get; }
-        public ICommand CellGotFocusCommand { get; }
 
         public DashboardViewModel(ILifetimeScope scope, DashboardItemCollection dashboard)
         {
@@ -72,16 +38,9 @@ namespace Kakuro.ViewModels
             VerifySolutionCommand = scope.Resolve<VerifySolutionCommand>();
             ApplyDifficultyCommand = new ApplyDifficultyCommand(scope.Resolve<IDashboardProvider>(), this);
             CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
-            EraseSelectedCellCommand = new EraseSelectedCellCommand(this);
-            CellGotFocusCommand = new CellGotFocusCommand(OnCellGotFocus);
             NewGameCommand = ApplyDifficultyCommand;
 
             ApplyDifficultyCommand.Execute(ChoosenDifficulty);
-        }
-
-        private void OnCellGotFocus(IDashboardItemViewModel selectedCell)
-        {
-            SelectedCell = selectedCell; // #BAD: shall this logic be in CellGotFocusCommand class?
         }
     }
 }

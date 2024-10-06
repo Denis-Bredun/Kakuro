@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
 
         <view:DifficultyLevelsSection Grid.Row="1"/>
-        <view:DashboardToolsSection Grid.Row="3"/>
+        <view:StopwatchSection Grid.Row="3"/>
         <view:DashboardSection Grid.Row="5"/>
         <view:SubmitSection Grid.Row="7"/>
         <view:CleaningToolsSection Grid.Row="9"/>
