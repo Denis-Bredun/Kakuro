@@ -14,7 +14,7 @@ namespace Kakuro.Data_Access.Data_Providers
 
         public DashboardProvider(IDashboardTemplateProvider templateProvider, DashboardItemCollection dashboard)
         {
-            _random = new Random();
+            _random ??= new Random();
             _dashboard ??= dashboard;
             _templateProvider ??= templateProvider;
         }

@@ -12,5 +12,17 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
+
+        <TextBlock VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" FontSize="45" Foreground="Red">
+            <TextBlock.Inlines>
+                <Run Text="{Binding StopWatchHours}" />
+                <Run Text=":" />
+                <Run Text="{Binding StopWatchMinutes}" />
+                <Run Text=":" />
+                <Run Text="{Binding StopWatchSeconds}" />
+            </TextBlock.Inlines>
+        </TextBlock>
+
+
     </Grid>
 </UserControl>

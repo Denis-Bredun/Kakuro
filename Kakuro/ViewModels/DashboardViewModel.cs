@@ -3,6 +3,7 @@ using Kakuro.Base_Classes;
 using Kakuro.Commands;
 using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
+using Kakuro.Interfaces.Game_Tools;
 using System.Diagnostics;
 using System.Windows.Input;
 
@@ -51,26 +52,35 @@ namespace Kakuro.ViewModels
         public ICommand CleanDashboardCommand { get; }
         public ICommand StartStopwatchCommand { get; set; }
         public ICommand StopStopwatchCommand { get; set; }
-        public ICommand ResetStopwatchCommand { get; set; }
+        public ICommand RestartStopwatchCommand { get; set; }
 
         public DashboardViewModel(ILifetimeScope scope, DashboardItemCollection dashboard)
         {
             ChoosenDifficulty = DifficultyLevels.Easy;
             Dashboard = dashboard;
 
-            VerifySolutionCommand = scope.Resolve<VerifySolutionCommand>();
-            ApplyDifficultyCommand = new ApplyDifficultyCommand(scope.Resolve<IDashboardProvider>(), this);
-            CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
-            NewGameCommand = ApplyDifficultyCommand;
-
             _stopwatch = new Stopwatch();
             StartStopwatchCommand = new StartStopwatchCommand(_stopwatch, this);
             StopStopwatchCommand = new StopStopwatchCommand(_stopwatch);
-            ResetStopwatchCommand = new ResetStopwatchCommand(_stopwatch, this);
+            RestartStopwatchCommand = new RestartStopwatchCommand(_stopwatch, StartStopwatchCommand);
             StopWatchHours = _stopwatch.Elapsed.Hours.ToString();
             StopWatchMinutes = _stopwatch.Elapsed.Minutes.ToString();
             StopWatchSeconds = _stopwatch.Elapsed.Seconds.ToString();
 
+            VerifySolutionCommand = new VerifySolutionCommand(
+                scope.Resolve<ISolutionVerifier>(),
+                scope.Resolve<IOperationNotifier>(),
+                StopStopwatchCommand);
+
+            ApplyDifficultyCommand = new ApplyDifficultyCommand(
+                scope.Resolve<IDashboardProvider>(),
+                this,
+                RestartStopwatchCommand);
+
+            CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
+            NewGameCommand = ApplyDifficultyCommand;
+
+            StartStopwatchCommand.Execute(null);
             ApplyDifficultyCommand.Execute(ChoosenDifficulty);
         }
     }

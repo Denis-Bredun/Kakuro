@@ -2,19 +2,22 @@
 using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Kakuro.ViewModels;
+using System.Windows.Input;
 
 namespace Kakuro.Commands
 {
     // #BAD: tests shall be REwritten
     public class ApplyDifficultyCommand : RelayCommand
     {
-        private readonly IDashboardProvider _dashboardProvider;
-        private readonly DashboardViewModel _dashboardViewModel;
+        private IDashboardProvider _dashboardProvider;
+        private DashboardViewModel _dashboardViewModel;
+        private ICommand _restartStopwatchCommand;
 
-        public ApplyDifficultyCommand(IDashboardProvider dashboardProvider, DashboardViewModel dashboardViewModel)
+        public ApplyDifficultyCommand(IDashboardProvider dashboardProvider, DashboardViewModel dashboardViewModel, ICommand restartStopwatchCommand)
         {
             _dashboardProvider ??= dashboardProvider;
             _dashboardViewModel ??= dashboardViewModel;
+            _restartStopwatchCommand ??= restartStopwatchCommand;
         }
 
         public override void Execute(object? parameter)
@@ -26,6 +29,8 @@ namespace Kakuro.Commands
                 throw new ArgumentException("Parameter for ApplyDifficultyCommand is of incorrect type!");
 
             _dashboardViewModel.ChoosenDifficulty = difficultyLevel;
+
+            _restartStopwatchCommand.Execute(null);
 
             _dashboardProvider.GenerateDashboard(difficultyLevel);
         }
