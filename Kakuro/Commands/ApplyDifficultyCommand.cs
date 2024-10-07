@@ -1,7 +1,7 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
-using Kakuro.Interfaces.ViewModels;
+using Kakuro.ViewModels;
 
 namespace Kakuro.Commands
 {
@@ -9,9 +9,9 @@ namespace Kakuro.Commands
     public class ApplyDifficultyCommand : RelayCommand
     {
         private readonly IDashboardProvider _dashboardProvider;
-        private readonly IDashboardViewModel _dashboardViewModel;
+        private readonly DashboardViewModel _dashboardViewModel;
 
-        public ApplyDifficultyCommand(IDashboardProvider dashboardProvider, IDashboardViewModel dashboardViewModel)
+        public ApplyDifficultyCommand(IDashboardProvider dashboardProvider, DashboardViewModel dashboardViewModel)
         {
             _dashboardProvider ??= dashboardProvider;
             _dashboardViewModel ??= dashboardViewModel;

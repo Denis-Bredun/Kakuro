@@ -5,7 +5,6 @@ using Kakuro.Data_Access.Tools;
 using Kakuro.Game_Tools;
 using Kakuro.Interfaces.Data_Access.Tools;
 using Kakuro.Interfaces.Game_Tools;
-using Kakuro.Interfaces.ViewModels;
 using Kakuro.Models;
 using Kakuro.ViewModels;
 
@@ -26,10 +25,8 @@ namespace Kakuro.StartUp
 
             // ViewModels
             builder.RegisterType<MainViewModel>().AsSelf().SingleInstance();
-            builder.RegisterType<DashboardItemViewModel>().As<IDashboardItemViewModel>();
-            builder.RegisterType<DashboardViewModel>()
-           .As<IDashboardViewModel>()
-           .SingleInstance();
+            builder.RegisterType<DashboardItemViewModel>().AsSelf();
+            builder.RegisterType<DashboardViewModel>().AsSelf().SingleInstance();
 
             // Commands
             builder.RegisterType<CleanDashboardCommand>().AsSelf().SingleInstance();

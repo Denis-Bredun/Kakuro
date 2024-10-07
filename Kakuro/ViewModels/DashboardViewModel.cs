@@ -3,13 +3,13 @@ using Kakuro.Base_Classes;
 using Kakuro.Commands;
 using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
-using Kakuro.Interfaces.ViewModels;
 using System.Windows.Input;
 
 namespace Kakuro.ViewModels
 {
     // #BAD: tests should be written
-    public class DashboardViewModel : ViewModelBase, IDashboardViewModel
+    // #BAD: shall there be interfaces?
+    public class DashboardViewModel : ViewModelBase
     {
         private DifficultyLevels _choosenDifficulty;
 

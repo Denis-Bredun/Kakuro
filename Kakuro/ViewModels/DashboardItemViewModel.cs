@@ -1,12 +1,12 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
-using Kakuro.Interfaces.ViewModels;
 using Kakuro.Models;
 
 namespace Kakuro.ViewModels
 {
     // #BAD: tests should be written
-    public class DashboardItemViewModel : ViewModelBase, IDashboardItemViewModel
+    // #BAD: shall there be interfaces?
+    public class DashboardItemViewModel : ViewModelBase
     {
         private DashboardItem _dashboardItem;
 
