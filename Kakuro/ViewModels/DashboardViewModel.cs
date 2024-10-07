@@ -62,7 +62,7 @@ namespace Kakuro.ViewModels
             _stopwatch = new Stopwatch();
             StartStopwatchCommand = new StartStopwatchCommand(_stopwatch, this);
             StopStopwatchCommand = new StopStopwatchCommand(_stopwatch);
-            RestartStopwatchCommand = new RestartStopwatchCommand(_stopwatch, StartStopwatchCommand);
+            RestartStopwatchCommand = new RestartStopwatchCommand(_stopwatch, StartStopwatchCommand, StopStopwatchCommand);
             StopWatchHours = _stopwatch.Elapsed.Hours.ToString();
             StopWatchMinutes = _stopwatch.Elapsed.Minutes.ToString();
             StopWatchSeconds = _stopwatch.Elapsed.Seconds.ToString();

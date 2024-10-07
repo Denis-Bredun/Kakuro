@@ -1,9 +1,11 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.ViewModels;
 using System.Diagnostics;
+using System.Windows;
 
 namespace Kakuro.Commands
 {
+    // #BAD: tests shall be written
     public class StartStopwatchCommand : RelayCommand
     {
         private Stopwatch _stopwatch;
@@ -22,9 +24,13 @@ namespace Kakuro.Commands
             {
                 while (_stopwatch.IsRunning)
                 {
-                    _viewModel.StopWatchHours = _stopwatch.Elapsed.Hours.ToString();
-                    _viewModel.StopWatchMinutes = _stopwatch.Elapsed.Minutes.ToString();
-                    _viewModel.StopWatchSeconds = _stopwatch.Elapsed.Seconds.ToString();
+                    Application.Current.Dispatcher.Invoke(() =>
+                    {
+                        _viewModel.StopWatchHours = _stopwatch.Elapsed.Hours.ToString();
+                        _viewModel.StopWatchMinutes = _stopwatch.Elapsed.Minutes.ToString();
+                        _viewModel.StopWatchSeconds = _stopwatch.Elapsed.Seconds.ToString();
+                    });
+
                     await Task.Delay(1000);
                 }
             });
