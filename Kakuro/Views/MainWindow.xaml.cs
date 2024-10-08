@@ -39,7 +39,7 @@ namespace Kakuro
             Dispose(false);
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        private void Window_Closed(object sender, EventArgs e) // #BAD: i guess i shall do it using commands
         {
             Dispose();
             base.OnClosed(e);
