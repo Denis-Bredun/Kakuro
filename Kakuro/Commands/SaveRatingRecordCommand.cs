@@ -10,6 +10,7 @@ namespace Kakuro.Commands
     public class SaveRatingRecordCommand : RelayCommand
     {
         private IRatingRecordProvider _ratingRecordProvider;
+        private bool _disposed = false;
 
         public event EventHandler? SaveCompleted;
 
