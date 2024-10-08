@@ -17,7 +17,7 @@
 
         <TabItem Header="Rating table" 
                  Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource TabItemWidthConverter}}">
-            <view:RatingTableTab/>
+            <view:RatingTableTab DataContext="{Binding RatingTableViewModel}"/>
         </TabItem>
     </TabControl>
 

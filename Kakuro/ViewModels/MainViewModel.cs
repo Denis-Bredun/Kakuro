@@ -6,9 +6,11 @@ namespace Kakuro.ViewModels
     public class MainViewModel : ViewModelBase
     {
         public DashboardViewModel DashboardViewModel { get; }
-        public MainViewModel(DashboardViewModel dashboardViewModel)
+        public RatingTableViewModel RatingTableViewModel { get; }
+        public MainViewModel(DashboardViewModel dashboardViewModel, RatingTableViewModel ratingTableViewModel)
         {
             DashboardViewModel = dashboardViewModel;
+            RatingTableViewModel = ratingTableViewModel;
         }
     }
 }

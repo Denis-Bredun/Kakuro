@@ -20,10 +20,12 @@ namespace Kakuro.Data_Access.Data_Providers
         {
             _dataService = dataService;
             Cache = new Dictionary<DifficultyLevels, IEnumerable<RatingRecord>>();
-            IsCacheSynchronizedWithFiles = new Dictionary<DifficultyLevels, bool>();
-            IsCacheSynchronizedWithFiles.Add(DifficultyLevels.Easy, true);
-            IsCacheSynchronizedWithFiles.Add(DifficultyLevels.Normal, true);
-            IsCacheSynchronizedWithFiles.Add(DifficultyLevels.Hard, true);
+            IsCacheSynchronizedWithFiles = new Dictionary<DifficultyLevels, bool>
+            {
+                { DifficultyLevels.Easy, true },
+                { DifficultyLevels.Normal, true },
+                { DifficultyLevels.Hard, true }
+            };
         }
 
         public void Add(RatingRecord entity, DifficultyLevels key)
