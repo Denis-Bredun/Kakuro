@@ -30,7 +30,7 @@ namespace Kakuro.Commands
 
             _dashboardViewModel.ChoosenDifficulty = difficultyLevel;
 
-            _restartStopwatchCommand.Execute(null);
+            _restartStopwatchCommand.Execute(parameter);
 
             _dashboardProvider.GenerateDashboard(difficultyLevel);
         }

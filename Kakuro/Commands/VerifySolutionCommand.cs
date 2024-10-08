@@ -32,7 +32,8 @@ namespace Kakuro.Commands
             if (isSolutionCorrect)
             {
                 successMessage = message;
-                _stopStopwatchCommand.Execute(null);
+                _stopStopwatchCommand.Execute(parameter);
+                _sentGameSessionCommand.Execute(parameter);
             }
             else
                 failMessage = message;

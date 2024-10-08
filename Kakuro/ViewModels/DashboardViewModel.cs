@@ -55,7 +55,7 @@ namespace Kakuro.ViewModels
         public ICommand RestartStopwatchCommand { get; }
         public ICommand SentGameSessionCommand { get; }
 
-        public DashboardViewModel(ILifetimeScope scope, DashboardItemCollection dashboard)
+        public DashboardViewModel(ILifetimeScope scope, IEventAggregator eventAggregator, DashboardItemCollection dashboard)
         {
             ChoosenDifficulty = DifficultyLevels.Easy;
             Dashboard = dashboard;
@@ -68,7 +68,7 @@ namespace Kakuro.ViewModels
             StopWatchMinutes = _stopwatch.Elapsed.Minutes.ToString();
             StopWatchSeconds = _stopwatch.Elapsed.Seconds.ToString();
 
-            SentGameSessionCommand = new SentGameSessionCommand(this);
+            SentGameSessionCommand = new SentGameSessionCommand(this, eventAggregator);
 
             VerifySolutionCommand = new VerifySolutionCommand(
                 scope.Resolve<ISolutionVerifier>(),

@@ -26,6 +26,7 @@ namespace Kakuro.StartUp
                    .AsSelf()
                    .SingleInstance();
 
+            builder.RegisterType<EventAggregator>().As<IEventAggregator>().SingleInstance();
 
             // ViewModels
             builder.RegisterType<MainViewModel>().AsSelf().SingleInstance();
