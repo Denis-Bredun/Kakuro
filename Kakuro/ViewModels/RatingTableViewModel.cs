@@ -1,4 +1,6 @@
-﻿using Kakuro.Interfaces.Data_Access.Data_Providers;
+﻿using Kakuro.Commands;
+using Kakuro.Enums;
+using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Kakuro.Models;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -10,6 +12,7 @@ namespace Kakuro.ViewModels
     public class RatingTableViewModel
     {
         private IRatingRecordProvider _ratingRecordProvider;
+        private RatingTableContainer _ratingTablesContainer;
 
         public ObservableCollection<RatingRecord> EasyRatingRecords { get; }
         public ObservableCollection<RatingRecord> NormalRatingRecords { get; }
@@ -21,6 +24,26 @@ namespace Kakuro.ViewModels
         public RatingTableViewModel(IRatingRecordProvider ratingRecordProvider)
         {
             _ratingRecordProvider = ratingRecordProvider;
+            EasyRatingRecords = new ObservableCollection<RatingRecord>();
+            NormalRatingRecords = new ObservableCollection<RatingRecord>();
+            HardRatingRecords = new ObservableCollection<RatingRecord>();
+            _ratingTablesContainer = new RatingTableContainer
+            {
+                { DifficultyLevels.Easy, EasyRatingRecords },
+                { DifficultyLevels.Normal, NormalRatingRecords },
+                { DifficultyLevels.Hard, HardRatingRecords }
+            };
+
+            LoadRatingRecordsCommand = new LoadRatingRecordsCommand(_ratingRecordProvider, _ratingTablesContainer);
+
+            SaveRatingRecordCommand = new SaveRatingRecordCommand(_ratingRecordProvider, _ratingTablesContainer);
+
+            ((SaveRatingRecordCommand)SaveRatingRecordCommand).SaveCompleted += (sender, e) =>
+            {
+                LoadRatingRecordsCommand.Execute(null);
+            };
+
+            LoadRatingRecordsCommand.Execute(null);
         }
     }
 }

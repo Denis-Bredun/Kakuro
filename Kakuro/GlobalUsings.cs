@@ -1,1 +1,2 @@
 ﻿global using DashboardItemCollection = System.Collections.ObjectModel.ObservableCollection<System.Collections.ObjectModel.ObservableCollection<Kakuro.ViewModels.DashboardItemViewModel>>;
+global using RatingTableContainer = System.Collections.Generic.Dictionary<Kakuro.Enums.DifficultyLevels, System.Collections.ObjectModel.ObservableCollection<Kakuro.Models.RatingRecord>>;
