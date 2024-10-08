@@ -16,5 +16,13 @@ namespace Kakuro.Models
             StopWatchMinutes = minutes;
             StopWatchSeconds = seconds;
         }
+
+        public void Deconstruct(out DifficultyLevels difficulty, out string hours, out string minutes, out string seconds)
+        {
+            difficulty = Difficulty;
+            hours = StopWatchHours;
+            minutes = StopWatchMinutes;
+            seconds = StopWatchSeconds;
+        }
     }
 }

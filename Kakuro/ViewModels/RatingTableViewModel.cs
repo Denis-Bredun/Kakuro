@@ -1,5 +1,6 @@
 ﻿using Kakuro.Commands;
 using Kakuro.Enums;
+using Kakuro.Events;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Kakuro.Models;
 using System.Collections.ObjectModel;
@@ -21,7 +22,7 @@ namespace Kakuro.ViewModels
         public ICommand LoadRatingRecordsCommand { get; }
         public ICommand SaveRatingRecordCommand { get; }
 
-        public RatingTableViewModel(IRatingRecordProvider ratingRecordProvider)
+        public RatingTableViewModel(IRatingRecordProvider ratingRecordProvider, IEventAggregator eventAggregator)
         {
             _ratingRecordProvider = ratingRecordProvider;
             EasyRatingRecords = new ObservableCollection<RatingRecord>();
@@ -36,7 +37,7 @@ namespace Kakuro.ViewModels
 
             LoadRatingRecordsCommand = new LoadRatingRecordsCommand(_ratingRecordProvider, _ratingTablesContainer);
 
-            SaveRatingRecordCommand = new SaveRatingRecordCommand(_ratingRecordProvider, _ratingTablesContainer);
+            SaveRatingRecordCommand = new SaveRatingRecordCommand(_ratingRecordProvider);
 
             ((SaveRatingRecordCommand)SaveRatingRecordCommand).SaveCompleted += (sender, e) =>
             {
@@ -44,6 +45,8 @@ namespace Kakuro.ViewModels
             };
 
             LoadRatingRecordsCommand.Execute(null);
+
+            eventAggregator.GetEvent<GameCompletedEvent>().Subscribe(SaveRatingRecordCommand.Execute);
         }
     }
 }

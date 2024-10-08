@@ -1,5 +1,8 @@
 ﻿using Kakuro.Base_Classes;
+using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
+using Kakuro.Models;
+using static System.Convert;
 
 namespace Kakuro.Commands
 {
@@ -7,18 +10,25 @@ namespace Kakuro.Commands
     public class SaveRatingRecordCommand : RelayCommand
     {
         private IRatingRecordProvider _ratingRecordProvider;
-        private RatingTableContainer _ratingTablesContainer;
 
         public event EventHandler? SaveCompleted;
 
-        public SaveRatingRecordCommand(IRatingRecordProvider ratingRecordProvider, RatingTableContainer ratingTablesContainer)
+        public SaveRatingRecordCommand(IRatingRecordProvider ratingRecordProvider)
         {
             _ratingRecordProvider ??= ratingRecordProvider;
-            _ratingTablesContainer ??= ratingTablesContainer;
         }
         public override void Execute(object? parameter)
         {
-            throw new NotImplementedException();
+            if (parameter == null)
+                throw new NullReferenceException("Parameter for SaveRatingRecordCommand is null!");
+
+            GameSession session = (GameSession)parameter;
+
+            (DifficultyLevels difficulty, string hours, string minutes, string seconds) = session;
+
+            RatingRecord ratingRecord = new RatingRecord(ToInt32(hours), ToInt32(minutes), ToInt32(seconds));
+
+            _ratingRecordProvider.Add(ratingRecord, difficulty);
 
             OnSaveCompleted();
         }
