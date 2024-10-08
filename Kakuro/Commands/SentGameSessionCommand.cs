@@ -1,4 +1,6 @@
 ﻿using Kakuro.Base_Classes;
+using Kakuro.Events;
+using Kakuro.Models;
 using Kakuro.ViewModels;
 
 namespace Kakuro.Commands
@@ -16,7 +18,13 @@ namespace Kakuro.Commands
 
         public override void Execute(object? parameter)
         {
+            GameSession session = new GameSession(
+                _dashboardViewModel.ChoosenDifficulty,
+                _dashboardViewModel.StopWatchHours,
+                _dashboardViewModel.StopWatchMinutes,
+                _dashboardViewModel.StopWatchSeconds);
 
+            _eventAggregator.GetEvent<GameCompletedEvent>().Publish(session);
         }
     }
 }
