@@ -10,7 +10,7 @@ namespace Kakuro.Commands
 
         public StopStopwatchCommand(Stopwatch stopwatch)
         {
-            _stopwatch = stopwatch;
+            _stopwatch ??= stopwatch;
         }
 
         public override void Execute(object? parameter)

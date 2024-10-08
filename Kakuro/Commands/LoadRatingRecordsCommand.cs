@@ -13,8 +13,8 @@ namespace Kakuro.Commands
 
         public LoadRatingRecordsCommand(IRatingRecordProvider ratingRecordProvider, RatingTableContainer ratingTablesContainer)
         {
-            _ratingRecordProvider = ratingRecordProvider;
-            _ratingTablesContainer = ratingTablesContainer;
+            _ratingRecordProvider ??= ratingRecordProvider;
+            _ratingTablesContainer ??= ratingTablesContainer;
         }
         public override void Execute(object? parameter)
         {

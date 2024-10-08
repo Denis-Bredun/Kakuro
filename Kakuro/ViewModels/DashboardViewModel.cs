@@ -50,9 +50,10 @@ namespace Kakuro.ViewModels
         public ICommand NewGameCommand { get; }
         public ICommand VerifySolutionCommand { get; }
         public ICommand CleanDashboardCommand { get; }
-        public ICommand StartStopwatchCommand { get; set; }
-        public ICommand StopStopwatchCommand { get; set; }
-        public ICommand RestartStopwatchCommand { get; set; }
+        public ICommand StartStopwatchCommand { get; }
+        public ICommand StopStopwatchCommand { get; }
+        public ICommand RestartStopwatchCommand { get; }
+        public ICommand SentGameSessionCommand { get; }
 
         public DashboardViewModel(ILifetimeScope scope, DashboardItemCollection dashboard)
         {
@@ -67,10 +68,13 @@ namespace Kakuro.ViewModels
             StopWatchMinutes = _stopwatch.Elapsed.Minutes.ToString();
             StopWatchSeconds = _stopwatch.Elapsed.Seconds.ToString();
 
+            SentGameSessionCommand = new SentGameSessionCommand(this);
+
             VerifySolutionCommand = new VerifySolutionCommand(
                 scope.Resolve<ISolutionVerifier>(),
                 scope.Resolve<IOperationNotifier>(),
-                StopStopwatchCommand);
+                StopStopwatchCommand,
+                SentGameSessionCommand);
 
             ApplyDifficultyCommand = new ApplyDifficultyCommand(
                 scope.Resolve<IDashboardProvider>(),
@@ -80,7 +84,6 @@ namespace Kakuro.ViewModels
             CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
             NewGameCommand = ApplyDifficultyCommand;
 
-            StartStopwatchCommand.Execute(null);
             ApplyDifficultyCommand.Execute(ChoosenDifficulty);
         }
     }

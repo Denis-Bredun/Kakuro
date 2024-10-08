@@ -13,8 +13,8 @@ namespace Kakuro.Commands
 
         public StartStopwatchCommand(Stopwatch stopwatch, DashboardViewModel viewModel)
         {
-            _stopwatch = stopwatch;
-            _viewModel = viewModel;
+            _stopwatch ??= stopwatch;
+            _viewModel ??= viewModel;
         }
 
         public override void Execute(object? parameter)

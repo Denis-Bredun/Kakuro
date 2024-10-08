@@ -10,12 +10,18 @@ namespace Kakuro.Commands
         private ISolutionVerifier _solutionVerifier;
         private IOperationNotifier _operationNotifier;
         private ICommand _stopStopwatchCommand;
+        private ICommand _sentGameSessionCommand;
 
-        public VerifySolutionCommand(ISolutionVerifier solutionVerifier, IOperationNotifier operationNotifier, ICommand stopStopwatchCommand)
+        public VerifySolutionCommand(
+            ISolutionVerifier solutionVerifier,
+            IOperationNotifier operationNotifier,
+            ICommand stopStopwatchCommand,
+            ICommand sentGameSessionCommand)
         {
             _solutionVerifier ??= solutionVerifier;
             _operationNotifier ??= operationNotifier;
             _stopStopwatchCommand ??= stopStopwatchCommand;
+            _sentGameSessionCommand ??= sentGameSessionCommand;
         }
 
         public override void Execute(object? parameter)

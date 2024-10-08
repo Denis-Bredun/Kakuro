@@ -9,7 +9,7 @@ namespace Kakuro.Commands
 
         public CleanDashboardCommand(DashboardItemCollection dashboard)
         {
-            _dashboard = dashboard;
+            _dashboard ??= dashboard;
         }
 
         public override void Execute(object? parameter)

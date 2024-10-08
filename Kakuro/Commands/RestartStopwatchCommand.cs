@@ -13,9 +13,9 @@ namespace Kakuro.Commands
 
         public RestartStopwatchCommand(Stopwatch stopwatch, ICommand startStopwatchCommand, ICommand stopStopwatchCommand)
         {
-            _stopwatch = stopwatch;
-            _startStopwatchCommand = startStopwatchCommand;
-            _stopStopwatchCommand = stopStopwatchCommand;
+            _stopwatch ??= stopwatch;
+            _startStopwatchCommand ??= startStopwatchCommand;
+            _stopStopwatchCommand ??= stopStopwatchCommand;
         }
 
         public override void Execute(object? parameter)
