@@ -29,6 +29,8 @@ namespace Kakuro.Commands
             var iEnumerableData = _ratingRecordProvider.GetAll(difficultyLevel);
             var convertedData = ConvertIEnumerableToObservable(iEnumerableData);
 
+            _ratingTablesContainer[difficultyLevel].Clear();
+
             foreach (var ratingRecord in convertedData)
                 _ratingTablesContainer[difficultyLevel].Add(ratingRecord);
         }
