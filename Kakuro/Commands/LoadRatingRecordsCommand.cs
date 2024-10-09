@@ -27,7 +27,10 @@ namespace Kakuro.Commands
         private void LoadDataForConcreteDifficulty(DifficultyLevels difficultyLevel)
         {
             var iEnumerableData = _ratingRecordProvider.GetAll(difficultyLevel);
-            _ratingTablesContainer[difficultyLevel] = ConvertIEnumerableToObservable(iEnumerableData);
+            var convertedData = ConvertIEnumerableToObservable(iEnumerableData);
+
+            foreach (var ratingRecord in convertedData)
+                _ratingTablesContainer[difficultyLevel].Add(ratingRecord);
         }
 
         private ObservableCollection<T> ConvertIEnumerableToObservable<T>(IEnumerable<T> values) => new ObservableCollection<T>(values);
