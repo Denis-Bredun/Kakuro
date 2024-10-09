@@ -10,6 +10,7 @@
                 <ResourceDictionary Source="Styles/Elements_Template.xaml"/>
                 <ResourceDictionary Source="Styles/Rows_Template.xaml"/>
                 <ResourceDictionary Source="Styles/RatingTableStyles.xaml"/>
+                <ResourceDictionary Source="Styles/RatingDataGridTemplate.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

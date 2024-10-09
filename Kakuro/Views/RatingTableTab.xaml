@@ -8,6 +8,10 @@
              d:DesignHeight="450" d:DesignWidth="800">
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -15,10 +19,21 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
 
-        <ContentControl Grid.Column="0" Content="{Binding EasyRatingRecords}" ContentTemplate="{StaticResource RatingDataGridTemplate}"/>
-        <ContentControl Grid.Column="1" Content="{Binding NormalRatingRecords}" ContentTemplate="{StaticResource RatingDataGridTemplate}"/>
-        <ContentControl Grid.Column="2" Content="{Binding HardRatingRecords}" ContentTemplate="{StaticResource RatingDataGridTemplate}"/>
-        
+        <Border Grid.Row="0" Grid.Column="0" Style="{StaticResource TitleTextBorderStyle}">
+            <TextBlock Text="Easy" Style="{StaticResource TitleTextStyle}" />
+        </Border>
+
+        <Border Grid.Row="0" Grid.Column="1" Style="{StaticResource TitleTextBorderStyle}">
+            <TextBlock Text="Normal" Style="{StaticResource TitleTextStyle}" />
+        </Border>
+
+        <Border Grid.Row="0" Grid.Column="2" Style="{StaticResource TitleTextBorderStyle}">
+            <TextBlock Text="Hard" Style="{StaticResource TitleTextStyle}" />
+        </Border>
+
+        <ContentControl Grid.Row="1" Grid.Column="0" Content="{Binding EasyRatingRecords}" ContentTemplate="{StaticResource RatingDataGridTemplate}"/>
+        <ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding NormalRatingRecords}" ContentTemplate="{StaticResource RatingDataGridTemplate}"/>
+        <ContentControl Grid.Row="1" Grid.Column="2" Content="{Binding HardRatingRecords}" ContentTemplate="{StaticResource RatingDataGridTemplate}"/>
     </Grid>
 
 </UserControl>
