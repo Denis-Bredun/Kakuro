@@ -13,6 +13,6 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Column="1" Command="{Binding VerifySolutionCommand}">Submit</Button>
+        <Button Grid.Column="1" Command="{Binding VerifySolutionCommand}" IsEnabled="{Binding IsGameCompleted, Converter={StaticResource InverseBooleanConverter}}">Submit</Button>
     </Grid>
 </UserControl>

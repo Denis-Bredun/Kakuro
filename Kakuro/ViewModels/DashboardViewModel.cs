@@ -18,9 +18,18 @@ namespace Kakuro.ViewModels
         private string _stopWatchHours;
         private string _stopWatchMinutes;
         private string _stopWatchSeconds;
+        private bool _isGameCompleted;
 
         public DashboardItemCollection Dashboard { get; }
-
+        public bool IsGameCompleted
+        {
+            get => _isGameCompleted;
+            set
+            {
+                _isGameCompleted = value;
+                OnPropertyChanged("IsGameCompleted");
+            }
+        }
         public DifficultyLevels ChoosenDifficulty
         {
             get => _choosenDifficulty;
@@ -59,6 +68,7 @@ namespace Kakuro.ViewModels
         {
             ChoosenDifficulty = DifficultyLevels.Easy;
             Dashboard = dashboard;
+            IsGameCompleted = false;
 
             _stopwatch = new Stopwatch();
             StartStopwatchCommand = new StartStopwatchCommand(_stopwatch, this);
@@ -74,7 +84,8 @@ namespace Kakuro.ViewModels
                 scope.Resolve<ISolutionVerifier>(),
                 scope.Resolve<IOperationNotifier>(),
                 StopStopwatchCommand,
-                SentGameSessionCommand);
+                SentGameSessionCommand,
+                this);
 
             ApplyDifficultyCommand = new ApplyDifficultyCommand(
                 scope.Resolve<IDashboardProvider>(),

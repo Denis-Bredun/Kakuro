@@ -1,5 +1,6 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Interfaces.Game_Tools;
+using Kakuro.ViewModels;
 using System.Windows.Input;
 
 namespace Kakuro.Commands
@@ -11,17 +12,20 @@ namespace Kakuro.Commands
         private IOperationNotifier _operationNotifier;
         private ICommand _stopStopwatchCommand;
         private ICommand _sentGameSessionCommand;
+        private DashboardViewModel _viewModel;
 
         public VerifySolutionCommand(
             ISolutionVerifier solutionVerifier,
             IOperationNotifier operationNotifier,
             ICommand stopStopwatchCommand,
-            ICommand sentGameSessionCommand)
+            ICommand sentGameSessionCommand,
+            DashboardViewModel viewModel)
         {
             _solutionVerifier ??= solutionVerifier;
             _operationNotifier ??= operationNotifier;
             _stopStopwatchCommand ??= stopStopwatchCommand;
             _sentGameSessionCommand ??= sentGameSessionCommand;
+            _viewModel ??= viewModel;
         }
 
         public override void Execute(object? parameter)
@@ -32,6 +36,7 @@ namespace Kakuro.Commands
             if (isSolutionCorrect)
             {
                 successMessage = message;
+                _viewModel.IsGameCompleted = true;
                 _stopStopwatchCommand.Execute(parameter);
                 _sentGameSessionCommand.Execute(parameter);
             }

@@ -33,6 +33,8 @@ namespace Kakuro.Commands
             _restartStopwatchCommand.Execute(parameter);
 
             _dashboardProvider.GenerateDashboard(difficultyLevel);
+
+            _dashboardViewModel.IsGameCompleted = false;
         }
     }
 }
