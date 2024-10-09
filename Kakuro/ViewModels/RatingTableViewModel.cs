@@ -33,11 +33,11 @@ namespace Kakuro.ViewModels
             NormalRatingRecords = new ObservableCollection<RatingRecord>();
             HardRatingRecords = new ObservableCollection<RatingRecord>();
             _ratingTablesContainer = new RatingTableContainer
-        {
-            { DifficultyLevels.Easy, EasyRatingRecords },
-            { DifficultyLevels.Normal, NormalRatingRecords },
-            { DifficultyLevels.Hard, HardRatingRecords }
-        };
+            {
+                { DifficultyLevels.Easy, EasyRatingRecords },
+                { DifficultyLevels.Normal, NormalRatingRecords },
+                { DifficultyLevels.Hard, HardRatingRecords }
+            };
 
             _eventAggregator = eventAggregator;
 

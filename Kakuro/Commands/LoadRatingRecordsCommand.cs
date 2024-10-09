@@ -30,9 +30,6 @@ namespace Kakuro.Commands
             _ratingTablesContainer[difficultyLevel] = ConvertIEnumerableToObservable(iEnumerableData);
         }
 
-        private ObservableCollection<T> ConvertIEnumerableToObservable<T>(IEnumerable<T> values)
-        {
-            return values as ObservableCollection<T>;
-        }
+        private ObservableCollection<T> ConvertIEnumerableToObservable<T>(IEnumerable<T> values) => new ObservableCollection<T>(values);
     }
 }
