@@ -18,6 +18,7 @@
         <ContentControl Grid.Column="0" Content="{Binding EasyRatingRecords}" ContentTemplate="{StaticResource RatingDataGridTemplate}"/>
         <ContentControl Grid.Column="1" Content="{Binding NormalRatingRecords}" ContentTemplate="{StaticResource RatingDataGridTemplate}"/>
         <ContentControl Grid.Column="2" Content="{Binding HardRatingRecords}" ContentTemplate="{StaticResource RatingDataGridTemplate}"/>
+        
     </Grid>
 
 </UserControl>

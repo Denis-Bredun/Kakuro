@@ -7,6 +7,8 @@ namespace Kakuro.Models
         public TimeOnly GameCompletionTime { get; set; }
         public DateOnly GameCompletionDate { get; set; }
 
+        public string FormattedCompletionTime => GameCompletionTime.ToString("HH\\:mm\\:ss");
+
         public RatingRecord(int hour, int minute, int second)
         {
             GameCompletionTime = new TimeOnly(hour, minute, second);

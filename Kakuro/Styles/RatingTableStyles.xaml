@@ -17,14 +17,36 @@
                 </Style>
             </Setter.Value>
         </Setter>
+        <Setter Property="CellStyle">
+            <Setter.Value>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    <Setter Property="VerticalContentAlignment" Value="Center"/>
+                </Style>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <DataTemplate x:Key="RatingDataGridTemplate">
         <DataGrid Style="{StaticResource RatingDataGridStyle}"
                   ItemsSource="{Binding}">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Time" Binding="{Binding GameCompletionTime}" Width="*"/>
-                <DataGridTextColumn Header="Date" Binding="{Binding GameCompletionDate}" Width="*"/>
+                <DataGridTextColumn Header="Time" Binding="{Binding FormattedCompletionTime}" Width="*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Date" Binding="{Binding GameCompletionDate}" Width="*">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="VerticalAlignment" Value="Center"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
             </DataGrid.Columns>
         </DataGrid>
     </DataTemplate>
