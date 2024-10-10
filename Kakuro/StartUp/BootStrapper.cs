@@ -33,6 +33,7 @@ namespace Kakuro.StartUp
             builder.RegisterType<DashboardItemViewModel>().AsSelf();
             builder.RegisterType<DashboardViewModel>().AsSelf().SingleInstance();
             builder.RegisterType<RatingTableViewModel>().AsSelf().SingleInstance();
+            builder.RegisterType<SettingsViewModel>().AsSelf().SingleInstance();
 
             // Commands
             builder.RegisterType<CleanDashboardCommand>().AsSelf().SingleInstance();

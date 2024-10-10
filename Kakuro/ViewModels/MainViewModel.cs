@@ -7,13 +7,18 @@ namespace Kakuro.ViewModels
     {
         public DashboardViewModel DashboardViewModel { get; }
         public RatingTableViewModel RatingTableViewModel { get; }
+        public SettingsViewModel SettingsViewModel { get; }
 
         private bool _disposed = false;
 
-        public MainViewModel(DashboardViewModel dashboardViewModel, RatingTableViewModel ratingTableViewModel)
+        public MainViewModel(
+            DashboardViewModel dashboardViewModel,
+            RatingTableViewModel ratingTableViewModel,
+            SettingsViewModel settingsViewModel)
         {
             DashboardViewModel = dashboardViewModel;
             RatingTableViewModel = ratingTableViewModel;
+            SettingsViewModel = settingsViewModel;
         }
 
         public void Dispose()
