@@ -16,10 +16,12 @@
             <TextBlock Text="Settings" Style="{StaticResource TitleTextStyle}" />
         </Border>
 
-        <ListBox Grid.Row="1" ItemsSource="{Binding Settings}">
+        <ListBox Grid.Row="1" ItemsSource="{Binding Settings}" 
+                 ItemContainerStyle="{StaticResource ListBoxItemStyle}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsEnabled}" />
+                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsEnabled}" 
+                              Style="{StaticResource CheckBoxStyle}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
