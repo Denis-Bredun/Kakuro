@@ -36,7 +36,11 @@ namespace Kakuro.Data_Access.Tools
 
             EnsureDirectoryExists(filepath);
 
-            var jsonData = JsonSerializer.Serialize(data);
+            var jsonData = JsonSerializer.Serialize(data, new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
+
             File.WriteAllText(filepath, jsonData);
         }
 
