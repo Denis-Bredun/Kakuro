@@ -59,7 +59,7 @@ namespace Kakuro.Game_Tools
                                 return false;
                         }
 
-                        calculatedSum += Convert.ToInt32(currentElement.HiddenValue);
+                        calculatedSum += Convert.ToInt32(currentElement.DisplayValue);
                         wasSumCollected = true;
                     }
                     else if (wasSumCollected)
@@ -100,7 +100,7 @@ namespace Kakuro.Game_Tools
                 tempJ = j;
             }
 
-            if (!CheckValueForUniqueness(tempI, tempJ, currentElement.HiddenValue, out message))
+            if (!CheckValueForUniqueness(tempI, tempJ, currentElement.DisplayValue, out message))
                 return false;
 
             return true;
@@ -108,7 +108,7 @@ namespace Kakuro.Game_Tools
 
         private bool CheckValueForEmptiness(DashboardItemViewModel cell, out string message)
         {
-            if (cell.CellType == CellType.ValueCell && cell.HiddenValue == "")
+            if (cell.CellType == CellType.ValueCell && cell.DisplayValue == "")
             {
                 message = "Dashboard isn't filled completely!";
                 return false;
@@ -132,25 +132,25 @@ namespace Kakuro.Game_Tools
 
         private bool IsUniqueAbove(int i, int j, string value)
         {
-            string valueAbove = _dashboard[i - 1][j].HiddenValue;
+            string valueAbove = _dashboard[i - 1][j].DisplayValue;
             return valueAbove != value;
         }
 
         private bool IsUniqueBelow(int i, int j, string value)
         {
-            string valueBelow = _dashboard[i + 1][j].HiddenValue;
+            string valueBelow = _dashboard[i + 1][j].DisplayValue;
             return valueBelow != value;
         }
 
         private bool IsUniqueLeft(int i, int j, string value)
         {
-            string valueLeft = _dashboard[i][j - 1].HiddenValue;
+            string valueLeft = _dashboard[i][j - 1].DisplayValue;
             return valueLeft != value;
         }
 
         private bool IsUniqueRight(int i, int j, string value)
         {
-            string valueRight = _dashboard[i][j + 1].HiddenValue;
+            string valueRight = _dashboard[i][j + 1].DisplayValue;
             return valueRight != value;
         }
     }
