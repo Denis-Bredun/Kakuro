@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="Styles/Rows_Template.xaml"/>
                 <ResourceDictionary Source="Styles/RatingTableStyles.xaml"/>
                 <ResourceDictionary Source="Styles/RatingDataGridTemplate.xaml"/>
+                <ResourceDictionary Source="Styles/TitleStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
