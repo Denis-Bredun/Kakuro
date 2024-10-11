@@ -1,4 +1,5 @@
-﻿using Kakuro.Models;
+﻿using Kakuro.Enums;
+using Kakuro.Models;
 using System.Collections.ObjectModel;
 
 namespace Kakuro.ViewModels
@@ -11,7 +12,7 @@ namespace Kakuro.ViewModels
         {
             Settings = new ObservableCollection<Setting>
             {
-                new Setting { Name = "Show correct values", IsEnabled = false }
+                new Setting { SettingType = SettingType.ShowCorrectValues, IsEnabled = false }
             };
         }
     }

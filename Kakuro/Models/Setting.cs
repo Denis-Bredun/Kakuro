@@ -1,8 +1,10 @@
-﻿namespace Kakuro.Models
+﻿using Kakuro.Enums;
+
+namespace Kakuro.Models
 {
     public class Setting
     {
-        public string Name { get; set; }
+        public SettingType SettingType { get; set; }
         public bool IsEnabled { get; set; }
     }
 }

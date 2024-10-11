@@ -20,7 +20,8 @@
                  ItemContainerStyle="{StaticResource ListBoxItemStyle}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsEnabled}" 
+                    <CheckBox Content="{Binding SettingType, Converter={StaticResource EnumDescriptionConverter}}" 
+                              IsChecked="{Binding IsEnabled}" 
                               Style="{StaticResource CheckBoxStyle}" />
                 </DataTemplate>
             </ListBox.ItemTemplate>
