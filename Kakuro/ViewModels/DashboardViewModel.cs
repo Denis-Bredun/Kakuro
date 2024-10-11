@@ -2,6 +2,7 @@
 using Kakuro.Base_Classes;
 using Kakuro.Commands;
 using Kakuro.Enums;
+using Kakuro.Events;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Kakuro.Interfaces.Game_Tools;
 using System.Diagnostics;
@@ -19,6 +20,8 @@ namespace Kakuro.ViewModels
         private string _stopWatchMinutes;
         private string _stopWatchSeconds;
         private bool _isGameCompleted;
+        private bool _showCorrectAnswers;
+        private List<SubscriptionToken> _subscriptionTokens;
 
         public DashboardItemCollection Dashboard { get; }
         public bool IsGameCompleted
@@ -28,6 +31,15 @@ namespace Kakuro.ViewModels
             {
                 _isGameCompleted = value;
                 OnPropertyChanged("IsGameCompleted");
+            }
+        }
+        public bool ShowCorrectAnswers
+        {
+            get => _showCorrectAnswers;
+            set
+            {
+                _showCorrectAnswers = value;
+                OnPropertyChanged("ShowCorrectAnswers");
             }
         }
         public DifficultyLevels ChoosenDifficulty
@@ -63,12 +75,15 @@ namespace Kakuro.ViewModels
         public ICommand StopStopwatchCommand { get; }
         public ICommand RestartStopwatchCommand { get; }
         public ICommand SentGameSessionCommand { get; }
+        public ICommand ShowCorrectAnswersCommand { get; }
 
         public DashboardViewModel(ILifetimeScope scope, IEventAggregator eventAggregator, DashboardItemCollection dashboard)
         {
             ChoosenDifficulty = DifficultyLevels.Easy;
             Dashboard = dashboard;
             IsGameCompleted = false;
+            ShowCorrectAnswers = false;
+            _subscriptionTokens = new List<SubscriptionToken>();
 
             _stopwatch = new Stopwatch();
             StartStopwatchCommand = new StartStopwatchCommand(_stopwatch, this);
@@ -94,8 +109,11 @@ namespace Kakuro.ViewModels
 
             CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
             NewGameCommand = ApplyDifficultyCommand;
+            ShowCorrectAnswersCommand = new ShowCorrectAnswersCommand(this);
 
             ApplyDifficultyCommand.Execute(ChoosenDifficulty);
+
+            _subscriptionTokens.Add(eventAggregator.GetEvent<SettingsChangedEvent>().Subscribe(ShowCorrectAnswersCommand.Execute));
         }
     }
 }
