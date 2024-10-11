@@ -5,12 +5,12 @@ using Kakuro.ViewModels;
 
 namespace Kakuro.Commands
 {
-    public class SentGameSessionCommand : RelayCommand
+    public class SendGameSessionCommand : RelayCommand
     {
         private DashboardViewModel _dashboardViewModel;
         private IEventAggregator _eventAggregator;
 
-        public SentGameSessionCommand(DashboardViewModel dashboardViewModel, IEventAggregator eventAggregator)
+        public SendGameSessionCommand(DashboardViewModel dashboardViewModel, IEventAggregator eventAggregator)
         {
             _dashboardViewModel ??= dashboardViewModel;
             _eventAggregator ??= eventAggregator;

@@ -78,7 +78,7 @@ namespace Kakuro.ViewModels
             StopWatchMinutes = _stopwatch.Elapsed.Minutes.ToString();
             StopWatchSeconds = _stopwatch.Elapsed.Seconds.ToString();
 
-            SentGameSessionCommand = new SentGameSessionCommand(this, eventAggregator);
+            SentGameSessionCommand = new SendGameSessionCommand(this, eventAggregator);
 
             VerifySolutionCommand = new VerifySolutionCommand(
                 scope.Resolve<ISolutionVerifier>(),
