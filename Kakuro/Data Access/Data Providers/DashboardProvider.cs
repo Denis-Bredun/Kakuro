@@ -117,6 +117,8 @@ namespace Kakuro.Data_Access.Data_Providers
             // 2.The clues in the black cells tells the sum of the numbers next to that clue. (on the right or down)
             // 3.The numbers in consecutive white cells must be unique.
 
+            // #BAD: in consecutive white cells!!! not only in close cells
+
             int value = 0;
             bool isUnique;
 
