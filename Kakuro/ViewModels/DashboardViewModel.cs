@@ -22,6 +22,7 @@ namespace Kakuro.ViewModels
         private bool _isGameCompleted;
         private bool _showCorrectAnswers;
         private List<SubscriptionToken> _subscriptionTokens;
+        private bool _disposed;
 
         public DashboardItemCollection Dashboard { get; }
         public bool IsGameCompleted
@@ -114,6 +115,33 @@ namespace Kakuro.ViewModels
             ApplyDifficultyCommand.Execute(ChoosenDifficulty);
 
             _subscriptionTokens.Add(eventAggregator.GetEvent<SettingsChangedEvent>().Subscribe(ShowCorrectAnswersCommand.Execute));
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    if (_subscriptionTokens.Count > 0)
+                    {
+                        foreach (var token in _subscriptionTokens)
+                            token.Dispose();
+                    }
+                }
+                _disposed = true;
+            }
+        }
+
+        ~DashboardViewModel()
+        {
+            Dispose(false);
         }
     }
 }
