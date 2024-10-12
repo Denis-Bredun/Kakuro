@@ -19,22 +19,26 @@
         </Grid.ColumnDefinitions>
 
         <RadioButton Content="Easy - 6x6" 
-                     Command="{Binding ApplyDifficultyCommand}" 
-                     CommandParameter="{x:Static enums:DifficultyLevels.Easy}"
-                     Style="{StaticResource {x:Type ToggleButton}}"
-                     Grid.Column="0" IsChecked="True" />
+             Command="{Binding ApplyDifficultyCommand}" 
+             CommandParameter="{x:Static enums:DifficultyLevels.Easy}"
+             Style="{StaticResource {x:Type ToggleButton}}"
+             Grid.Column="0" 
+             IsChecked="True" 
+             IsEnabled="{Binding ShowCorrectAnswers, Converter={StaticResource InverseBooleanConverter}}" />
 
         <RadioButton Content="Normal - 10x10" 
-                     Command="{Binding ApplyDifficultyCommand}" 
-                     CommandParameter="{x:Static enums:DifficultyLevels.Normal}"
-                     Style="{StaticResource {x:Type ToggleButton}}"
-                     Grid.Column="2" />
+             Command="{Binding ApplyDifficultyCommand}" 
+             CommandParameter="{x:Static enums:DifficultyLevels.Normal}"
+             Style="{StaticResource {x:Type ToggleButton}}"
+             Grid.Column="2" 
+             IsEnabled="{Binding ShowCorrectAnswers, Converter={StaticResource InverseBooleanConverter}}" />
 
         <RadioButton Content="Hard - 16x16" 
-                     Command="{Binding ApplyDifficultyCommand}" 
-                     CommandParameter="{x:Static enums:DifficultyLevels.Hard}"
-                     Style="{StaticResource {x:Type ToggleButton}}"
-                     Grid.Column="4" />
+             Command="{Binding ApplyDifficultyCommand}" 
+             CommandParameter="{x:Static enums:DifficultyLevels.Hard}"
+             Style="{StaticResource {x:Type ToggleButton}}"
+             Grid.Column="4" 
+             IsEnabled="{Binding ShowCorrectAnswers, Converter={StaticResource InverseBooleanConverter}}" />
 
     </Grid>
 </UserControl>

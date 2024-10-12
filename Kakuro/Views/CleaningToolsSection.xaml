@@ -15,7 +15,17 @@
             <ColumnDefinition Width="0.8*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Column="1" Command="{Binding CleanDashboardCommand}">Full Clean</Button>
-        <Button Grid.Column="3" Command="{Binding NewGameCommand}" CommandParameter="{Binding ChoosenDifficulty}">New Game</Button>
+        <Button Grid.Column="1" 
+        Command="{Binding CleanDashboardCommand}" 
+        IsEnabled="{Binding ShowCorrectAnswers, Converter={StaticResource InverseBooleanConverter}}">
+            Full Clean
+        </Button>
+
+        <Button Grid.Column="3" 
+        Command="{Binding NewGameCommand}" 
+        CommandParameter="{Binding ChoosenDifficulty}" 
+        IsEnabled="{Binding ShowCorrectAnswers, Converter={StaticResource InverseBooleanConverter}}">
+            New Game
+        </Button>
     </Grid>
 </UserControl>

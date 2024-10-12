@@ -17,6 +17,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <converters:MultiOrBooleanConverter x:Key="MultiOrBooleanConverter" />
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
