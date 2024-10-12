@@ -8,9 +8,12 @@ namespace Kakuro.Converters
     {
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
-            if (values.Length == 2 && values[0] is bool isGameCompleted && values[1] is CellType cellType)
+            if (values.Length == 3 &&
+                values[0] is bool isGameCompleted &&
+                values[1] is bool showCorrectAnswers &&
+                values[2] is CellType cellType)
             {
-                if (isGameCompleted)
+                if (showCorrectAnswers || isGameCompleted)
                     return true;
 
                 if (cellType == CellType.EmptyCell || cellType == CellType.SumCell)
@@ -27,4 +30,5 @@ namespace Kakuro.Converters
             throw new NotImplementedException();
         }
     }
+
 }

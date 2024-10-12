@@ -15,7 +15,7 @@
 
         <Button Grid.Column="1" Command="{Binding VerifySolutionCommand}">
             <Button.IsEnabled>
-                <MultiBinding Converter="{StaticResource MultiOrBooleanConverter}" ConverterParameter="True">
+                <MultiBinding Converter="{StaticResource MultiOrBooleanConverter}">
                     <Binding Path="IsGameCompleted" />
                     <Binding Path="ShowCorrectAnswers" />
                 </MultiBinding>

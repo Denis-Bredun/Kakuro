@@ -6,10 +6,11 @@
     
     <DataTemplate x:Key="Elements_Template">
         <TextBox Height="40" Width="40" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center"
-             Style="{DynamicResource CustomTextBoxStyle}">
+     Style="{DynamicResource CustomTextBoxStyle}">
             <TextBox.IsReadOnly>
                 <MultiBinding Converter="{StaticResource ReadOnlyMultiConverter}">
                     <Binding Path="DataContext.IsGameCompleted" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
+                    <Binding Path="DataContext.ShowCorrectAnswers" RelativeSource="{RelativeSource AncestorType=UserControl}"/>
                     <Binding Path="CellType" />
                 </MultiBinding>
             </TextBox.IsReadOnly>
