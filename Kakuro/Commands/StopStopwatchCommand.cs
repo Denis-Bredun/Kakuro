@@ -1,14 +1,14 @@
 ﻿using Kakuro.Base_Classes;
-using System.Diagnostics;
+using Kakuro.Models;
 
 namespace Kakuro.Commands
 {
     // #BAD: tests shall be written
     public class StopStopwatchCommand : RelayCommand
     {
-        private Stopwatch _stopwatch;
+        private MyStopwatch _stopwatch;
 
-        public StopStopwatchCommand(Stopwatch stopwatch)
+        public StopStopwatchCommand(MyStopwatch stopwatch)
         {
             _stopwatch ??= stopwatch;
         }

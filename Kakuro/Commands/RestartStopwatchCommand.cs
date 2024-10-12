@@ -1,5 +1,5 @@
 ﻿using Kakuro.Base_Classes;
-using System.Diagnostics;
+using Kakuro.Models;
 using System.Windows.Input;
 
 namespace Kakuro.Commands
@@ -7,11 +7,11 @@ namespace Kakuro.Commands
     // #BAD: tests shall be written
     public class RestartStopwatchCommand : RelayCommand
     {
-        private Stopwatch _stopwatch;
+        private MyStopwatch _stopwatch;
         private ICommand _startStopwatchCommand;
         private ICommand _stopStopwatchCommand;
 
-        public RestartStopwatchCommand(Stopwatch stopwatch, ICommand startStopwatchCommand, ICommand stopStopwatchCommand)
+        public RestartStopwatchCommand(MyStopwatch stopwatch, ICommand startStopwatchCommand, ICommand stopStopwatchCommand)
         {
             _stopwatch ??= stopwatch;
             _startStopwatchCommand ??= startStopwatchCommand;

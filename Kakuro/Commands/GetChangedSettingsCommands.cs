@@ -9,18 +9,24 @@ namespace Kakuro.Commands
 {
     public class GetChangedSettingsCommands : RelayCommand
     {
-        private ICommand ShowCorrectAnswersCommand { get; }
+        private ICommand _showCorrectAnswersCommand;
 
-        public GetChangedSettingsCommands(DashboardViewModel dashboardViewModel)
+        public GetChangedSettingsCommands(
+            DashboardViewModel dashboardViewModel,
+            ICommand stopStopwatchCommand,
+            ICommand addMinuteAndContinueStopwatchCommand)
         {
-            ShowCorrectAnswersCommand = new ShowCorrectAnswersCommand(dashboardViewModel);
+            _showCorrectAnswersCommand = new ShowCorrectAnswersCommand(
+                dashboardViewModel,
+                stopStopwatchCommand,
+                addMinuteAndContinueStopwatchCommand);
         }
 
         public override void Execute(object? parameter)
         {
             var settings = (ObservableCollection<Setting>)parameter;
 
-            ShowCorrectAnswersCommand.Execute(settings.FirstOrDefault(el => el.SettingType == SettingType.ShowCorrectValues));
+            _showCorrectAnswersCommand.Execute(settings.FirstOrDefault(el => el.SettingType == SettingType.ShowCorrectValues));
         }
     }
 }

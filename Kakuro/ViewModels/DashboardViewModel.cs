@@ -5,7 +5,7 @@ using Kakuro.Enums;
 using Kakuro.Events;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Kakuro.Interfaces.Game_Tools;
-using System.Diagnostics;
+using Kakuro.Models;
 using System.Windows.Input;
 
 namespace Kakuro.ViewModels
@@ -15,7 +15,7 @@ namespace Kakuro.ViewModels
     public class DashboardViewModel : ViewModelBase
     {
         private DifficultyLevels _choosenDifficulty;
-        private Stopwatch _stopwatch;
+        private MyStopwatch _stopwatch;
         private string _stopWatchHours;
         private string _stopWatchMinutes;
         private string _stopWatchSeconds;
@@ -77,6 +77,7 @@ namespace Kakuro.ViewModels
         public ICommand RestartStopwatchCommand { get; }
         public ICommand SentGameSessionCommand { get; }
         public ICommand GetChangedSettingsCommands { get; }
+        public ICommand AddMinuteAndContinueStopwatchCommand { get; }
 
         public DashboardViewModel(ILifetimeScope scope, IEventAggregator eventAggregator, DashboardItemCollection dashboard)
         {
@@ -85,10 +86,13 @@ namespace Kakuro.ViewModels
             IsGameCompleted = false;
             ShowCorrectAnswers = false;
 
-            _stopwatch = new Stopwatch();
+            // #BAD: we shall create commands and some other objects though Lazy way
+
+            _stopwatch = new MyStopwatch(new TimeSpan());
             StartStopwatchCommand = new StartStopwatchCommand(_stopwatch, this);
             StopStopwatchCommand = new StopStopwatchCommand(_stopwatch);
             RestartStopwatchCommand = new RestartStopwatchCommand(_stopwatch, StartStopwatchCommand, StopStopwatchCommand);
+            AddMinuteAndContinueStopwatchCommand = new AddMinuteAndContinueStopwatchCommand(_stopwatch, StartStopwatchCommand);
             StopWatchHours = _stopwatch.Elapsed.Hours.ToString();
             StopWatchMinutes = _stopwatch.Elapsed.Minutes.ToString();
             StopWatchSeconds = _stopwatch.Elapsed.Seconds.ToString();
@@ -109,7 +113,7 @@ namespace Kakuro.ViewModels
 
             CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
             NewGameCommand = ApplyDifficultyCommand;
-            GetChangedSettingsCommands = new GetChangedSettingsCommands(this);
+            GetChangedSettingsCommands = new GetChangedSettingsCommands(this, StopStopwatchCommand, AddMinuteAndContinueStopwatchCommand);
 
             ApplyDifficultyCommand.Execute(ChoosenDifficulty);
 
