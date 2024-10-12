@@ -21,7 +21,7 @@ namespace Kakuro.ViewModels
         private string _stopWatchSeconds;
         private bool _isGameCompleted;
         private bool _showCorrectAnswers;
-        private List<SubscriptionToken> _subscriptionTokens;
+        private SubscriptionToken _settingsChangedSubscriptionTokens;
         private bool _disposed;
 
         public DashboardItemCollection Dashboard { get; }
@@ -76,7 +76,7 @@ namespace Kakuro.ViewModels
         public ICommand StopStopwatchCommand { get; }
         public ICommand RestartStopwatchCommand { get; }
         public ICommand SentGameSessionCommand { get; }
-        public ICommand ShowCorrectAnswersCommand { get; }
+        public ICommand GetChangedSettingsCommands { get; }
 
         public DashboardViewModel(ILifetimeScope scope, IEventAggregator eventAggregator, DashboardItemCollection dashboard)
         {
@@ -84,7 +84,6 @@ namespace Kakuro.ViewModels
             Dashboard = dashboard;
             IsGameCompleted = false;
             ShowCorrectAnswers = false;
-            _subscriptionTokens = new List<SubscriptionToken>();
 
             _stopwatch = new Stopwatch();
             StartStopwatchCommand = new StartStopwatchCommand(_stopwatch, this);
@@ -110,11 +109,11 @@ namespace Kakuro.ViewModels
 
             CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
             NewGameCommand = ApplyDifficultyCommand;
-            ShowCorrectAnswersCommand = new ShowCorrectAnswersCommand(this);
+            GetChangedSettingsCommands = new GetChangedSettingsCommands(this);
 
             ApplyDifficultyCommand.Execute(ChoosenDifficulty);
 
-            _subscriptionTokens.Add(eventAggregator.GetEvent<SettingsChangedEvent>().Subscribe(ShowCorrectAnswersCommand.Execute));
+            _settingsChangedSubscriptionTokens = eventAggregator.GetEvent<SettingsChangedEvent>().Subscribe(GetChangedSettingsCommands.Execute);
         }
 
         public void Dispose()
@@ -129,10 +128,10 @@ namespace Kakuro.ViewModels
             {
                 if (disposing)
                 {
-                    if (_subscriptionTokens.Count > 0)
+                    if (_settingsChangedSubscriptionTokens != null)
                     {
-                        foreach (var token in _subscriptionTokens)
-                            token.Dispose();
+                        _settingsChangedSubscriptionTokens.Dispose();
+                        _settingsChangedSubscriptionTokens = null;
                     }
                 }
                 _disposed = true;
