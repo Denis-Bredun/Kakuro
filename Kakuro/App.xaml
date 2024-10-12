@@ -16,7 +16,7 @@
                 <ResourceDictionary Source="Styles/SettingsStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
-            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <converters:MultiOrBooleanConverter x:Key="MultiOrBooleanConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
