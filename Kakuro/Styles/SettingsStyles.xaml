@@ -14,7 +14,7 @@
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="LayoutTransform">
             <Setter.Value>
-                <ScaleTransform ScaleX="1.5" ScaleY="1.5"/>
+                <ScaleTransform ScaleX="1.15" ScaleY="1.15"/>
             </Setter.Value>
         </Setter>
     </Style>
