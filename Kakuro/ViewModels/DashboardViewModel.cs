@@ -54,7 +54,7 @@ namespace Kakuro.ViewModels
             set
             {
                 _isTimerVisible = value;
-                OnPropertyChanged("AutoSubmit");
+                OnPropertyChanged("IsTimerVisible");
             }
         }
         public DifficultyLevels ChoosenDifficulty
@@ -101,7 +101,7 @@ namespace Kakuro.ViewModels
             IsGameCompleted = false;
             ShowCorrectAnswers = false;
             AutoSubmit = true;
-            IsTimerVisible = false;
+            IsTimerVisible = true;
 
             // #BAD: we shall create commands and some other objects through Lazy way
 

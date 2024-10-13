@@ -11,6 +11,7 @@ namespace Kakuro.Commands
     {
         private ICommand _showCorrectAnswersCommand;
         private ICommand _autoSubmitCommand;
+        private ICommand _hideTimerCommand;
 
         public GetChangedSettingsCommands(
             DashboardViewModel dashboardViewModel,
@@ -25,6 +26,8 @@ namespace Kakuro.Commands
                 cleanDashboardCommand);
 
             _autoSubmitCommand = new ApplySettingAutoSubmitCommand(dashboardViewModel);
+
+            _hideTimerCommand = new ApplySettingHideTimerCommand(dashboardViewModel);
         }
 
         public override void Execute(object? parameter)
@@ -34,6 +37,8 @@ namespace Kakuro.Commands
             _showCorrectAnswersCommand.Execute(settings.FirstOrDefault(el => el.SettingType == SettingType.ShowCorrectAnswers));
 
             _autoSubmitCommand.Execute(settings.FirstOrDefault(el => el.SettingType == SettingType.AutoSubmit));
+
+            _hideTimerCommand.Execute(settings.FirstOrDefault(el => el.SettingType == SettingType.HideTimer));
         }
     }
 }
