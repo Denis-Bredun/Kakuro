@@ -14,12 +14,14 @@ namespace Kakuro.Commands
         public GetChangedSettingsCommands(
             DashboardViewModel dashboardViewModel,
             ICommand stopStopwatchCommand,
-            ICommand addMinuteAndContinueStopwatchCommand)
+            ICommand addMinuteAndContinueStopwatchCommand,
+            ICommand cleanDashboardCommand)
         {
             _showCorrectAnswersCommand = new ApplySettingShowCorrectAnswersCommand(
                 dashboardViewModel,
                 stopStopwatchCommand,
-                addMinuteAndContinueStopwatchCommand);
+                addMinuteAndContinueStopwatchCommand,
+                cleanDashboardCommand);
         }
 
         public override void Execute(object? parameter)

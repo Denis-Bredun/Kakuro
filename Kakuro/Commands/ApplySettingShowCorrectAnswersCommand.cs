@@ -10,12 +10,20 @@ namespace Kakuro.Commands
         private DashboardViewModel _dashboardViewModel;
         private ICommand _stopStopwatchCommand;
         private ICommand _addMinuteAndContinueStopwatchCommand;
+        private ICommand _cleanDashboardCommand;
+        private ICommand _showCorrectAnswersCommand;
 
-        public ApplySettingShowCorrectAnswersCommand(DashboardViewModel dashboardViewModel, ICommand stopStopwatchCommand, ICommand addMinuteAndContinueStopwatchCommand)
+        public ApplySettingShowCorrectAnswersCommand(
+            DashboardViewModel dashboardViewModel,
+            ICommand stopStopwatchCommand,
+            ICommand addMinuteAndContinueStopwatchCommand,
+            ICommand cleanDashboardCommand)
         {
             _dashboardViewModel = dashboardViewModel;
             _stopStopwatchCommand = stopStopwatchCommand;
             _addMinuteAndContinueStopwatchCommand = addMinuteAndContinueStopwatchCommand;
+            _cleanDashboardCommand = cleanDashboardCommand;
+            _showCorrectAnswersCommand = new ShowCorrectAnswersCommand(dashboardViewModel.Dashboard);
         }
 
         public override void Execute(object? parameter)
@@ -25,6 +33,8 @@ namespace Kakuro.Commands
             _dashboardViewModel.ShowCorrectAnswers = showCorrectAnswersSetting.IsEnabled;
 
             LockStopwatch(_dashboardViewModel.ShowCorrectAnswers);
+
+            ShowOrEraseCorrectAnswers(_dashboardViewModel.ShowCorrectAnswers);
         }
 
         private void LockStopwatch(bool showCorrectAnswers)
@@ -33,6 +43,14 @@ namespace Kakuro.Commands
                 _stopStopwatchCommand.Execute(null);
             else
                 _addMinuteAndContinueStopwatchCommand.Execute(null);
+        }
+
+        private void ShowOrEraseCorrectAnswers(bool showCorrectAnswers)
+        {
+            if (showCorrectAnswers)
+                _showCorrectAnswersCommand.Execute(null);
+            else
+                _cleanDashboardCommand.Execute(null);
         }
     }
 }

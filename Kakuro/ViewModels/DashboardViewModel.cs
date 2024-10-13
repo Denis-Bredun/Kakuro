@@ -113,7 +113,7 @@ namespace Kakuro.ViewModels
 
             CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
             NewGameCommand = ApplyDifficultyCommand;
-            GetChangedSettingsCommands = new GetChangedSettingsCommands(this, StopStopwatchCommand, AddMinuteAndContinueStopwatchCommand);
+            GetChangedSettingsCommands = new GetChangedSettingsCommands(this, StopStopwatchCommand, AddMinuteAndContinueStopwatchCommand, CleanDashboardCommand);
 
             ApplyDifficultyCommand.Execute(ChoosenDifficulty);
 
