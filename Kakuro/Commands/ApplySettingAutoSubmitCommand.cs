@@ -1,5 +1,4 @@
 ﻿using Kakuro.Base_Classes;
-using Kakuro.Models;
 using Kakuro.ViewModels;
 
 namespace Kakuro.Commands
@@ -14,7 +13,7 @@ namespace Kakuro.Commands
         }
         public override void Execute(object? parameter)
         {
-            var autoSubmitSetting = (Setting)parameter;
+            var autoSubmitSetting = (SettingViewModel)parameter;
 
             _dashboardViewModel.AutoSubmit = autoSubmitSetting.IsEnabled;
         }

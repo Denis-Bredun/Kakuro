@@ -6,5 +6,11 @@ namespace Kakuro.Models
     {
         public SettingType SettingType { get; set; }
         public bool IsEnabled { get; set; }
+
+        public Setting(SettingType settingType, bool isEnabled)
+        {
+            SettingType = settingType;
+            IsEnabled = isEnabled;
+        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Kakuro.Base_Classes;
-using Kakuro.Models;
 using Kakuro.ViewModels;
 
 namespace Kakuro.Commands
@@ -15,7 +14,7 @@ namespace Kakuro.Commands
 
         public override void Execute(object? parameter)
         {
-            var hideTimerSetting = (Setting)parameter;
+            var hideTimerSetting = (SettingViewModel)parameter;
 
             _dashboardViewModel.IsTimerVisible = !hideTimerSetting.IsEnabled;
         }

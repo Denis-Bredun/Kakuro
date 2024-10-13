@@ -1,5 +1,5 @@
 ﻿using Kakuro.Base_Classes;
-using Kakuro.Models;
+using Kakuro.Events;
 using Kakuro.ViewModels;
 using System.Windows.Input;
 
@@ -12,23 +12,26 @@ namespace Kakuro.Commands
         private ICommand _addMinuteAndContinueStopwatchCommand;
         private ICommand _cleanDashboardCommand;
         private ICommand _showCorrectAnswersCommand;
+        private IEventAggregator _eventAggregator;
 
         public ApplySettingShowCorrectAnswersCommand(
             DashboardViewModel dashboardViewModel,
             ICommand stopStopwatchCommand,
             ICommand addMinuteAndContinueStopwatchCommand,
-            ICommand cleanDashboardCommand)
+            ICommand cleanDashboardCommand,
+            IEventAggregator eventAggregator)
         {
             _dashboardViewModel = dashboardViewModel;
             _stopStopwatchCommand = stopStopwatchCommand;
             _addMinuteAndContinueStopwatchCommand = addMinuteAndContinueStopwatchCommand;
             _cleanDashboardCommand = cleanDashboardCommand;
             _showCorrectAnswersCommand = new ShowCorrectAnswersCommand(dashboardViewModel.Dashboard);
+            _eventAggregator = eventAggregator;
         }
 
         public override void Execute(object? parameter)
         {
-            var showCorrectAnswersSetting = (Setting)parameter;
+            var showCorrectAnswersSetting = (SettingViewModel)parameter;
 
             bool wasChanged = false;
 
@@ -39,10 +42,20 @@ namespace Kakuro.Commands
 
             if (wasChanged)
             {
+                TurnOffAutoSubmit(_dashboardViewModel.ShowCorrectAnswers);
+
                 LockStopwatch(_dashboardViewModel.ShowCorrectAnswers);
 
                 ShowOrEraseCorrectAnswers(_dashboardViewModel.ShowCorrectAnswers);
             }
+        }
+
+        private void TurnOffAutoSubmit(bool showCorrectAnswers)
+        {
+            if (showCorrectAnswers)
+                _dashboardViewModel.AutoSubmit = false;
+
+            _eventAggregator.GetEvent<CorrectAnswersTurnedOnEvent>().Publish(_dashboardViewModel.AutoSubmit);
         }
 
         private void LockStopwatch(bool showCorrectAnswers)

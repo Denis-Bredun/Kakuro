@@ -1,6 +1,5 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
-using Kakuro.Models;
 using Kakuro.ViewModels;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -17,13 +16,15 @@ namespace Kakuro.Commands
             DashboardViewModel dashboardViewModel,
             ICommand stopStopwatchCommand,
             ICommand addMinuteAndContinueStopwatchCommand,
-            ICommand cleanDashboardCommand)
+            ICommand cleanDashboardCommand,
+            IEventAggregator eventAggregator)
         {
             _showCorrectAnswersCommand = new ApplySettingShowCorrectAnswersCommand(
                 dashboardViewModel,
                 stopStopwatchCommand,
                 addMinuteAndContinueStopwatchCommand,
-                cleanDashboardCommand);
+                cleanDashboardCommand,
+                eventAggregator);
 
             _autoSubmitCommand = new ApplySettingAutoSubmitCommand(dashboardViewModel);
 
@@ -32,7 +33,7 @@ namespace Kakuro.Commands
 
         public override void Execute(object? parameter)
         {
-            var settings = (ObservableCollection<Setting>)parameter;
+            var settings = (ObservableCollection<SettingViewModel>)parameter;
 
             _showCorrectAnswersCommand.Execute(settings.FirstOrDefault(el => el.SettingType == SettingType.ShowCorrectAnswers));
 

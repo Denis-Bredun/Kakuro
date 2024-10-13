@@ -135,7 +135,8 @@ namespace Kakuro.ViewModels
                 this,
                 StopStopwatchCommand,
                 AddMinuteAndContinueStopwatchCommand,
-                CleanDashboardCommand);
+                CleanDashboardCommand,
+                eventAggregator);
 
             AutoSubmitCommand = new AutoSubmitCommand(this, ValidateSolutionCommand);
 
