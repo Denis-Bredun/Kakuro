@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-                    xmlns:converters="clr-namespace:Kakuro.Converters">
+                    xmlns:converters="clr-namespace:Kakuro.Converters" 
+                    xmlns:i="http://schemas.microsoft.com/xaml/behaviors">
 
     <converters:ReadOnlyMultiConverter x:Key="ReadOnlyMultiConverter"/>
     
@@ -14,6 +15,12 @@
                     <Binding Path="CellType" />
                 </MultiBinding>
             </TextBox.IsReadOnly>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="TextChanged">
+                    <i:InvokeCommandAction Command="{Binding DataContext.AutoSubmitCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                       CommandParameter="{Binding CellType}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
         </TextBox>
     </DataTemplate>
 </ResourceDictionary>

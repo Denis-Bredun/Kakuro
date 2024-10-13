@@ -18,7 +18,8 @@ namespace Kakuro.ViewModels
             _eventAggregator = eventAggregator;
             Settings = new ObservableCollection<Setting>
             {
-                new Setting { SettingType = SettingType.ShowCorrectAnswers, IsEnabled = false }
+                new Setting { SettingType = SettingType.ShowCorrectAnswers, IsEnabled = false },
+                new Setting { SettingType = SettingType.AutoSubmit, IsEnabled = true }
             };
             SendSettingsCommand = new SendSettingsCommand(_eventAggregator, Settings);
         }

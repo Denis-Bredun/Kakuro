@@ -10,6 +10,7 @@ namespace Kakuro.Commands
     public class GetChangedSettingsCommands : RelayCommand
     {
         private ICommand _showCorrectAnswersCommand;
+        private ICommand _autoSubmitCommand;
 
         public GetChangedSettingsCommands(
             DashboardViewModel dashboardViewModel,
@@ -22,6 +23,8 @@ namespace Kakuro.Commands
                 stopStopwatchCommand,
                 addMinuteAndContinueStopwatchCommand,
                 cleanDashboardCommand);
+
+            _autoSubmitCommand = new ApplySettingAutoSubmitCommand(dashboardViewModel);
         }
 
         public override void Execute(object? parameter)
@@ -29,6 +32,8 @@ namespace Kakuro.Commands
             var settings = (ObservableCollection<Setting>)parameter;
 
             _showCorrectAnswersCommand.Execute(settings.FirstOrDefault(el => el.SettingType == SettingType.ShowCorrectAnswers));
+
+            _autoSubmitCommand.Execute(settings.FirstOrDefault(el => el.SettingType == SettingType.AutoSubmit));
         }
     }
 }

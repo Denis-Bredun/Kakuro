@@ -16,13 +16,9 @@ namespace Kakuro.ViewModels
     {
         private DifficultyLevels _choosenDifficulty;
         private MyStopwatch _stopwatch;
-        private string _stopWatchHours;
-        private string _stopWatchMinutes;
-        private string _stopWatchSeconds;
-        private bool _isGameCompleted;
-        private bool _showCorrectAnswers;
+        private string _stopWatchHours, _stopWatchMinutes, _stopWatchSeconds;
+        private bool _isGameCompleted, _showCorrectAnswers, _autoSubmit, _disposed;
         private SubscriptionToken _settingsChangedSubscriptionTokens;
-        private bool _disposed;
 
         public DashboardItemCollection Dashboard { get; }
         public bool IsGameCompleted
@@ -41,6 +37,15 @@ namespace Kakuro.ViewModels
             {
                 _showCorrectAnswers = value;
                 OnPropertyChanged("ShowCorrectAnswers");
+            }
+        }
+        public bool AutoSubmit
+        {
+            get => _autoSubmit;
+            set
+            {
+                _autoSubmit = value;
+                OnPropertyChanged("AutoSubmit");
             }
         }
         public DifficultyLevels ChoosenDifficulty
@@ -70,7 +75,7 @@ namespace Kakuro.ViewModels
 
         public ICommand ApplyDifficultyCommand { get; }
         public ICommand NewGameCommand { get; }
-        public ICommand VerifySolutionCommand { get; }
+        public ICommand ValidateSolutionCommand { get; }
         public ICommand CleanDashboardCommand { get; }
         public ICommand StartStopwatchCommand { get; }
         public ICommand StopStopwatchCommand { get; }
@@ -78,6 +83,7 @@ namespace Kakuro.ViewModels
         public ICommand SentGameSessionCommand { get; }
         public ICommand GetChangedSettingsCommands { get; }
         public ICommand AddMinuteAndContinueStopwatchCommand { get; }
+        public ICommand AutoSubmitCommand { get; }
 
         public DashboardViewModel(ILifetimeScope scope, IEventAggregator eventAggregator, DashboardItemCollection dashboard)
         {
@@ -85,8 +91,9 @@ namespace Kakuro.ViewModels
             Dashboard = dashboard;
             IsGameCompleted = false;
             ShowCorrectAnswers = false;
+            AutoSubmit = true;
 
-            // #BAD: we shall create commands and some other objects though Lazy way
+            // #BAD: we shall create commands and some other objects through Lazy way
 
             _stopwatch = new MyStopwatch(new TimeSpan());
             StartStopwatchCommand = new StartStopwatchCommand(_stopwatch, this);
@@ -99,7 +106,7 @@ namespace Kakuro.ViewModels
 
             SentGameSessionCommand = new SendGameSessionCommand(this, eventAggregator);
 
-            VerifySolutionCommand = new VerifySolutionCommand(
+            ValidateSolutionCommand = new ValidateSolutionCommand(
                 scope.Resolve<ISolutionVerifier>(),
                 scope.Resolve<IOperationNotifier>(),
                 StopStopwatchCommand,
@@ -113,7 +120,14 @@ namespace Kakuro.ViewModels
 
             CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
             NewGameCommand = ApplyDifficultyCommand;
-            GetChangedSettingsCommands = new GetChangedSettingsCommands(this, StopStopwatchCommand, AddMinuteAndContinueStopwatchCommand, CleanDashboardCommand);
+
+            GetChangedSettingsCommands = new GetChangedSettingsCommands(
+                this,
+                StopStopwatchCommand,
+                AddMinuteAndContinueStopwatchCommand,
+                CleanDashboardCommand);
+
+            AutoSubmitCommand = new AutoSubmitCommand(this, ValidateSolutionCommand);
 
             ApplyDifficultyCommand.Execute(ChoosenDifficulty);
 

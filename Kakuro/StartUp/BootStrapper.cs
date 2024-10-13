@@ -37,7 +37,7 @@ namespace Kakuro.StartUp
 
             // Commands
             builder.RegisterType<CleanDashboardCommand>().AsSelf().SingleInstance();
-            builder.RegisterType<VerifySolutionCommand>().AsSelf().SingleInstance();
+            builder.RegisterType<ValidateSolutionCommand>().AsSelf().SingleInstance();
 
             // Data Access
             builder.RegisterType<DashboardProvider>().As<IDashboardProvider>().SingleInstance();

@@ -6,7 +6,7 @@ using System.Windows.Input;
 namespace Kakuro.Commands
 {
     // #BAD: tests shall be written
-    public class VerifySolutionCommand : RelayCommand
+    public class ValidateSolutionCommand : RelayCommand
     {
         private ISolutionVerifier _solutionVerifier;
         private IOperationNotifier _operationNotifier;
@@ -14,7 +14,7 @@ namespace Kakuro.Commands
         private ICommand _sentGameSessionCommand;
         private DashboardViewModel _viewModel;
 
-        public VerifySolutionCommand(
+        public ValidateSolutionCommand(
             ISolutionVerifier solutionVerifier,
             IOperationNotifier operationNotifier,
             ICommand stopStopwatchCommand,

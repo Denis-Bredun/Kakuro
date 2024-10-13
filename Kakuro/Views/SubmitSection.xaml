@@ -13,7 +13,7 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Column="1" Command="{Binding VerifySolutionCommand}">
+        <Button Grid.Column="1" Command="{Binding ValidateSolutionCommand}">
             <Button.IsEnabled>
                 <MultiBinding Converter="{StaticResource MultiOrBooleanConverter}">
                     <Binding Path="IsGameCompleted" />

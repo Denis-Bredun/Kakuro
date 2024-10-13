@@ -30,11 +30,19 @@ namespace Kakuro.Commands
         {
             var showCorrectAnswersSetting = (Setting)parameter;
 
+            bool wasChanged = false;
+
+            if (_dashboardViewModel.ShowCorrectAnswers != showCorrectAnswersSetting.IsEnabled)
+                wasChanged = true;
+
             _dashboardViewModel.ShowCorrectAnswers = showCorrectAnswersSetting.IsEnabled;
 
-            LockStopwatch(_dashboardViewModel.ShowCorrectAnswers);
+            if (wasChanged)
+            {
+                LockStopwatch(_dashboardViewModel.ShowCorrectAnswers);
 
-            ShowOrEraseCorrectAnswers(_dashboardViewModel.ShowCorrectAnswers);
+                ShowOrEraseCorrectAnswers(_dashboardViewModel.ShowCorrectAnswers);
+            }
         }
 
         private void LockStopwatch(bool showCorrectAnswers)
