@@ -4,6 +4,9 @@ namespace Kakuro.Models
 {
     public class DashboardItem
     {
+        private static int _countOfIds = 1;
+
+        public int? ID { get; }
         public int? DisplayValue { get; set; }
         public int? HiddenValue { get; set; } // we need this so we could show right answers using settings
         public CellType CellType { get; set; }
@@ -12,6 +15,8 @@ namespace Kakuro.Models
 
         public DashboardItem()
         {
+            ID = _countOfIds;
+            _countOfIds++;
         }
 
         // #BAD: i shall write tests for this model

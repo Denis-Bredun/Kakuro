@@ -10,6 +10,8 @@ namespace Kakuro.ViewModels
     {
         private DashboardItem _dashboardItem;
 
+        public int? ID => _dashboardItem.ID;
+
         public string DisplayValue
         {
             get => ConvertIntToString(_dashboardItem.DisplayValue);
