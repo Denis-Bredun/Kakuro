@@ -1,4 +1,6 @@
 ﻿using Kakuro.Base_Classes;
+using Kakuro.Enums;
+using Kakuro.ViewModels;
 
 namespace Kakuro.Commands
 {
@@ -14,10 +16,16 @@ namespace Kakuro.Commands
 
         public override void Execute(object? parameter)
         {
-            foreach (var row in _dashboard)
-                foreach (var item in row)
-                    if (item.CellType == Enums.CellType.ValueCell)
-                        item.HiddenValue = "";
+            int dashboardSize = _dashboard.Count;
+            DashboardItemViewModel currentElement;
+
+            for (int i = 1; i < dashboardSize - 1; i++)
+                for (int j = 1; j < dashboardSize - 1; j++)
+                {
+                    currentElement = _dashboard[i][j];
+                    if (currentElement.CellType == CellType.ValueCell)
+                        currentElement.DisplayValue = "";
+                }
         }
     }
 }
