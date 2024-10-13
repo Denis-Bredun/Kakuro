@@ -4,7 +4,7 @@ namespace Kakuro.Enums
 {
     public enum SettingType
     {
-        [EnumMember(Value = "Show correct values (+1 minute, post-cleaning)")]
-        ShowCorrectValues
+        [EnumMember(Value = "Show correct answers (+1 minute, post-cleaning)")]
+        ShowCorrectAnswers
     }
 }

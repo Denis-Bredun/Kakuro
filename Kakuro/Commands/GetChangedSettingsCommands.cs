@@ -28,7 +28,7 @@ namespace Kakuro.Commands
         {
             var settings = (ObservableCollection<Setting>)parameter;
 
-            _showCorrectAnswersCommand.Execute(settings.FirstOrDefault(el => el.SettingType == SettingType.ShowCorrectValues));
+            _showCorrectAnswersCommand.Execute(settings.FirstOrDefault(el => el.SettingType == SettingType.ShowCorrectAnswers));
         }
     }
 }
