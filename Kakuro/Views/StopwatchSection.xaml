@@ -13,7 +13,8 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <TextBlock VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" FontSize="45" Foreground="Red">
+        <TextBlock VerticalAlignment="Center" Grid.Column="1" HorizontalAlignment="Center" FontSize="45" Foreground="Red"
+           Visibility="{Binding IsTimerVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <TextBlock.Inlines>
                 <Run Text="{Binding StopWatchHours}" />
                 <Run Text=":" />

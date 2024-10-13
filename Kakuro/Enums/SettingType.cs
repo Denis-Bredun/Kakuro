@@ -7,6 +7,8 @@ namespace Kakuro.Enums
         [EnumMember(Value = "Show correct answers (+1 minute, post-cleaning)")]
         ShowCorrectAnswers,
         [EnumMember(Value = "Auto submit")]
-        AutoSubmit
+        AutoSubmit,
+        [EnumMember(Value = "Hide the timer")]
+        HideTimer
     }
 }

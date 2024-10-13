@@ -18,6 +18,7 @@
 
             <converters:MultiOrBooleanConverter x:Key="MultiOrBooleanConverter" />
             <converters:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
         </ResourceDictionary>
     </Application.Resources>
 </Application>

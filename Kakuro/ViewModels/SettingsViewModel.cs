@@ -19,7 +19,8 @@ namespace Kakuro.ViewModels
             Settings = new ObservableCollection<Setting>
             {
                 new Setting { SettingType = SettingType.ShowCorrectAnswers, IsEnabled = false },
-                new Setting { SettingType = SettingType.AutoSubmit, IsEnabled = true }
+                new Setting { SettingType = SettingType.AutoSubmit, IsEnabled = true },
+                new Setting { SettingType = SettingType.HideTimer, IsEnabled = false }
             };
             SendSettingsCommand = new SendSettingsCommand(_eventAggregator, Settings);
         }

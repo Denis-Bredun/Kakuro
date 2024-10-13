@@ -17,7 +17,7 @@ namespace Kakuro.ViewModels
         private DifficultyLevels _choosenDifficulty;
         private MyStopwatch _stopwatch;
         private string _stopWatchHours, _stopWatchMinutes, _stopWatchSeconds;
-        private bool _isGameCompleted, _showCorrectAnswers, _autoSubmit, _disposed;
+        private bool _isGameCompleted, _showCorrectAnswers, _autoSubmit, _isTimerVisible, _disposed;
         private SubscriptionToken _settingsChangedSubscriptionTokens;
 
         public DashboardItemCollection Dashboard { get; }
@@ -45,6 +45,15 @@ namespace Kakuro.ViewModels
             set
             {
                 _autoSubmit = value;
+                OnPropertyChanged("AutoSubmit");
+            }
+        }
+        public bool IsTimerVisible
+        {
+            get => _isTimerVisible;
+            set
+            {
+                _isTimerVisible = value;
                 OnPropertyChanged("AutoSubmit");
             }
         }
@@ -92,6 +101,7 @@ namespace Kakuro.ViewModels
             IsGameCompleted = false;
             ShowCorrectAnswers = false;
             AutoSubmit = true;
+            IsTimerVisible = false;
 
             // #BAD: we shall create commands and some other objects through Lazy way
 
