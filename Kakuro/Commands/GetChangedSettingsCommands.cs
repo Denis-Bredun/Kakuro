@@ -16,7 +16,7 @@ namespace Kakuro.Commands
             ICommand stopStopwatchCommand,
             ICommand addMinuteAndContinueStopwatchCommand)
         {
-            _showCorrectAnswersCommand = new ShowCorrectAnswersCommand(
+            _showCorrectAnswersCommand = new ApplySettingShowCorrectAnswersCommand(
                 dashboardViewModel,
                 stopStopwatchCommand,
                 addMinuteAndContinueStopwatchCommand);

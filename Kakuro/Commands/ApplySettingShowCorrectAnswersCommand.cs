@@ -5,13 +5,13 @@ using System.Windows.Input;
 
 namespace Kakuro.Commands
 {
-    public class ShowCorrectAnswersCommand : RelayCommand
+    public class ApplySettingShowCorrectAnswersCommand : RelayCommand
     {
         private DashboardViewModel _dashboardViewModel;
         private ICommand _stopStopwatchCommand;
         private ICommand _addMinuteAndContinueStopwatchCommand;
 
-        public ShowCorrectAnswersCommand(DashboardViewModel dashboardViewModel, ICommand stopStopwatchCommand, ICommand addMinuteAndContinueStopwatchCommand)
+        public ApplySettingShowCorrectAnswersCommand(DashboardViewModel dashboardViewModel, ICommand stopStopwatchCommand, ICommand addMinuteAndContinueStopwatchCommand)
         {
             _dashboardViewModel = dashboardViewModel;
             _stopStopwatchCommand = stopStopwatchCommand;
