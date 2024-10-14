@@ -18,7 +18,8 @@
         </Border>
 
         <ListBox Grid.Row="1" ItemsSource="{Binding Settings}" 
-                 ItemContainerStyle="{StaticResource ListBoxItemStyle}">
+                 ItemContainerStyle="{StaticResource ListBoxItemStyle}"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <CheckBox Content="{Binding SettingType, Converter={StaticResource EnumDescriptionConverter}}" 
