@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using Kakuro.Game_Tools;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Kakuro.Styles.Custom_Controls
 {
@@ -28,5 +30,17 @@ namespace Kakuro.Styles.Custom_Controls
 
         public static readonly DependencyProperty SumBottomProperty =
             DependencyProperty.Register("SumBottom", typeof(string), typeof(SumCell), new PropertyMetadata(string.Empty));
+
+        public SumCell()
+        {
+            Focusable = true;
+            IsTabStop = true;
+            KeyDown += SumCell_KeyDown;
+        }
+
+        private void SumCell_KeyDown(object sender, KeyEventArgs e)
+        {
+            FocusNavigationHelper.HandleWASDKeyDown(this, e);
+        }
     }
 }

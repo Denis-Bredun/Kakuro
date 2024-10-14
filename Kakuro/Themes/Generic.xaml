@@ -9,24 +9,38 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:SumCell}">
                     <Grid Background="Black">
-                        <TextBlock Text="{TemplateBinding SumRight}" 
-                                   HorizontalAlignment="Right"
-                                   VerticalAlignment="Top"
-                                   Foreground="White"
-                                   FontSize="14"
-                                   Margin="0,5,0,0" />
+                        <Border x:Name="FocusBorder"
+                            BorderBrush="Transparent"
+                            BorderThickness="2">
+                            <Grid>
+                                <TextBlock Text="{TemplateBinding SumRight}"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Top"
+                                       Foreground="White"
+                                       FontSize="14"
+                                       Margin="0,5,0,0" />
 
-                        <Path Data="M 10 10 L 40 40" Stroke="White" StrokeThickness="1" />
+                                <Path Data="M 10 10 L 40 40" 
+                                  Stroke="White" 
+                                  StrokeThickness="1" />
 
-                        <TextBlock Text="{TemplateBinding SumBottom}" 
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Bottom"
-                                   Foreground="White"
-                                   FontSize="14"
-                                   Margin="5,0,0,0" />
+                                <TextBlock Text="{TemplateBinding SumBottom}"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Bottom"
+                                       Foreground="White"
+                                       FontSize="14"
+                                       Margin="5,0,0,0" />
+                            </Grid>
+                        </Border>
                     </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="FocusBorder" Property="BorderBrush" Value="LightBlue" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+
 </ResourceDictionary>
