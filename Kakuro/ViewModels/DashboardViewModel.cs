@@ -82,17 +82,17 @@ namespace Kakuro.ViewModels
             set { _stopWatchSeconds = value; OnPropertyChanged("StopWatchSeconds"); }
         }
 
-        public ICommand ApplyDifficultyCommand { get; }
-        public ICommand NewGameCommand { get; }
-        public ICommand ValidateSolutionCommand { get; }
-        public ICommand CleanDashboardCommand { get; }
-        public ICommand StartStopwatchCommand { get; }
-        public ICommand StopStopwatchCommand { get; }
-        public ICommand RestartStopwatchCommand { get; }
-        public ICommand SentGameSessionCommand { get; }
-        public ICommand GetChangedSettingsCommands { get; }
-        public ICommand AddMinuteAndContinueStopwatchCommand { get; }
-        public ICommand AutoSubmitCommand { get; }
+        public ICommand ApplyDifficultyCommand { get; private set; }
+        public ICommand NewGameCommand { get; private set; }
+        public ICommand ValidateSolutionCommand { get; private set; }
+        public ICommand CleanDashboardCommand { get; private set; }
+        public ICommand StartStopwatchCommand { get; private set; }
+        public ICommand StopStopwatchCommand { get; private set; }
+        public ICommand RestartStopwatchCommand { get; private set; }
+        public ICommand SentGameSessionCommand { get; private set; }
+        public ICommand GetChangedSettingsCommands { get; private set; }
+        public ICommand AddMinuteAndContinueStopwatchCommand { get; private set; }
+        public ICommand AutoSubmitCommand { get; private set; }
 
         public DashboardViewModel(ILifetimeScope scope, IEventAggregator eventAggregator, DashboardItemCollection dashboard)
         {
@@ -161,6 +161,12 @@ namespace Kakuro.ViewModels
                     {
                         _settingsChangedSubscriptionTokens.Dispose();
                         _settingsChangedSubscriptionTokens = null;
+                    }
+
+                    if (StartStopwatchCommand != null)
+                    {
+                        ((StartStopwatchCommand)StartStopwatchCommand).Dispose();
+                        StartStopwatchCommand = null;
                     }
                 }
                 _disposed = true;
