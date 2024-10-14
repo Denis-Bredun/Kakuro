@@ -35,6 +35,7 @@ namespace Kakuro.ViewModels
                 {
                     RatingTableViewModel.Dispose();
                     DashboardViewModel.Dispose();
+                    SettingsViewModel.Dispose();
                 }
                 _disposed = true;
             }

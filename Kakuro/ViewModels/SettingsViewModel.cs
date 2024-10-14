@@ -7,9 +7,10 @@ using System.Windows.Input;
 
 namespace Kakuro.ViewModels
 {
-    public class SettingsViewModel
+    public class SettingsViewModel : IDisposable
     {
         private IEventAggregator _eventAggregator;
+        private bool _disposed = false;
 
         public ObservableCollection<SettingViewModel> Settings { get; set; }
         public ICommand SendSettingsCommand { get; }
@@ -31,6 +32,33 @@ namespace Kakuro.ViewModels
             TurnOffAutoSubmitCommand = new TurnOffAutoSubmitCommand(Settings);
 
             _correctAnswersTurnedOnSubscriptionToken = eventAggregator.GetEvent<CorrectAnswersTurnedOnEvent>().Subscribe(TurnOffAutoSubmitCommand.Execute);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    if (_correctAnswersTurnedOnSubscriptionToken != null)
+                    {
+                        _correctAnswersTurnedOnSubscriptionToken.Dispose();
+                        _correctAnswersTurnedOnSubscriptionToken = null;
+                    }
+                }
+                _disposed = true;
+            }
+        }
+
+        ~SettingsViewModel()
+        {
+            Dispose(false);
         }
     }
 }
