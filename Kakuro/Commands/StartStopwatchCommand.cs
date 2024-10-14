@@ -1,71 +1,39 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Models;
 using Kakuro.ViewModels;
-using System.Windows.Threading;
+using System.Windows;
 
 namespace Kakuro.Commands
 {
     // #BAD: tests shall be written
-    public class StartStopwatchCommand : RelayCommand, IDisposable
+    public class StartStopwatchCommand : RelayCommand
     {
         private MyStopwatch _stopwatch;
         private DashboardViewModel _viewModel;
-        private DispatcherTimer _timer;
-        private bool _disposed = false;
 
         public StartStopwatchCommand(MyStopwatch stopwatch, DashboardViewModel viewModel)
         {
-            _stopwatch = stopwatch;
-            _viewModel = viewModel;
-            _timer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromSeconds(1)
-            };
-            _timer.Tick += Timer_Tick;
-        }
-
-        private void Timer_Tick(object? sender, EventArgs e)
-        {
-            if (_stopwatch.IsRunning)
-            {
-                _viewModel.StopWatchHours = _stopwatch.ElapsedHours.ToString();
-                _viewModel.StopWatchMinutes = _stopwatch.ElapsedMinutes.ToString();
-                _viewModel.StopWatchSeconds = _stopwatch.ElapsedSeconds.ToString();
-            }
+            _stopwatch ??= stopwatch;
+            _viewModel ??= viewModel;
         }
 
         public override void Execute(object? parameter)
         {
             _stopwatch.Start();
-            _timer.Start();
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!_disposed)
+            Task.Run(async () =>
             {
-                if (disposing)
+                while (_stopwatch.IsRunning && Application.Current != null)
                 {
-                    if (_timer != null)
+                    Application.Current.Dispatcher.Invoke(() =>
                     {
-                        _timer.Stop();
-                        _timer.Tick -= Timer_Tick;
-                        _timer = null;
-                    }
-                }
-                _disposed = true;
-            }
-        }
+                        _viewModel.StopWatchHours = _stopwatch.ElapsedHours.ToString();
+                        _viewModel.StopWatchMinutes = _stopwatch.ElapsedMinutes.ToString();
+                        _viewModel.StopWatchSeconds = _stopwatch.ElapsedSeconds.ToString();
+                    });
 
-        ~StartStopwatchCommand()
-        {
-            Dispose(false);
+                    await Task.Delay(1000);
+                }
+            });
         }
     }
 }

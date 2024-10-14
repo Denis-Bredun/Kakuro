@@ -68,17 +68,17 @@ namespace Kakuro.ViewModels
         }
         public string StopWatchHours
         {
-            get { return _stopWatchHours; }
+            get { return _stopWatchHours.PadLeft(2, '0'); }
             set { _stopWatchHours = value; OnPropertyChanged("StopWatchHours"); }
         }
         public string StopWatchMinutes
         {
-            get { return _stopWatchMinutes; }
+            get { return _stopWatchMinutes.PadLeft(2, '0'); }
             set { _stopWatchMinutes = value; OnPropertyChanged("StopWatchMinutes"); }
         }
         public string StopWatchSeconds
         {
-            get { return _stopWatchSeconds; }
+            get { return _stopWatchSeconds.PadLeft(2, '0'); }
             set { _stopWatchSeconds = value; OnPropertyChanged("StopWatchSeconds"); }
         }
 
@@ -161,12 +161,6 @@ namespace Kakuro.ViewModels
                     {
                         _settingsChangedSubscriptionTokens.Dispose();
                         _settingsChangedSubscriptionTokens = null;
-                    }
-
-                    if (StartStopwatchCommand != null)
-                    {
-                        ((StartStopwatchCommand)StartStopwatchCommand).Dispose();
-                        StartStopwatchCommand = null;
                     }
                 }
                 _disposed = true;
