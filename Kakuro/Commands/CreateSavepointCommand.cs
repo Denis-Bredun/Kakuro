@@ -2,7 +2,6 @@
 using Kakuro.Models;
 using Kakuro.ViewModels;
 using Microsoft.VisualBasic;
-using System.Collections.ObjectModel;
 
 namespace Kakuro.Commands
 {
@@ -19,7 +18,7 @@ namespace Kakuro.Commands
 
         public override void Execute(object? parameter)
         {
-            var dashboard = CreateDashboardCopy(_dashboardViewModel.Dashboard);
+            var dashboard = _dashboardViewModel.CreateDashboardCopy();
 
             var newId = _savepointsViewModel.Savepoints.Count + 1;
 
@@ -36,29 +35,6 @@ namespace Kakuro.Commands
                 dashboard);
 
             _savepointsViewModel.Savepoints.Add(new SavepointViewModel(newSavepoint));
-        }
-
-        private DashboardItemCollection CreateDashboardCopy(DashboardItemCollection original)
-        {
-            var newCollection = new DashboardItemCollection();
-            foreach (var innerCollection in original)
-            {
-                var newInnerCollection = new ObservableCollection<DashboardItemViewModel>();
-                foreach (var item in innerCollection)
-                {
-                    var newItem = new DashboardItemViewModel(new DashboardItem
-                    {
-                        DisplayValue = item.ConvertStringToInt(item.DisplayValue),
-                        HiddenValue = item.ConvertStringToInt(item.HiddenValue),
-                        SumRight = item.ConvertStringToInt(item.SumRight),
-                        SumBottom = item.ConvertStringToInt(item.SumBottom),
-                        CellType = item.CellType
-                    });
-                    newInnerCollection.Add(newItem);
-                }
-                newCollection.Add(newInnerCollection);
-            }
-            return newCollection;
         }
     }
 }

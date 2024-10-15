@@ -6,6 +6,7 @@ using Kakuro.Events;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Kakuro.Interfaces.Game_Tools;
 using Kakuro.Models;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace Kakuro.ViewModels
@@ -143,6 +144,29 @@ namespace Kakuro.ViewModels
             ApplyDifficultyCommand.Execute(ChoosenDifficulty);
 
             _settingsChangedSubscriptionTokens = eventAggregator.GetEvent<SettingsChangedEvent>().Subscribe(GetChangedSettingsCommands.Execute);
+        }
+
+        public DashboardItemCollection CreateDashboardCopy()
+        {
+            var newCollection = new DashboardItemCollection();
+            foreach (var innerCollection in Dashboard)
+            {
+                var newInnerCollection = new ObservableCollection<DashboardItemViewModel>();
+                foreach (var item in innerCollection)
+                {
+                    var newItem = new DashboardItemViewModel(new DashboardItem
+                    {
+                        DisplayValue = item.ConvertStringToInt(item.DisplayValue),
+                        HiddenValue = item.ConvertStringToInt(item.HiddenValue),
+                        SumRight = item.ConvertStringToInt(item.SumRight),
+                        SumBottom = item.ConvertStringToInt(item.SumBottom),
+                        CellType = item.CellType
+                    });
+                    newInnerCollection.Add(newItem);
+                }
+                newCollection.Add(newInnerCollection);
+            }
+            return newCollection;
         }
 
         public void Dispose()
