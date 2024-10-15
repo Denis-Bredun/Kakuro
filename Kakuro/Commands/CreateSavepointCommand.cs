@@ -25,12 +25,18 @@ namespace Kakuro.Commands
 
             var newId = _savepointsViewModel.Savepoints.Count + 1;
 
-            string defaultName = $"Savepoint #{newId}";
+            while (_savepointsViewModel.Savepoints.Any(sp => sp.Id == newId))
+            {
+                newId++;
+            }
 
+            string defaultName = $"Savepoint #{newId}";
             string inputName = Interaction.InputBox("Enter a name for the Savepoint:", "Create Savepoint", defaultName);
 
             if (string.IsNullOrEmpty(inputName))
+            {
                 inputName = defaultName;
+            }
 
             var newSavepoint = new Savepoint(
                 newId,
@@ -39,6 +45,7 @@ namespace Kakuro.Commands
 
             _savepointsViewModel.Savepoints.Add(new SavepointViewModel(newSavepoint));
         }
+
 
         public override bool CanExecute(object? parameter)
         {
