@@ -3,14 +3,14 @@
     public class Savepoint
     {
         public int Id { get; set; }
-        public List<DashboardItem> DashboardItems { get; set; }
+        public DashboardItemCollection Dashboard { get; set; }
 
         public override bool Equals(object? obj)
         {
             if (obj is Savepoint other)
             {
                 return Id == other.Id &&
-                       DashboardItems.SequenceEqual(other.DashboardItems);
+                       Dashboard.SequenceEqual(other.Dashboard);
             }
 
             return false;
@@ -20,7 +20,7 @@
         {
             int hash = 17;
             hash = hash * 31 + Id.GetHashCode();
-            hash = hash * 31 + (DashboardItems != null ? DashboardItems.GetHashCode() : 0);
+            hash = hash * 31 + (Dashboard != null ? Dashboard.GetHashCode() : 0);
             return hash;
         }
     }
