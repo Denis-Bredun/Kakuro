@@ -1,5 +1,4 @@
 ﻿using Kakuro.Base_Classes;
-using Kakuro.Enums;
 using Kakuro.Models;
 using Kakuro.ViewModels;
 using System.Collections.ObjectModel;
@@ -44,12 +43,12 @@ namespace Kakuro.Commands
                 var newInnerCollection = new ObservableCollection<DashboardItemViewModel>();
                 foreach (var item in innerCollection)
                 {
-                    if (item.CellType != CellType.ValueCell)
-                        continue;
-
                     var newItem = new DashboardItemViewModel(new DashboardItem
                     {
                         DisplayValue = item.ConvertStringToInt(item.DisplayValue),
+                        HiddenValue = item.ConvertStringToInt(item.HiddenValue),
+                        SumRight = item.ConvertStringToInt(item.SumRight),
+                        SumBottom = item.ConvertStringToInt(item.SumBottom),
                         CellType = item.CellType
                     });
                     newInnerCollection.Add(newItem);

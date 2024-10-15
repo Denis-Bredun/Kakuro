@@ -33,9 +33,11 @@ namespace Kakuro.ViewModels
         {
             Savepoints = new ObservableCollection<SavepointViewModel>();
 
+            // #BAD: I think we shouldn't pass DashboardViewModel straightfully
             DeleteSavepointCommand = new DeleteSavepointCommand(this);
             CreateSavepointCommand = new CreateSavepointCommand(this, scope.Resolve<DashboardViewModel>());
             RewriteSavepointCommand = new RewriteSavepointCommand(this, scope.Resolve<DashboardViewModel>());
+            LoadSavepointCommand = new LoadSavepointCommand(this, scope.Resolve<DashboardViewModel>());
         }
     }
 
