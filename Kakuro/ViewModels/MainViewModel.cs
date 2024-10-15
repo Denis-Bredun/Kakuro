@@ -8,17 +8,20 @@ namespace Kakuro.ViewModels
         public DashboardViewModel DashboardViewModel { get; }
         public RatingTableViewModel RatingTableViewModel { get; }
         public SettingsViewModel SettingsViewModel { get; }
+        public SavepointsViewModel SavepointsViewModel { get; }
 
         private bool _disposed = false;
 
         public MainViewModel(
             DashboardViewModel dashboardViewModel,
             RatingTableViewModel ratingTableViewModel,
-            SettingsViewModel settingsViewModel)
+            SettingsViewModel settingsViewModel,
+            SavepointsViewModel savepointsViewModel)
         {
             DashboardViewModel = dashboardViewModel;
             RatingTableViewModel = ratingTableViewModel;
             SettingsViewModel = settingsViewModel;
+            SavepointsViewModel = savepointsViewModel;
         }
 
         public void Dispose()

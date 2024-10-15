@@ -15,7 +15,8 @@
             <ColumnDefinition Width="5.5*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <view:SettingsSection Grid.Column="0" DataContext="{Binding SettingsViewModel}"/> 
+        <view:SettingsSection Grid.Column="0" DataContext="{Binding SettingsViewModel}"/>
         <view:GameSection Grid.Column="2" DataContext="{Binding DashboardViewModel}"/> <!-- #BAD: Maybe we could use ViewModelLocator?-->
+        <view:SavepointsSection Grid.Column="4" DataContext="{Binding SavepointsViewModel}"/> 
     </Grid>
 </UserControl>
