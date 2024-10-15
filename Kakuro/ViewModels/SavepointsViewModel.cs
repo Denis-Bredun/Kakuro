@@ -35,6 +35,7 @@ namespace Kakuro.ViewModels
 
             DeleteSavepointCommand = new DeleteSavepointCommand(this);
             CreateSavepointCommand = new CreateSavepointCommand(this, scope.Resolve<DashboardViewModel>());
+            RewriteSavepointCommand = new RewriteSavepointCommand(this, scope.Resolve<DashboardViewModel>());
         }
     }
 
