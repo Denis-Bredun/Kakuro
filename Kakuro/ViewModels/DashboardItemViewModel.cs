@@ -67,7 +67,7 @@ namespace Kakuro.ViewModels
             _dashboardItem = dashboardItem;
         }
 
-        private int ConvertStringToInt(string value)
+        public int ConvertStringToInt(string value)
         {
             int enteredValue;
             try
@@ -83,7 +83,7 @@ namespace Kakuro.ViewModels
             return enteredValue;
         }
 
-        private string ConvertIntToString(int? value)
+        public string ConvertIntToString(int? value)
         {
             return value == 0 ? "" : $"{value}";
         }

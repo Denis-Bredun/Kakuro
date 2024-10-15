@@ -1,5 +1,8 @@
 ﻿using Kakuro.Base_Classes;
+using Kakuro.Enums;
+using Kakuro.Models;
 using Kakuro.ViewModels;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 
 namespace Kakuro.Commands
@@ -19,7 +22,7 @@ namespace Kakuro.Commands
 
         public override void Execute(object? parameter)
         {
-            _savepointsViewModel.SelectedSavepoint.Dashboard = _dashboardViewModel.Dashboard;
+            _savepointsViewModel.SelectedSavepoint.Dashboard = CreateDashboardCopy(_dashboardViewModel.Dashboard);
         }
 
         public override bool CanExecute(object? parameter)
@@ -31,6 +34,29 @@ namespace Kakuro.Commands
         {
             if (e.PropertyName == nameof(_savepointsViewModel.SelectedSavepoint))
                 OnCanExecutedChanged();
+        }
+
+        private DashboardItemCollection CreateDashboardCopy(DashboardItemCollection original)
+        {
+            var newCollection = new DashboardItemCollection();
+            foreach (var innerCollection in original)
+            {
+                var newInnerCollection = new ObservableCollection<DashboardItemViewModel>();
+                foreach (var item in innerCollection)
+                {
+                    if (item.CellType != CellType.ValueCell)
+                        continue;
+
+                    var newItem = new DashboardItemViewModel(new DashboardItem
+                    {
+                        DisplayValue = item.ConvertStringToInt(item.DisplayValue),
+                        CellType = item.CellType
+                    });
+                    newInnerCollection.Add(newItem);
+                }
+                newCollection.Add(newInnerCollection);
+            }
+            return newCollection;
         }
     }
 }
