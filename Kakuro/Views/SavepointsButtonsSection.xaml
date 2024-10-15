@@ -19,9 +19,9 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
-        <Button Grid.Column="1">Load</Button>
-        <Button Grid.Column="3">Create</Button>
-        <Button Grid.Column="5">Rewrite</Button>
-        <Button Grid.Column="7">Delete</Button>
+        <Button Grid.Column="1" Command="{Binding Load}">Load</Button>
+        <Button Grid.Column="3" Command="{Binding Create}">Create</Button>
+        <Button Grid.Column="5" Command="{Binding Rewrite}">Rewrite</Button>
+        <Button Grid.Column="7" Command="{Binding Delete}">Delete</Button>
     </Grid>
 </UserControl>

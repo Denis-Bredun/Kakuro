@@ -1,6 +1,7 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Models;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 
 namespace Kakuro.ViewModels
 {
@@ -22,18 +23,14 @@ namespace Kakuro.ViewModels
             }
         }
 
+        public ICommand Load { get; }
+        public ICommand Create { get; }
+        public ICommand Rewrite { get; }
+        public ICommand Delete { get; }
+
         public SavepointsViewModel()
         {
             Savepoints = new ObservableCollection<Savepoint>();
-
-            for (int i = 1; i <= 10; i++)
-            {
-                Savepoints.Add(new Savepoint
-                {
-                    Id = i,
-                    Dashboard = new DashboardItemCollection()
-                });
-            }
         }
     }
 
