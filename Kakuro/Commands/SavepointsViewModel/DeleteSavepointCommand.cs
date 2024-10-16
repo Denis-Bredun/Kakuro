@@ -1,4 +1,5 @@
 ﻿using Kakuro.Base_Classes;
+using Kakuro.Interfaces.Data_Access.Data_Providers;
 using System.ComponentModel;
 
 namespace Kakuro.Commands.SavepointsViewModel
@@ -6,17 +7,21 @@ namespace Kakuro.Commands.SavepointsViewModel
     public class DeleteSavepointCommand : RelayCommand, IDisposable
     {
         private ViewModels.SavepointsViewModel _savepointsViewModel;
+        private ISavepointProvider _savepointProvider;
         private bool _disposed = false;
 
-        public DeleteSavepointCommand(ViewModels.SavepointsViewModel savepointsViewModel)
+        public DeleteSavepointCommand(ViewModels.SavepointsViewModel savepointsViewModel, ISavepointProvider savepointProvider)
         {
             _savepointsViewModel = savepointsViewModel;
+            _savepointProvider = savepointProvider;
 
             _savepointsViewModel.PropertyChanged += OnSelectedSavepointPropertyChanged;
         }
 
         public override void Execute(object? parameter)
         {
+            _savepointProvider.Delete(_savepointsViewModel.SelectedSavepoint.Id);
+
             _savepointsViewModel.Savepoints.Remove(_savepointsViewModel.SelectedSavepoint);
             _savepointsViewModel.SelectedSavepoint = null;
         }

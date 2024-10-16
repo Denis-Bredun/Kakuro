@@ -1,5 +1,6 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
+using Kakuro.Interfaces.Data_Access.Data_Providers;
 using System.ComponentModel;
 
 namespace Kakuro.Commands.SavepointsViewModel
@@ -8,18 +9,25 @@ namespace Kakuro.Commands.SavepointsViewModel
     {
         private ViewModels.SavepointsViewModel _savepointsViewModel;
         private readonly ViewModels.DashboardViewModel _dashboardViewModel;
+        private readonly ISavepointProvider _savepointProvider;
         private bool _disposed = false;
 
-        public LoadSavepointCommand(ViewModels.SavepointsViewModel savepointsViewModel, ViewModels.DashboardViewModel dashboardViewModel)
+        public LoadSavepointCommand(
+            ViewModels.SavepointsViewModel savepointsViewModel,
+            ViewModels.DashboardViewModel dashboardViewModel,
+            ISavepointProvider savepointProvider)
         {
             _savepointsViewModel = savepointsViewModel;
             _dashboardViewModel = dashboardViewModel;
+            _savepointProvider = savepointProvider;
 
             _savepointsViewModel.PropertyChanged += OnSelectedSavepointPropertyChanged;
         }
 
         public override void Execute(object? parameter)
         {
+            var savepointToLoad = _savepointProvider.GetById(_savepointsViewModel.SelectedSavepoint.Id);
+
             int dashboardSize = _dashboardViewModel.Dashboard.Count;
             ViewModels.DashboardItemViewModel currentElement;
 
@@ -29,7 +37,7 @@ namespace Kakuro.Commands.SavepointsViewModel
                 {
                     currentElement = _dashboardViewModel.Dashboard[i][j];
                     if (currentElement.CellType == CellType.ValueCell)
-                        currentElement.DisplayValue = _savepointsViewModel.SelectedSavepoint.Dashboard[i][j].DisplayValue;
+                        currentElement.DisplayValue = savepointToLoad.Dashboard[i][j].DisplayValue;
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Kakuro.Base_Classes;
+using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Kakuro.Models;
 using Microsoft.VisualBasic;
 using System.ComponentModel;
@@ -9,12 +10,17 @@ namespace Kakuro.Commands.SavepointsViewModel
     {
         private readonly ViewModels.SavepointsViewModel _savepointsViewModel;
         private readonly ViewModels.DashboardViewModel _dashboardViewModel;
+        private readonly ISavepointProvider _savepointProvider;
         private bool _disposed = false;
 
-        public CreateSavepointCommand(ViewModels.SavepointsViewModel savepointsViewModel, ViewModels.DashboardViewModel dashboardViewModel)
+        public CreateSavepointCommand(
+            ViewModels.SavepointsViewModel savepointsViewModel,
+            ViewModels.DashboardViewModel dashboardViewModel,
+            ISavepointProvider savepointProvider)
         {
             _savepointsViewModel = savepointsViewModel;
             _dashboardViewModel = dashboardViewModel;
+            _savepointProvider = savepointProvider;
 
             _savepointsViewModel.PropertyChanged += OnSavepointsCollectionPropertyChanged;
         }
@@ -38,12 +44,11 @@ namespace Kakuro.Commands.SavepointsViewModel
                 inputName = defaultName;
             }
 
-            var newSavepoint = new Savepoint(
-                newId,
-                inputName,
-                dashboard);
+            var newSavepoint = new Savepoint(newId, dashboard);
 
-            _savepointsViewModel.Savepoints.Add(new ViewModels.SavepointViewModel(newSavepoint));
+            _savepointProvider.Add(newSavepoint);
+
+            _savepointsViewModel.Savepoints.Add(new ViewModels.SavepointViewModel(newId, inputName));
         }
 
         public override bool CanExecute(object? parameter)

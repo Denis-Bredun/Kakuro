@@ -47,7 +47,6 @@ namespace Kakuro.StartUp
             builder.RegisterType<SavepointProvider>().As<ISavepointProvider>().SingleInstance();
             builder.RegisterType<RatingRecordRepository>().As<IReadAllRepository<RatingRecord, DifficultyLevels>>().SingleInstance();
             builder.RegisterType<SavepointRepository>().As<IRepository<Savepoint>>().SingleInstance();
-            builder.RegisterType<SavepointProvider>().As<ISavepointProvider>().SingleInstance();
             builder.RegisterType<JsonFileHandler<RatingRecord>>().As<IJsonFileHandler<RatingRecord>>().SingleInstance();
             builder.RegisterType<JsonFileHandler<Savepoint>>().As<IJsonFileHandler<Savepoint>>().SingleInstance();
 

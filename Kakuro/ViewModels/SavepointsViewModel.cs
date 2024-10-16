@@ -2,6 +2,7 @@
 using Kakuro.Base_Classes;
 using Kakuro.Commands.SavepointsViewModel;
 using Kakuro.Events;
+using Kakuro.Interfaces.Data_Access.Data_Providers;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -9,9 +10,11 @@ namespace Kakuro.ViewModels
 {
     public class SavepointsViewModel : ViewModelBase
     {
+        private SavepointViewModel _selectedSavepoint;
+        private ISavepointProvider _savepointProvider;
+
         public ObservableCollection<SavepointViewModel> Savepoints { get; }
 
-        private SavepointViewModel _selectedSavepoint;
         public SavepointViewModel SelectedSavepoint
         {
             get => _selectedSavepoint;
@@ -34,16 +37,20 @@ namespace Kakuro.ViewModels
         private SubscriptionToken _newGameStartedSubscriptionToken;
         private bool _disposed;
 
-        public SavepointsViewModel(ILifetimeScope scope, IEventAggregator eventAggregator)
+        public SavepointsViewModel(
+            ILifetimeScope scope,
+            IEventAggregator eventAggregator,
+            ISavepointProvider savepointProvider)
         {
             Savepoints = new ObservableCollection<SavepointViewModel>();
+            _savepointProvider = savepointProvider;
 
             // #BAD: I think we shouldn't pass DashboardViewModel straightfully
-            DeleteSavepointCommand = new DeleteSavepointCommand(this);
-            CreateSavepointCommand = new CreateSavepointCommand(this, scope.Resolve<DashboardViewModel>());
-            RewriteSavepointCommand = new RewriteSavepointCommand(this, scope.Resolve<DashboardViewModel>());
-            LoadSavepointCommand = new LoadSavepointCommand(this, scope.Resolve<DashboardViewModel>());
-            CleanSavepointsCommand = new CleanSavepointsCommand(this);
+            DeleteSavepointCommand = new DeleteSavepointCommand(this, _savepointProvider);
+            CreateSavepointCommand = new CreateSavepointCommand(this, scope.Resolve<DashboardViewModel>(), _savepointProvider);
+            RewriteSavepointCommand = new RewriteSavepointCommand(this, scope.Resolve<DashboardViewModel>(), _savepointProvider);
+            LoadSavepointCommand = new LoadSavepointCommand(this, scope.Resolve<DashboardViewModel>(), _savepointProvider);
+            CleanSavepointsCommand = new CleanSavepointsCommand(this, _savepointProvider);
 
             _newGameStartedSubscriptionToken = eventAggregator.GetEvent<NewGameStartedEvent>().Subscribe(CleanSavepointsCommand.Execute);
         }
@@ -70,6 +77,8 @@ namespace Kakuro.ViewModels
                     (CreateSavepointCommand as IDisposable)?.Dispose();
                     (RewriteSavepointCommand as IDisposable)?.Dispose();
                     (LoadSavepointCommand as IDisposable)?.Dispose();
+
+                    CleanSavepointsCommand.Execute(null);
                 }
                 _disposed = true;
             }

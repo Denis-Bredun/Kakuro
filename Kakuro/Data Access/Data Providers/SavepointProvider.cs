@@ -34,7 +34,13 @@ namespace Kakuro.Data_Access.Data_Providers
         public Savepoint Delete(int id)
         {
             var deletedEntity = _dataService.Delete(id);
-            Cache.Remove(deletedEntity);
+
+            var cachedEntity = Cache.FirstOrDefault(el => el.Id == id);
+            if (cachedEntity != null)
+            {
+                Cache.Remove(cachedEntity);
+            }
+
             return deletedEntity;
         }
 

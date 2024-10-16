@@ -1,6 +1,7 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
 using Kakuro.Models;
+using System.Text.Json.Serialization;
 
 namespace Kakuro.ViewModels
 {
@@ -10,7 +11,15 @@ namespace Kakuro.ViewModels
     {
         private DashboardItem _dashboardItem;
 
-        public int? ID => _dashboardItem.ID;
+        public int? ID
+        {
+            get => _dashboardItem.ID;
+            set
+            {
+                _dashboardItem.ID = value;
+                OnPropertyChanged(nameof(ID));
+            }
+        }
 
         public string DisplayValue
         {
@@ -65,6 +74,18 @@ namespace Kakuro.ViewModels
         public DashboardItemViewModel(DashboardItem dashboardItem)
         {
             _dashboardItem = dashboardItem;
+        }
+
+        [JsonConstructor]
+        public DashboardItemViewModel(int? id, string displayValue, string hiddenValue, CellType cellType, string sumRight, string sumBottom)
+        {
+            _dashboardItem = new DashboardItem();
+            ID = id;
+            DisplayValue = displayValue;
+            HiddenValue = hiddenValue;
+            CellType = cellType;
+            SumRight = sumRight;
+            SumBottom = sumBottom;
         }
 
         public int ConvertStringToInt(string value)

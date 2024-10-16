@@ -1,46 +1,36 @@
 ﻿using Kakuro.Base_Classes;
-using Kakuro.Models;
 
 namespace Kakuro.ViewModels
 {
     public class SavepointViewModel : ViewModelBase
     {
-        private Savepoint _savepoint;
+        private string _name;
+        private int _id;
 
         public int Id
         {
-            get => _savepoint.Id;
+            get => _id;
             set
             {
-                _savepoint.Id = value;
+                _id = value;
                 OnPropertyChanged("Id");
             }
         }
 
         public string Name
         {
-            get => _savepoint.Name;
+            get => _name;
             set
             {
-                _savepoint.Name = value;
+                _name = value;
                 OnPropertyChanged("Name");
             }
         }
 
-        public DashboardItemCollection Dashboard
+        public SavepointViewModel(int id, string name)
         {
-            get => _savepoint.Dashboard;
-            set
-            {
-                _savepoint.Dashboard = value;
-                OnPropertyChanged("Dashboard");
-            }
-        }
-
-        public SavepointViewModel(Savepoint savepoint)
-        {
-            _savepoint = savepoint;
+            Id = id;
+            Name = name;
         }
     }
-
 }
