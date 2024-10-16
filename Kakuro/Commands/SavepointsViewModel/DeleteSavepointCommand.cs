@@ -3,9 +3,10 @@ using System.ComponentModel;
 
 namespace Kakuro.Commands.SavepointsViewModel
 {
-    public class DeleteSavepointCommand : RelayCommand
+    public class DeleteSavepointCommand : RelayCommand, IDisposable
     {
         private ViewModels.SavepointsViewModel _savepointsViewModel;
+        private bool _disposed = false;
 
         public DeleteSavepointCommand(ViewModels.SavepointsViewModel savepointsViewModel)
         {
@@ -29,6 +30,29 @@ namespace Kakuro.Commands.SavepointsViewModel
         {
             if (e.PropertyName == nameof(_savepointsViewModel.SelectedSavepoint))
                 OnCanExecutedChanged();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _savepointsViewModel.PropertyChanged -= OnSelectedSavepointPropertyChanged;
+                }
+                _disposed = true;
+            }
+        }
+
+        ~DeleteSavepointCommand()
+        {
+            Dispose(false);
         }
     }
 }

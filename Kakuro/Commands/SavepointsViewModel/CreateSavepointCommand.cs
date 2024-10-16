@@ -5,10 +5,11 @@ using System.ComponentModel;
 
 namespace Kakuro.Commands.SavepointsViewModel
 {
-    public class CreateSavepointCommand : RelayCommand
+    public class CreateSavepointCommand : RelayCommand, IDisposable
     {
         private readonly ViewModels.SavepointsViewModel _savepointsViewModel;
         private readonly ViewModels.DashboardViewModel _dashboardViewModel;
+        private bool _disposed = false;
 
         public CreateSavepointCommand(ViewModels.SavepointsViewModel savepointsViewModel, ViewModels.DashboardViewModel dashboardViewModel)
         {
@@ -45,7 +46,6 @@ namespace Kakuro.Commands.SavepointsViewModel
             _savepointsViewModel.Savepoints.Add(new ViewModels.SavepointViewModel(newSavepoint));
         }
 
-
         public override bool CanExecute(object? parameter)
         {
             return _savepointsViewModel.Savepoints.Count < 10 && base.CanExecute(parameter);
@@ -55,6 +55,29 @@ namespace Kakuro.Commands.SavepointsViewModel
         {
             if (e.PropertyName == nameof(_savepointsViewModel.Savepoints.Count))
                 OnCanExecutedChanged();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _savepointsViewModel.PropertyChanged -= OnSavepointsCollectionPropertyChanged;
+                }
+                _disposed = true;
+            }
+        }
+
+        ~CreateSavepointCommand()
+        {
+            Dispose(false);
         }
     }
 }

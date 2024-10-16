@@ -65,6 +65,11 @@ namespace Kakuro.ViewModels
                         _newGameStartedSubscriptionToken.Dispose();
                         _newGameStartedSubscriptionToken = null;
                     }
+
+                    (DeleteSavepointCommand as IDisposable)?.Dispose();
+                    (CreateSavepointCommand as IDisposable)?.Dispose();
+                    (RewriteSavepointCommand as IDisposable)?.Dispose();
+                    (LoadSavepointCommand as IDisposable)?.Dispose();
                 }
                 _disposed = true;
             }

@@ -4,10 +4,11 @@ using System.ComponentModel;
 
 namespace Kakuro.Commands.SavepointsViewModel
 {
-    public class LoadSavepointCommand : RelayCommand
+    public class LoadSavepointCommand : RelayCommand, IDisposable
     {
         private ViewModels.SavepointsViewModel _savepointsViewModel;
         private readonly ViewModels.DashboardViewModel _dashboardViewModel;
+        private bool _disposed = false;
 
         public LoadSavepointCommand(ViewModels.SavepointsViewModel savepointsViewModel, ViewModels.DashboardViewModel dashboardViewModel)
         {
@@ -43,5 +44,29 @@ namespace Kakuro.Commands.SavepointsViewModel
             if (e.PropertyName == nameof(_savepointsViewModel.SelectedSavepoint))
                 OnCanExecutedChanged();
         }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    _savepointsViewModel.PropertyChanged -= OnSelectedSavepointPropertyChanged;
+                }
+                _disposed = true;
+            }
+        }
+
+        ~LoadSavepointCommand()
+        {
+            Dispose(false);
+        }
     }
+
 }
