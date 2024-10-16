@@ -1,4 +1,4 @@
-﻿using Kakuro.Commands;
+﻿using Kakuro.Commands.SettingsViewModel;
 using Kakuro.Enums;
 using Kakuro.Events;
 using Kakuro.Models;

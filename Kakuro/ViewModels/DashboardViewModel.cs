@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Kakuro.Base_Classes;
-using Kakuro.Commands;
+using Kakuro.Commands.DashboardViewModel;
 using Kakuro.Enums;
 using Kakuro.Events;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
@@ -90,7 +90,7 @@ namespace Kakuro.ViewModels
         public ICommand StartStopwatchCommand { get; private set; }
         public ICommand StopStopwatchCommand { get; private set; }
         public ICommand RestartStopwatchCommand { get; private set; }
-        public ICommand SentGameSessionCommand { get; private set; }
+        public ICommand SendGameSessionCommand { get; private set; }
         public ICommand GetChangedSettingsCommands { get; private set; }
         public ICommand AddMinuteAndContinueStopwatchCommand { get; private set; }
         public ICommand AutoSubmitCommand { get; private set; }
@@ -115,13 +115,13 @@ namespace Kakuro.ViewModels
             StopWatchMinutes = _stopwatch.Elapsed.Minutes.ToString();
             StopWatchSeconds = _stopwatch.Elapsed.Seconds.ToString();
 
-            SentGameSessionCommand = new SendGameSessionCommand(this, eventAggregator);
+            SendGameSessionCommand = new SendGameSessionCommand(this, eventAggregator);
 
             ValidateSolutionCommand = new ValidateSolutionCommand(
                 scope.Resolve<ISolutionVerifier>(),
                 scope.Resolve<IOperationNotifier>(),
                 StopStopwatchCommand,
-                SentGameSessionCommand,
+                SendGameSessionCommand,
                 this);
 
             ApplyDifficultyCommand = new ApplyDifficultyCommand(

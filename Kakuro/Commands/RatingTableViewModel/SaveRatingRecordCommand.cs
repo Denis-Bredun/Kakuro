@@ -4,7 +4,7 @@ using Kakuro.Interfaces.Data_Access.Data_Providers;
 using Kakuro.Models;
 using static System.Convert;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.RatingTableViewModel
 {
     // #BAD: tests shall be written
     public class SaveRatingRecordCommand : RelayCommand

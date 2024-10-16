@@ -1,7 +1,7 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Models;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.DashboardViewModel
 {
     // #BAD: tests shall be written
     public class StopStopwatchCommand : RelayCommand

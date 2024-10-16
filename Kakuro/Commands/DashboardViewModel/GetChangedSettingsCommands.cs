@@ -1,10 +1,9 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
-using Kakuro.ViewModels;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.DashboardViewModel
 {
     public class GetChangedSettingsCommands : RelayCommand
     {
@@ -13,27 +12,27 @@ namespace Kakuro.Commands
         private ICommand _hideTimerCommand;
 
         public GetChangedSettingsCommands(
-            DashboardViewModel dashboardViewModel,
+            ViewModels.DashboardViewModel dashboardViewModel,
             ICommand stopStopwatchCommand,
             ICommand addMinuteAndContinueStopwatchCommand,
             ICommand cleanDashboardCommand,
             IEventAggregator eventAggregator)
         {
-            _showCorrectAnswersCommand = new ApplySettingShowCorrectAnswersCommand(
+            _showCorrectAnswersCommand = new GetChangedSettingsCommand.ApplySettingShowCorrectAnswersCommand(
                 dashboardViewModel,
                 stopStopwatchCommand,
                 addMinuteAndContinueStopwatchCommand,
                 cleanDashboardCommand,
                 eventAggregator);
 
-            _autoSubmitCommand = new ApplySettingAutoSubmitCommand(dashboardViewModel);
+            _autoSubmitCommand = new GetChangedSettingsCommand.ApplySettingAutoSubmitCommand(dashboardViewModel);
 
-            _hideTimerCommand = new ApplySettingHideTimerCommand(dashboardViewModel);
+            _hideTimerCommand = new GetChangedSettingsCommand.ApplySettingHideTimerCommand(dashboardViewModel);
         }
 
         public override void Execute(object? parameter)
         {
-            var settings = (ObservableCollection<SettingViewModel>)parameter;
+            var settings = (ObservableCollection<ViewModels.SettingViewModel>)parameter;
 
             _showCorrectAnswersCommand.Execute(settings.FirstOrDefault(el => el.SettingType == SettingType.ShowCorrectAnswers));
 

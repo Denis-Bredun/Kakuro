@@ -1,16 +1,15 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Events;
 using Kakuro.Models;
-using Kakuro.ViewModels;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.DashboardViewModel
 {
     public class SendGameSessionCommand : RelayCommand
     {
-        private DashboardViewModel _dashboardViewModel;
+        private ViewModels.DashboardViewModel _dashboardViewModel;
         private IEventAggregator _eventAggregator;
 
-        public SendGameSessionCommand(DashboardViewModel dashboardViewModel, IEventAggregator eventAggregator)
+        public SendGameSessionCommand(ViewModels.DashboardViewModel dashboardViewModel, IEventAggregator eventAggregator)
         {
             _dashboardViewModel ??= dashboardViewModel;
             _eventAggregator ??= eventAggregator;

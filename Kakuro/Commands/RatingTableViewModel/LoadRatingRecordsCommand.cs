@@ -3,7 +3,7 @@ using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
 using System.Collections.ObjectModel;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.RatingTableViewModel
 {
     // #BAD: tests shall be written
     public class LoadRatingRecordsCommand : RelayCommand

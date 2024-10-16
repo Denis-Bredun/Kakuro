@@ -1,19 +1,18 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
-using Kakuro.ViewModels;
 using System.Windows.Input;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.DashboardViewModel
 {
     // #BAD: tests shall be REwritten
     public class ApplyDifficultyCommand : RelayCommand
     {
         private IDashboardProvider _dashboardProvider;
-        private DashboardViewModel _dashboardViewModel;
+        private ViewModels.DashboardViewModel _dashboardViewModel;
         private ICommand _restartStopwatchCommand;
 
-        public ApplyDifficultyCommand(IDashboardProvider dashboardProvider, DashboardViewModel dashboardViewModel, ICommand restartStopwatchCommand)
+        public ApplyDifficultyCommand(IDashboardProvider dashboardProvider, ViewModels.DashboardViewModel dashboardViewModel, ICommand restartStopwatchCommand)
         {
             _dashboardProvider ??= dashboardProvider;
             _dashboardViewModel ??= dashboardViewModel;

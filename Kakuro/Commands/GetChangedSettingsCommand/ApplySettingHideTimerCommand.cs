@@ -1,20 +1,19 @@
 ﻿using Kakuro.Base_Classes;
-using Kakuro.ViewModels;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.GetChangedSettingsCommand
 {
     class ApplySettingHideTimerCommand : RelayCommand
     {
-        private DashboardViewModel _dashboardViewModel;
+        private ViewModels.DashboardViewModel _dashboardViewModel;
 
-        public ApplySettingHideTimerCommand(DashboardViewModel dashboardViewModel)
+        public ApplySettingHideTimerCommand(ViewModels.DashboardViewModel dashboardViewModel)
         {
             _dashboardViewModel = dashboardViewModel;
         }
 
         public override void Execute(object? parameter)
         {
-            var hideTimerSetting = (SettingViewModel)parameter;
+            var hideTimerSetting = (ViewModels.SettingViewModel)parameter;
 
             _dashboardViewModel.IsTimerVisible = !hideTimerSetting.IsEnabled;
         }

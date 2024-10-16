@@ -1,9 +1,8 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Interfaces.Game_Tools;
-using Kakuro.ViewModels;
 using System.Windows.Input;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.DashboardViewModel
 {
     // #BAD: tests shall be written
     public class ValidateSolutionCommand : RelayCommand
@@ -12,14 +11,14 @@ namespace Kakuro.Commands
         private IOperationNotifier _operationNotifier;
         private ICommand _stopStopwatchCommand;
         private ICommand _sentGameSessionCommand;
-        private DashboardViewModel _viewModel;
+        private ViewModels.DashboardViewModel _viewModel;
 
         public ValidateSolutionCommand(
             ISolutionVerifier solutionVerifier,
             IOperationNotifier operationNotifier,
             ICommand stopStopwatchCommand,
             ICommand sentGameSessionCommand,
-            DashboardViewModel viewModel)
+            ViewModels.DashboardViewModel viewModel)
         {
             _solutionVerifier ??= solutionVerifier;
             _operationNotifier ??= operationNotifier;

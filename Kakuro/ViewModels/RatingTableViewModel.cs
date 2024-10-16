@@ -1,4 +1,4 @@
-﻿using Kakuro.Commands;
+﻿using Kakuro.Commands.RatingTableViewModel;
 using Kakuro.Enums;
 using Kakuro.Events;
 using Kakuro.Interfaces.Data_Access.Data_Providers;

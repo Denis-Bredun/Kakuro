@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using Kakuro.Commands;
+using Kakuro.Commands.DashboardViewModel;
 using Kakuro.Data_Access.Data_Providers;
 using Kakuro.Data_Access.Repositories;
 using Kakuro.Data_Access.Tools;

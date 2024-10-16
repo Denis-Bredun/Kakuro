@@ -1,16 +1,15 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
-using Kakuro.ViewModels;
 using System.ComponentModel;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.SavepointsViewModel
 {
     public class LoadSavepointCommand : RelayCommand
     {
-        private SavepointsViewModel _savepointsViewModel;
-        private readonly DashboardViewModel _dashboardViewModel;
+        private ViewModels.SavepointsViewModel _savepointsViewModel;
+        private readonly ViewModels.DashboardViewModel _dashboardViewModel;
 
-        public LoadSavepointCommand(SavepointsViewModel savepointsViewModel, DashboardViewModel dashboardViewModel)
+        public LoadSavepointCommand(ViewModels.SavepointsViewModel savepointsViewModel, ViewModels.DashboardViewModel dashboardViewModel)
         {
             _savepointsViewModel = savepointsViewModel;
             _dashboardViewModel = dashboardViewModel;
@@ -21,7 +20,7 @@ namespace Kakuro.Commands
         public override void Execute(object? parameter)
         {
             int dashboardSize = _dashboardViewModel.Dashboard.Count;
-            DashboardItemViewModel currentElement;
+            ViewModels.DashboardItemViewModel currentElement;
 
             for (int i = 1; i < dashboardSize - 1; i++)
             {

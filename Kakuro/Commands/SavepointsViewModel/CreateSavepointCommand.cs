@@ -1,17 +1,16 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Models;
-using Kakuro.ViewModels;
 using Microsoft.VisualBasic;
 using System.ComponentModel;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.SavepointsViewModel
 {
     public class CreateSavepointCommand : RelayCommand
     {
-        private readonly SavepointsViewModel _savepointsViewModel;
-        private readonly DashboardViewModel _dashboardViewModel;
+        private readonly ViewModels.SavepointsViewModel _savepointsViewModel;
+        private readonly ViewModels.DashboardViewModel _dashboardViewModel;
 
-        public CreateSavepointCommand(SavepointsViewModel savepointsViewModel, DashboardViewModel dashboardViewModel)
+        public CreateSavepointCommand(ViewModels.SavepointsViewModel savepointsViewModel, ViewModels.DashboardViewModel dashboardViewModel)
         {
             _savepointsViewModel = savepointsViewModel;
             _dashboardViewModel = dashboardViewModel;
@@ -43,7 +42,7 @@ namespace Kakuro.Commands
                 inputName,
                 dashboard);
 
-            _savepointsViewModel.Savepoints.Add(new SavepointViewModel(newSavepoint));
+            _savepointsViewModel.Savepoints.Add(new ViewModels.SavepointViewModel(newSavepoint));
         }
 
 

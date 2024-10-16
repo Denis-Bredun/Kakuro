@@ -3,7 +3,7 @@ using Kakuro.Enums;
 using Kakuro.ViewModels;
 using System.Collections.ObjectModel;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.SettingsViewModel
 {
     public class TurnOffAutoSubmitCommand : RelayCommand
     {

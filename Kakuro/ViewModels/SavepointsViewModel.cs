@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Kakuro.Base_Classes;
-using Kakuro.Commands;
+using Kakuro.Commands.SavepointsViewModel;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 

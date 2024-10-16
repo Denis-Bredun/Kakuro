@@ -2,7 +2,7 @@
 using Kakuro.Models;
 using System.Windows.Input;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.DashboardViewModel
 {
     public class AddMinuteAndContinueStopwatchCommand : RelayCommand
     {

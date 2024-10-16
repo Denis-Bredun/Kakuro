@@ -1,13 +1,12 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Events;
-using Kakuro.ViewModels;
 using System.Windows.Input;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.GetChangedSettingsCommand
 {
     public class ApplySettingShowCorrectAnswersCommand : RelayCommand
     {
-        private DashboardViewModel _dashboardViewModel;
+        private ViewModels.DashboardViewModel _dashboardViewModel;
         private ICommand _stopStopwatchCommand;
         private ICommand _addMinuteAndContinueStopwatchCommand;
         private ICommand _cleanDashboardCommand;
@@ -15,7 +14,7 @@ namespace Kakuro.Commands
         private IEventAggregator _eventAggregator;
 
         public ApplySettingShowCorrectAnswersCommand(
-            DashboardViewModel dashboardViewModel,
+            ViewModels.DashboardViewModel dashboardViewModel,
             ICommand stopStopwatchCommand,
             ICommand addMinuteAndContinueStopwatchCommand,
             ICommand cleanDashboardCommand,
@@ -31,7 +30,7 @@ namespace Kakuro.Commands
 
         public override void Execute(object? parameter)
         {
-            var showCorrectAnswersSetting = (SettingViewModel)parameter;
+            var showCorrectAnswersSetting = (ViewModels.SettingViewModel)parameter;
 
             bool wasChanged = false;
 

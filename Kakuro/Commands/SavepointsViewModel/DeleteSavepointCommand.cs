@@ -1,14 +1,13 @@
 ﻿using Kakuro.Base_Classes;
-using Kakuro.ViewModels;
 using System.ComponentModel;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.SavepointsViewModel
 {
     public class DeleteSavepointCommand : RelayCommand
     {
-        private SavepointsViewModel _savepointsViewModel;
+        private ViewModels.SavepointsViewModel _savepointsViewModel;
 
-        public DeleteSavepointCommand(SavepointsViewModel savepointsViewModel)
+        public DeleteSavepointCommand(ViewModels.SavepointsViewModel savepointsViewModel)
         {
             _savepointsViewModel = savepointsViewModel;
 

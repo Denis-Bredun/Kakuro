@@ -2,7 +2,7 @@
 using Kakuro.Models;
 using System.Windows.Input;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.DashboardViewModel
 {
     // #BAD: tests shall be written
     public class RestartStopwatchCommand : RelayCommand

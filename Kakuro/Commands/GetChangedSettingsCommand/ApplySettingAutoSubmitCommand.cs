@@ -1,19 +1,18 @@
 ﻿using Kakuro.Base_Classes;
-using Kakuro.ViewModels;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.GetChangedSettingsCommand
 {
     public class ApplySettingAutoSubmitCommand : RelayCommand
     {
-        private DashboardViewModel _dashboardViewModel;
+        private ViewModels.DashboardViewModel _dashboardViewModel;
 
-        public ApplySettingAutoSubmitCommand(DashboardViewModel dashboardViewModel)
+        public ApplySettingAutoSubmitCommand(ViewModels.DashboardViewModel dashboardViewModel)
         {
             _dashboardViewModel = dashboardViewModel;
         }
         public override void Execute(object? parameter)
         {
-            var autoSubmitSetting = (SettingViewModel)parameter;
+            var autoSubmitSetting = (ViewModels.SettingViewModel)parameter;
 
             _dashboardViewModel.AutoSubmit = autoSubmitSetting.IsEnabled;
         }

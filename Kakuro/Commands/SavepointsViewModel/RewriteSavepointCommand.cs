@@ -1,15 +1,14 @@
 ﻿using Kakuro.Base_Classes;
-using Kakuro.ViewModels;
 using System.ComponentModel;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.SavepointsViewModel
 {
     public class RewriteSavepointCommand : RelayCommand
     {
-        private SavepointsViewModel _savepointsViewModel;
-        private readonly DashboardViewModel _dashboardViewModel;
+        private ViewModels.SavepointsViewModel _savepointsViewModel;
+        private readonly ViewModels.DashboardViewModel _dashboardViewModel;
 
-        public RewriteSavepointCommand(SavepointsViewModel savepointsViewModel, DashboardViewModel dashboardViewModel)
+        public RewriteSavepointCommand(ViewModels.SavepointsViewModel savepointsViewModel, ViewModels.DashboardViewModel dashboardViewModel)
         {
             _savepointsViewModel = savepointsViewModel;
             _dashboardViewModel = dashboardViewModel;

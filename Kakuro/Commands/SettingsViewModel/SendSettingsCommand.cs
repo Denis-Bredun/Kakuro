@@ -3,7 +3,7 @@ using Kakuro.Events;
 using Kakuro.ViewModels;
 using System.Collections.ObjectModel;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.SettingsViewModel
 {
     // #BAD: tests shall be written
     public class SendSettingsCommand : RelayCommand

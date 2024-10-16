@@ -2,13 +2,14 @@
 using Kakuro.Enums;
 using Kakuro.ViewModels;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.DashboardViewModel
 {
-    public class ShowCorrectAnswersCommand : RelayCommand
+    // #BAD: tests shall be written
+    public class CleanDashboardCommand : RelayCommand
     {
         private DashboardItemCollection _dashboard;
 
-        public ShowCorrectAnswersCommand(DashboardItemCollection dashboard)
+        public CleanDashboardCommand(DashboardItemCollection dashboard)
         {
             _dashboard ??= dashboard;
         }
@@ -23,7 +24,7 @@ namespace Kakuro.Commands
                 {
                     currentElement = _dashboard[i][j];
                     if (currentElement.CellType == CellType.ValueCell)
-                        currentElement.DisplayValue = currentElement.HiddenValue;
+                        currentElement.DisplayValue = "";
                 }
         }
     }

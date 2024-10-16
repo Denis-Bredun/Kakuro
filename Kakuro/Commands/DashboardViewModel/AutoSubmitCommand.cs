@@ -1,17 +1,16 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
-using Kakuro.ViewModels;
 using System.Windows.Input;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.DashboardViewModel
 {
     public class AutoSubmitCommand : RelayCommand
     {
-        private DashboardViewModel _dashboardViewModel;
+        private ViewModels.DashboardViewModel _dashboardViewModel;
         private DashboardItemCollection _dashboard;
         private ICommand _validateSolutionCommand;
 
-        public AutoSubmitCommand(DashboardViewModel dashboardViewModel, ICommand validateSolutionCommand)
+        public AutoSubmitCommand(ViewModels.DashboardViewModel dashboardViewModel, ICommand validateSolutionCommand)
         {
             _dashboardViewModel = dashboardViewModel;
             _dashboard = _dashboardViewModel.Dashboard;
@@ -29,7 +28,7 @@ namespace Kakuro.Commands
 
             bool allElementsAreFilled = true;
             int dashboardSize = _dashboard.Count;
-            DashboardItemViewModel currentElement;
+            ViewModels.DashboardItemViewModel currentElement;
 
             for (int i = 1; i < dashboardSize - 1; i++)
             {

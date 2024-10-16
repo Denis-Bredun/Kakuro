@@ -1,17 +1,16 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Models;
-using Kakuro.ViewModels;
 using System.Windows;
 
-namespace Kakuro.Commands
+namespace Kakuro.Commands.DashboardViewModel
 {
     // #BAD: tests shall be written
     public class StartStopwatchCommand : RelayCommand
     {
         private MyStopwatch _stopwatch;
-        private DashboardViewModel _viewModel;
+        private ViewModels.DashboardViewModel _viewModel;
 
-        public StartStopwatchCommand(MyStopwatch stopwatch, DashboardViewModel viewModel)
+        public StartStopwatchCommand(MyStopwatch stopwatch, ViewModels.DashboardViewModel viewModel)
         {
             _stopwatch ??= stopwatch;
             _viewModel ??= viewModel;
