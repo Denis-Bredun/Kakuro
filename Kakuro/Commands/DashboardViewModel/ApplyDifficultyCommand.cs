@@ -1,5 +1,6 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Enums;
+using Kakuro.Events;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
 using System.Windows.Input;
 
@@ -11,12 +12,18 @@ namespace Kakuro.Commands.DashboardViewModel
         private IDashboardProvider _dashboardProvider;
         private ViewModels.DashboardViewModel _dashboardViewModel;
         private ICommand _restartStopwatchCommand;
+        private IEventAggregator _eventAggregator;
 
-        public ApplyDifficultyCommand(IDashboardProvider dashboardProvider, ViewModels.DashboardViewModel dashboardViewModel, ICommand restartStopwatchCommand)
+        public ApplyDifficultyCommand(
+            IDashboardProvider dashboardProvider,
+            ViewModels.DashboardViewModel dashboardViewModel,
+            ICommand restartStopwatchCommand,
+            IEventAggregator eventAggregator)
         {
             _dashboardProvider ??= dashboardProvider;
             _dashboardViewModel ??= dashboardViewModel;
             _restartStopwatchCommand ??= restartStopwatchCommand;
+            _eventAggregator ??= eventAggregator;
         }
 
         public override void Execute(object? parameter)
@@ -32,6 +39,8 @@ namespace Kakuro.Commands.DashboardViewModel
             _restartStopwatchCommand.Execute(parameter);
 
             _dashboardProvider.GenerateDashboard(difficultyLevel);
+
+            _eventAggregator.GetEvent<NewGameStartedEvent>().Publish(true);
 
             _dashboardViewModel.IsGameCompleted = false;
         }

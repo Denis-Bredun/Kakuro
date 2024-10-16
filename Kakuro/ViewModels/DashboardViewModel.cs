@@ -127,7 +127,8 @@ namespace Kakuro.ViewModels
             ApplyDifficultyCommand = new ApplyDifficultyCommand(
                 scope.Resolve<IDashboardProvider>(),
                 this,
-                RestartStopwatchCommand);
+                RestartStopwatchCommand,
+                eventAggregator);
 
             CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
             NewGameCommand = ApplyDifficultyCommand;

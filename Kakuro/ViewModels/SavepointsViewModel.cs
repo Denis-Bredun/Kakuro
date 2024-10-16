@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Kakuro.Base_Classes;
 using Kakuro.Commands.SavepointsViewModel;
+using Kakuro.Events;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -28,8 +29,12 @@ namespace Kakuro.ViewModels
         public ICommand CreateSavepointCommand { get; }
         public ICommand RewriteSavepointCommand { get; }
         public ICommand DeleteSavepointCommand { get; }
+        public ICommand CleanSavepointsCommand { get; }
 
-        public SavepointsViewModel(ILifetimeScope scope)
+        private SubscriptionToken _newGameStartedSubscriptionToken;
+        private bool _disposed;
+
+        public SavepointsViewModel(ILifetimeScope scope, IEventAggregator eventAggregator)
         {
             Savepoints = new ObservableCollection<SavepointViewModel>();
 
@@ -38,6 +43,36 @@ namespace Kakuro.ViewModels
             CreateSavepointCommand = new CreateSavepointCommand(this, scope.Resolve<DashboardViewModel>());
             RewriteSavepointCommand = new RewriteSavepointCommand(this, scope.Resolve<DashboardViewModel>());
             LoadSavepointCommand = new LoadSavepointCommand(this, scope.Resolve<DashboardViewModel>());
+            CleanSavepointsCommand = new CleanSavepointsCommand(this);
+
+            _newGameStartedSubscriptionToken = eventAggregator.GetEvent<NewGameStartedEvent>().Subscribe(CleanSavepointsCommand.Execute);
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    if (_newGameStartedSubscriptionToken != null)
+                    {
+                        _newGameStartedSubscriptionToken.Dispose();
+                        _newGameStartedSubscriptionToken = null;
+                    }
+                }
+                _disposed = true;
+            }
+        }
+
+        ~SavepointsViewModel()
+        {
+            Dispose(false);
         }
     }
 
