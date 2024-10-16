@@ -5,29 +5,29 @@ using System.Windows.Input;
 
 namespace Kakuro.Commands.DashboardViewModel
 {
-    public class GetChangedSettingsCommands : RelayCommand
+    public class GetChangedSettingsCommand : RelayCommand
     {
         private ICommand _showCorrectAnswersCommand;
         private ICommand _autoSubmitCommand;
         private ICommand _hideTimerCommand;
 
-        public GetChangedSettingsCommands(
+        public GetChangedSettingsCommand(
             ViewModels.DashboardViewModel dashboardViewModel,
             ICommand stopStopwatchCommand,
             ICommand addMinuteAndContinueStopwatchCommand,
             ICommand cleanDashboardCommand,
             IEventAggregator eventAggregator)
         {
-            _showCorrectAnswersCommand = new GetChangedSettingsCommand.ApplySettingShowCorrectAnswersCommand(
+            _showCorrectAnswersCommand = new Commands.GetChangedSettingsCommand.ApplySettingShowCorrectAnswersCommand(
                 dashboardViewModel,
                 stopStopwatchCommand,
                 addMinuteAndContinueStopwatchCommand,
                 cleanDashboardCommand,
                 eventAggregator);
 
-            _autoSubmitCommand = new GetChangedSettingsCommand.ApplySettingAutoSubmitCommand(dashboardViewModel);
+            _autoSubmitCommand = new Commands.GetChangedSettingsCommand.ApplySettingAutoSubmitCommand(dashboardViewModel);
 
-            _hideTimerCommand = new GetChangedSettingsCommand.ApplySettingHideTimerCommand(dashboardViewModel);
+            _hideTimerCommand = new Commands.GetChangedSettingsCommand.ApplySettingHideTimerCommand(dashboardViewModel);
         }
 
         public override void Execute(object? parameter)

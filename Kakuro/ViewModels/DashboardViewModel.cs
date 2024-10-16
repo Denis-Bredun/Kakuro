@@ -91,7 +91,7 @@ namespace Kakuro.ViewModels
         public ICommand StopStopwatchCommand { get; private set; }
         public ICommand RestartStopwatchCommand { get; private set; }
         public ICommand SendGameSessionCommand { get; private set; }
-        public ICommand GetChangedSettingsCommands { get; private set; }
+        public ICommand GetChangedSettingsCommand { get; private set; }
         public ICommand AddMinuteAndContinueStopwatchCommand { get; private set; }
         public ICommand AutoSubmitCommand { get; private set; }
 
@@ -132,7 +132,7 @@ namespace Kakuro.ViewModels
             CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
             NewGameCommand = ApplyDifficultyCommand;
 
-            GetChangedSettingsCommands = new GetChangedSettingsCommands(
+            GetChangedSettingsCommand = new GetChangedSettingsCommand(
                 this,
                 StopStopwatchCommand,
                 AddMinuteAndContinueStopwatchCommand,
@@ -143,7 +143,7 @@ namespace Kakuro.ViewModels
 
             ApplyDifficultyCommand.Execute(ChoosenDifficulty);
 
-            _settingsChangedSubscriptionTokens = eventAggregator.GetEvent<SettingsChangedEvent>().Subscribe(GetChangedSettingsCommands.Execute);
+            _settingsChangedSubscriptionTokens = eventAggregator.GetEvent<SettingsChangedEvent>().Subscribe(GetChangedSettingsCommand.Execute);
         }
 
         public DashboardItemCollection CreateDashboardCopy()
