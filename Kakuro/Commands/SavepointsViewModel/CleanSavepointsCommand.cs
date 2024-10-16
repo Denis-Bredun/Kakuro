@@ -19,8 +19,6 @@ namespace Kakuro.Commands.SavepointsViewModel
             for (int i = 0; i < _savepointsViewModel.Savepoints.Count; i++)
                 _savepointProvider.Delete(_savepointsViewModel.Savepoints[i].Id);
 
-            //_savepointProvider.CleanCache();
-
             _savepointsViewModel.Savepoints.Clear();
         }
     }
