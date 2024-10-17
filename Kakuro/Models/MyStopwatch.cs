@@ -47,5 +47,10 @@ namespace Kakuro.Models
         {
             StartOffset += timeToAdd;
         }
+
+        public void CleanAdditionalTime()
+        {
+            StartOffset = new TimeSpan();
+        }
     }
 }

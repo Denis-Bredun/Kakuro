@@ -128,7 +128,8 @@ namespace Kakuro.ViewModels
                 scope.Resolve<IDashboardProvider>(),
                 this,
                 RestartStopwatchCommand,
-                eventAggregator);
+                eventAggregator,
+                _stopwatch);
 
             CleanDashboardCommand = scope.Resolve<CleanDashboardCommand>();
             NewGameCommand = ApplyDifficultyCommand;
