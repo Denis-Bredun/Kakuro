@@ -1,5 +1,6 @@
 ﻿using Kakuro.Base_Classes;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
+using Kakuro.Interfaces.Game_Tools;
 using System.ComponentModel;
 
 namespace Kakuro.Commands.SavepointsViewModel
@@ -9,16 +10,19 @@ namespace Kakuro.Commands.SavepointsViewModel
         private ViewModels.SavepointsViewModel _savepointsViewModel;
         private readonly ViewModels.DashboardViewModel _dashboardViewModel;
         private readonly ISavepointProvider _savepointProvider;
+        private readonly IOperationNotifier _operationNotifier;
         private bool _disposed = false;
 
         public RewriteSavepointCommand(
             ViewModels.SavepointsViewModel savepointsViewModel,
             ViewModels.DashboardViewModel dashboardViewModel,
-            ISavepointProvider savepointProvider)
+            ISavepointProvider savepointProvider,
+            IOperationNotifier operationNotifier)
         {
             _savepointsViewModel = savepointsViewModel;
             _dashboardViewModel = dashboardViewModel;
             _savepointProvider = savepointProvider;
+            _operationNotifier = operationNotifier;
 
             _savepointsViewModel.PropertyChanged += OnSelectedSavepointPropertyChanged;
         }
@@ -28,6 +32,7 @@ namespace Kakuro.Commands.SavepointsViewModel
             var savepointToRewrite = _savepointProvider.GetById(_savepointsViewModel.SelectedSavepoint.Id);
             savepointToRewrite.Dashboard = _dashboardViewModel.CreateDashboardCopy();
             _savepointProvider.Update(savepointToRewrite);
+            _operationNotifier.NotifySuccess("Dashboard was successfully rewritten!");
         }
 
         public override bool CanExecute(object? parameter)

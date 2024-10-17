@@ -3,6 +3,7 @@ using Kakuro.Base_Classes;
 using Kakuro.Commands.SavepointsViewModel;
 using Kakuro.Events;
 using Kakuro.Interfaces.Data_Access.Data_Providers;
+using Kakuro.Interfaces.Game_Tools;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -12,6 +13,7 @@ namespace Kakuro.ViewModels
     {
         private SavepointViewModel _selectedSavepoint;
         private ISavepointProvider _savepointProvider;
+        private IOperationNotifier _operationNotifier;
 
         public ObservableCollection<SavepointViewModel> Savepoints { get; }
 
@@ -44,11 +46,12 @@ namespace Kakuro.ViewModels
         {
             Savepoints = new ObservableCollection<SavepointViewModel>();
             _savepointProvider = savepointProvider;
+            _operationNotifier = scope.Resolve<IOperationNotifier>();
 
             // #BAD: I think we shouldn't pass DashboardViewModel straightfully
             DeleteSavepointCommand = new DeleteSavepointCommand(this, _savepointProvider);
             CreateSavepointCommand = new CreateSavepointCommand(this, scope.Resolve<DashboardViewModel>(), _savepointProvider);
-            RewriteSavepointCommand = new RewriteSavepointCommand(this, scope.Resolve<DashboardViewModel>(), _savepointProvider);
+            RewriteSavepointCommand = new RewriteSavepointCommand(this, scope.Resolve<DashboardViewModel>(), _savepointProvider, _operationNotifier);
             LoadSavepointCommand = new LoadSavepointCommand(this, scope.Resolve<DashboardViewModel>(), _savepointProvider);
             CleanSavepointsCommand = new CleanSavepointsCommand(this, _savepointProvider);
 
