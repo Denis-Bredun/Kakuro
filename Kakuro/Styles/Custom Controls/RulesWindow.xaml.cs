@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Kakuro.Views
+namespace Kakuro.Styles.Custom_Controls
 {
     /// <summary>
-    /// Interaction logic for CleaningToolsSection.xaml
+    /// Interaction logic for RulesWindow.xaml
     /// </summary>
-    public partial class CleaningToolsSection : UserControl
+    public partial class RulesWindow : Window
     {
-        public CleaningToolsSection()
+        public RulesWindow()
         {
             InitializeComponent();
         }

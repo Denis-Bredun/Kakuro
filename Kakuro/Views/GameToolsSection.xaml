@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Kakuro.Views.CleaningToolsSection"
+﻿<UserControl x:Class="Kakuro.Views.GameToolsSection"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,11 +8,13 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="0.8*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="0.8*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition Width="0.8*"></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="4*"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
 
         <Button Grid.Column="1" 
@@ -21,7 +23,12 @@
             Full Clean
         </Button>
 
-        <Button Grid.Column="3" 
+        <Button Grid.Column="3"
+                Command="{Binding OpenRulesCommand}">
+            Rules
+        </Button>
+        
+        <Button Grid.Column="5" 
         Command="{Binding NewGameCommand}" 
         CommandParameter="{Binding ChoosenDifficulty}" 
         IsEnabled="{Binding ShowCorrectAnswers, Converter={StaticResource InverseBooleanConverter}}">

@@ -26,7 +26,7 @@
         <view:StopwatchSection Grid.Row="3"/>
         <view:DashboardSection Grid.Row="5"/>
         <view:SubmitSection Grid.Row="7"/>
-        <view:CleaningToolsSection Grid.Row="9"/>
+        <view:GameToolsSection Grid.Row="9"/>
     </Grid>
 
 </UserControl>

@@ -1,0 +1,29 @@
+﻿<Window x:Class="Kakuro.Styles.Custom_Controls.RulesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Game Rules" 
+        WindowStartupLocation="CenterScreen" 
+        ResizeMode="NoResize"
+        Width="400" Height="300">
+    <Grid Margin="10">
+        <TextBlock TextWrapping="Wrap" FontSize="14" Foreground="Black">
+            <Run Text="Kakuro is a logic puzzle with simple rules and challenging solutions."/>
+            <LineBreak/>
+            <LineBreak/>
+            <Run Text="The rules of Kakuro are simple:"/>
+            <LineBreak/>
+            <Run Text="1. Each cell can contain numbers from 1 through 9."/>
+            <LineBreak/>
+            <Run Text="2. The clues in the black cells tell the sum of the numbers next to that clue (on the right or down)."/>
+            <LineBreak/>
+            <Run Text="3. The numbers in consecutive white cells must be unique."/>
+            <LineBreak/>
+            <LineBreak/>
+            <Run Text="Limitations:"/>
+            <LineBreak/>
+            <Run Text="1. You cannot have more than 10 savepoints."/>
+            <LineBreak/>
+            <Run Text="2. You cannot have more than 10 records in the rating table for each difficulty level."/>
+        </TextBlock>
+    </Grid>
+</Window>

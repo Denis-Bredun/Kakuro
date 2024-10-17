@@ -95,6 +95,7 @@ namespace Kakuro.ViewModels
         public ICommand GetChangedSettingsCommand { get; private set; }
         public ICommand AddMinuteAndContinueStopwatchCommand { get; private set; }
         public ICommand AutoSubmitCommand { get; private set; }
+        public ICommand OpenRulesCommand { get; private set; }
 
         public DashboardViewModel(ILifetimeScope scope, IEventAggregator eventAggregator, DashboardItemCollection dashboard)
         {
@@ -144,6 +145,8 @@ namespace Kakuro.ViewModels
                 eventAggregator);
 
             AutoSubmitCommand = new AutoSubmitCommand(this, ValidateSolutionCommand);
+
+            OpenRulesCommand = new OpenRulesCommand();
 
             ApplyDifficultyCommand.Execute(ChoosenDifficulty);
 
