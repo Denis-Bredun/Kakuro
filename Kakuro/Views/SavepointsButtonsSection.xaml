@@ -20,7 +20,7 @@
         </Grid.ColumnDefinitions>
 
         <Button Grid.Column="1" Command="{Binding LoadSavepointCommand}">Load</Button>
-        <Button Grid.Column="3" Command="{Binding CreateSavepointCommand}">Create</Button>
+        <Button Grid.Column="3" Command="{Binding CreateSavepointCommand}" IsEnabled="{Binding IsCreatingAllowed}">Create</Button>
         <Button Grid.Column="5" Command="{Binding RewriteSavepointCommand}">Rewrite</Button>
         <Button Grid.Column="7" Command="{Binding DeleteSavepointCommand}">Delete</Button>
     </Grid>

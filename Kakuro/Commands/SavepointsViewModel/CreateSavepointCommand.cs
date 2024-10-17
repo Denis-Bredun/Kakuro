@@ -49,6 +49,8 @@ namespace Kakuro.Commands.SavepointsViewModel
             _savepointProvider.Add(newSavepoint);
 
             _savepointsViewModel.Savepoints.Add(new ViewModels.SavepointViewModel(newId, inputName));
+
+            _savepointsViewModel.IsCreatingAllowed = _savepointsViewModel.Savepoints.Count < 10;
         }
 
         public override bool CanExecute(object? parameter)

@@ -30,6 +30,16 @@ namespace Kakuro.ViewModels
             }
         }
 
+        public bool IsCreatingAllowed
+        {
+            get => _isCreatingAllowed;
+            set
+            {
+                _isCreatingAllowed = value;
+                OnPropertyChanged("IsCreatingAllowed");
+            }
+        }
+
         public ICommand LoadSavepointCommand { get; }
         public ICommand CreateSavepointCommand { get; }
         public ICommand RewriteSavepointCommand { get; }
@@ -38,6 +48,7 @@ namespace Kakuro.ViewModels
 
         private SubscriptionToken _newGameStartedSubscriptionToken;
         private bool _disposed;
+        private bool _isCreatingAllowed;
 
         public SavepointsViewModel(
             ILifetimeScope scope,
@@ -47,6 +58,7 @@ namespace Kakuro.ViewModels
             Savepoints = new ObservableCollection<SavepointViewModel>();
             _savepointProvider = savepointProvider;
             _operationNotifier = scope.Resolve<IOperationNotifier>();
+            IsCreatingAllowed = true;
 
             // #BAD: I think we shouldn't pass DashboardViewModel straightfully
             DeleteSavepointCommand = new DeleteSavepointCommand(this, _savepointProvider);
