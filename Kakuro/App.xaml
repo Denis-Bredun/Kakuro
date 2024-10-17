@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="Styles/RatingDataGridTemplate.xaml"/>
                 <ResourceDictionary Source="Styles/TitleStyles.xaml"/>
                 <ResourceDictionary Source="Styles/SettingsStyles.xaml"/>
+                <ResourceDictionary Source="Styles/NotificationStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <converters:MultiOrBooleanConverter x:Key="MultiOrBooleanConverter" />

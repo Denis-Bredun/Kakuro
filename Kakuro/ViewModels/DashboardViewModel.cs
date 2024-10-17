@@ -20,6 +20,7 @@ namespace Kakuro.ViewModels
         private string _stopWatchHours, _stopWatchMinutes, _stopWatchSeconds;
         private bool _isGameCompleted, _showCorrectAnswers, _autoSubmit, _isTimerVisible, _disposed;
         private SubscriptionToken _settingsChangedSubscriptionTokens;
+        private IOperationNotifier _operationNotifier;
 
         public DashboardItemCollection Dashboard { get; }
         public bool IsGameCompleted
@@ -103,6 +104,7 @@ namespace Kakuro.ViewModels
             ShowCorrectAnswers = false;
             AutoSubmit = true;
             IsTimerVisible = true;
+            _operationNotifier = scope.Resolve<IOperationNotifier>();
 
             // #BAD: we shall create commands and some other objects through Lazy way
 
@@ -119,7 +121,7 @@ namespace Kakuro.ViewModels
 
             ValidateSolutionCommand = new ValidateSolutionCommand(
                 scope.Resolve<ISolutionVerifier>(),
-                scope.Resolve<IOperationNotifier>(),
+                _operationNotifier,
                 StopStopwatchCommand,
                 SendGameSessionCommand,
                 this);
@@ -188,6 +190,8 @@ namespace Kakuro.ViewModels
                         _settingsChangedSubscriptionTokens.Dispose();
                         _settingsChangedSubscriptionTokens = null;
                     }
+
+                    _operationNotifier.CloseAllNotifications();
                 }
                 _disposed = true;
             }

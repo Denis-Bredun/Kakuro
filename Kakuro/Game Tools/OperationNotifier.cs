@@ -1,19 +1,26 @@
 ﻿using Kakuro.Interfaces.Game_Tools;
-using System.Windows;
+using Kakuro.Styles.Custom_Controls;
 
 namespace Kakuro.Game_Tools
 {
     // #BAD: tests shall be written
     public class OperationNotifier : IOperationNotifier
     {
+        private readonly List<ToastNotificationWindow> _openNotifications;
+
+        public OperationNotifier()
+        {
+            _openNotifications = new List<ToastNotificationWindow>();
+        }
+
         public void NotifySuccess(string message = "Operation completed successfully.")
         {
-            MessageBox.Show(message, "Success", MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly);
+            ShowToastNotification(message, "Success", true);
         }
 
         public void NotifyFailure(string message = "Operation failed.")
         {
-            MessageBox.Show(message, "Failure", MessageBoxButton.OK, MessageBoxImage.Error, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly);
+            ShowToastNotification(message, "Failure", false);
         }
 
         public void NotifyOutcome(bool isSuccess,
@@ -22,9 +29,23 @@ namespace Kakuro.Game_Tools
         {
             string caption = isSuccess ? "Success" : "Failure";
             string message = isSuccess ? successMessage : failMessage;
-            MessageBoxImage icon = isSuccess ? MessageBoxImage.Information : MessageBoxImage.Error;
+            ShowToastNotification(message, caption, isSuccess);
+        }
 
-            MessageBox.Show(message, caption, MessageBoxButton.OK, icon, MessageBoxResult.None, MessageBoxOptions.DefaultDesktopOnly);
+        private void ShowToastNotification(string message, string caption, bool isSuccess)
+        {
+            var toast = new ToastNotificationWindow(message, caption, isSuccess);
+            toast.ShowAndCloseAfterDelay(10000);
+            _openNotifications.Add(toast);
+        }
+
+        public void CloseAllNotifications()
+        {
+            foreach (var notification in _openNotifications.ToList())
+                notification.Close();
+
+            _openNotifications.Clear();
         }
     }
+
 }

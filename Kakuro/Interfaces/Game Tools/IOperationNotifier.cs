@@ -7,5 +7,6 @@
         void NotifyOutcome(bool isSuccess,
             string successMessage = "Operation completed successfully.",
             string failMessage = "Operation failed.");
+        void CloseAllNotifications();
     }
 }
