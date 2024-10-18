@@ -2,10 +2,11 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
                     xmlns:converters="clr-namespace:Kakuro.Converters">
 
+    <converters:WindowWidthToTabItemWidthConverter x:Key="TabItemWidthConverter" />
+    
     <Style TargetType="TabItem">
         <Setter Property="FontSize" Value="18"/>
+        <Setter Property="Width" Value="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource TabItemWidthConverter}}"/>
     </Style>
-
-    <converters:WindowWidthToTabItemWidthConverter x:Key="TabItemWidthConverter" />
 
 </ResourceDictionary>
