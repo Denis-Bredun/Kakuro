@@ -121,7 +121,7 @@ namespace Kakuro.ViewModels
             SendGameSessionCommand = new SendGameSessionCommand(this, eventAggregator);
 
             ValidateSolutionCommand = new ValidateSolutionCommand(
-                scope.Resolve<ISolutionVerifier>(),
+                scope.Resolve<ISolutionValidator>(),
                 _operationNotifier,
                 StopStopwatchCommand,
                 SendGameSessionCommand,

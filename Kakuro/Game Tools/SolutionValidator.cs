@@ -5,11 +5,11 @@ using Kakuro.ViewModels;
 namespace Kakuro.Game_Tools
 {
     // #BAD: tests shall be written
-    public class SolutionVerifier : ISolutionVerifier
+    public class SolutionValidator : ISolutionValidator
     {
         private DashboardItemCollection _dashboard;
 
-        public SolutionVerifier(DashboardItemCollection dashboard)
+        public SolutionValidator(DashboardItemCollection dashboard)
         {
             _dashboard = dashboard;
         }

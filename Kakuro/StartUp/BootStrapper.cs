@@ -51,7 +51,7 @@ namespace Kakuro.StartUp
             builder.RegisterType<JsonFileHandler<Savepoint>>().As<IJsonFileHandler<Savepoint>>().SingleInstance();
 
             // Game Tools:
-            builder.RegisterType<SolutionVerifier>().As<ISolutionVerifier>().SingleInstance();
+            builder.RegisterType<SolutionValidator>().As<ISolutionValidator>().SingleInstance();
             builder.RegisterType<OperationNotifier>().As<IOperationNotifier>().SingleInstance();
 
 

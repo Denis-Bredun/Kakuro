@@ -7,14 +7,14 @@ namespace Kakuro.Commands.DashboardViewModel
     // #BAD: tests shall be written
     public class ValidateSolutionCommand : RelayCommand
     {
-        private ISolutionVerifier _solutionVerifier;
+        private ISolutionValidator _solutionVerifier;
         private IOperationNotifier _operationNotifier;
         private ICommand _stopStopwatchCommand;
         private ICommand _sentGameSessionCommand;
         private ViewModels.DashboardViewModel _viewModel;
 
         public ValidateSolutionCommand(
-            ISolutionVerifier solutionVerifier,
+            ISolutionValidator solutionVerifier,
             IOperationNotifier operationNotifier,
             ICommand stopStopwatchCommand,
             ICommand sentGameSessionCommand,
