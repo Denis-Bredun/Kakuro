@@ -1,5 +1,5 @@
 ﻿using Kakuro.Base_Classes;
-using Kakuro.Styles.Custom_Controls;
+using Kakuro.Custom_Components;
 
 namespace Kakuro.Commands.DashboardViewModel
 {

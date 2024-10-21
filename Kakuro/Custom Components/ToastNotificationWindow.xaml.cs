@@ -2,7 +2,7 @@
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 
-namespace Kakuro.Styles.Custom_Controls
+namespace Kakuro.Custom_Components
 {
     /// <summary>
     /// Interaction logic for ToastNotificationWindow.xaml

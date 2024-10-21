@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:customComponents="clr-namespace:Kakuro.Styles.Custom_Controls">
+                    xmlns:customComponents="clr-namespace:Kakuro.Custom_Components">
         
     <Style TargetType="TextBox" x:Key="CustomTextBoxStyle">
         <Style.Triggers>

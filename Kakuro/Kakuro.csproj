@@ -14,4 +14,10 @@
     <PackageReference Include="Prism.Events" Version="9.0.537" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Custom Components\SumCell.cs">
+      <CustomToolNamespace></CustomToolNamespace>
+    </Compile>
+  </ItemGroup>
+
 </Project>

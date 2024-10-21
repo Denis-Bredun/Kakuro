@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace Kakuro.Styles.Custom_Controls
+namespace Kakuro.Custom_Components
 {
     // #BAD: tests shall be written
     public class SumCell : Control

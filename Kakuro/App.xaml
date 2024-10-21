@@ -16,6 +16,7 @@
                 <ResourceDictionary Source="Styles/TitleStyles.xaml"/>
                 <ResourceDictionary Source="Styles/SettingsStyles.xaml"/>
                 <ResourceDictionary Source="Styles/NotificationStyles.xaml"/>
+                <ResourceDictionary Source="Styles/SumCell_Style.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <converters:MultiOrBooleanConverter x:Key="MultiOrBooleanConverter" />

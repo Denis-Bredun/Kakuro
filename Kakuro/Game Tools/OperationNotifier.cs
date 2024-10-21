@@ -1,5 +1,5 @@
-﻿using Kakuro.Interfaces.Game_Tools;
-using Kakuro.Styles.Custom_Controls;
+﻿using Kakuro.Custom_Components;
+using Kakuro.Interfaces.Game_Tools;
 
 namespace Kakuro.Game_Tools
 {

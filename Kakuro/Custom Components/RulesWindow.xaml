@@ -1,4 +1,4 @@
-﻿<Window x:Class="Kakuro.Styles.Custom_Controls.RulesWindow"
+﻿<Window x:Class="Kakuro.Custom_Components.RulesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Game Rules" 
