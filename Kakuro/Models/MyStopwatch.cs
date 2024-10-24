@@ -11,37 +11,13 @@ namespace Kakuro.Models
             StartOffset = startOffset;
         }
 
-        public TimeSpan TotalElapsed
-        {
-            get
-            {
-                return Elapsed + StartOffset;
-            }
-        }
+        public TimeSpan TotalElapsed => Elapsed + StartOffset;
 
-        public int ElapsedHours
-        {
-            get
-            {
-                return TotalElapsed.Hours;
-            }
-        }
+        public int ElapsedHours => TotalElapsed.Hours;
 
-        public int ElapsedMinutes
-        {
-            get
-            {
-                return TotalElapsed.Minutes;
-            }
-        }
+        public int ElapsedMinutes => TotalElapsed.Minutes;
 
-        public int ElapsedSeconds
-        {
-            get
-            {
-                return TotalElapsed.Seconds;
-            }
-        }
+        public int ElapsedSeconds => TotalElapsed.Seconds;
 
         public void AddTime(TimeSpan timeToAdd)
         {
