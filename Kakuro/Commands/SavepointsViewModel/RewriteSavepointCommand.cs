@@ -37,12 +37,17 @@ namespace Kakuro.Commands.SavepointsViewModel
 
         public override bool CanExecute(object? parameter)
         {
-            return _savepointsViewModel.SelectedSavepoint != null && base.CanExecute(parameter);
+            return AnySavepointSelected() && !AreCorrectAnswersShown() && base.CanExecute(parameter);
         }
+
+        private bool AnySavepointSelected() => _savepointsViewModel.SelectedSavepoint != null;
+
+        private bool AreCorrectAnswersShown() => _savepointsViewModel.CorrectAnswersAreShown;
 
         private void OnSelectedSavepointPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(_savepointsViewModel.SelectedSavepoint))
+            if (e.PropertyName == nameof(_savepointsViewModel.SelectedSavepoint) ||
+                e.PropertyName == nameof(_savepointsViewModel.CorrectAnswersAreShown))
                 OnCanExecutedChanged();
         }
 

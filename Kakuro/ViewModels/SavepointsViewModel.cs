@@ -14,8 +14,19 @@ namespace Kakuro.ViewModels
         private SavepointViewModel _selectedSavepoint;
         private ISavepointProvider _savepointProvider;
         private IOperationNotifier _operationNotifier;
+        private bool _correctAnswersAreShown;
 
         public ObservableCollection<SavepointViewModel> Savepoints { get; }
+
+        public bool CorrectAnswersAreShown
+        {
+            get => _correctAnswersAreShown;
+            set
+            {
+                _correctAnswersAreShown = value;
+                OnPropertyChanged("CorrectAnswersAreShown");
+            }
+        }
 
         public SavepointViewModel SelectedSavepoint
         {
@@ -45,8 +56,10 @@ namespace Kakuro.ViewModels
         public ICommand RewriteSavepointCommand { get; }
         public ICommand DeleteSavepointCommand { get; }
         public ICommand CleanSavepointsCommand { get; }
+        public ICommand ChangeAvailabilityOfSectionCommand { get; }
 
         private SubscriptionToken _newGameStartedSubscriptionToken;
+        private SubscriptionToken _correctAnswersTurnedOnSubscriptionToken;
         private bool _disposed;
         private bool _isCreatingAllowed;
 
@@ -59,6 +72,7 @@ namespace Kakuro.ViewModels
             _savepointProvider = savepointProvider;
             _operationNotifier = scope.Resolve<IOperationNotifier>();
             IsCreatingAllowed = true;
+            CorrectAnswersAreShown = false;
 
             // #BAD: I think we shouldn't pass DashboardViewModel straightfully
             DeleteSavepointCommand = new DeleteSavepointCommand(this, _savepointProvider);
@@ -66,8 +80,10 @@ namespace Kakuro.ViewModels
             RewriteSavepointCommand = new RewriteSavepointCommand(this, scope.Resolve<DashboardViewModel>(), _savepointProvider, _operationNotifier);
             LoadSavepointCommand = new LoadSavepointCommand(this, scope.Resolve<DashboardViewModel>(), _savepointProvider);
             CleanSavepointsCommand = new CleanSavepointsCommand(this, _savepointProvider);
+            ChangeAvailabilityOfSectionCommand = new ChangeAvailabilityOfSectionCommand(this);
 
             _newGameStartedSubscriptionToken = eventAggregator.GetEvent<NewGameStartedEvent>().Subscribe(CleanSavepointsCommand.Execute);
+            _correctAnswersTurnedOnSubscriptionToken = eventAggregator.GetEvent<CorrectAnswersTurnedOnEvent>().Subscribe(ChangeAvailabilityOfSectionCommand.Execute);
         }
 
         public void Dispose()
@@ -86,6 +102,12 @@ namespace Kakuro.ViewModels
                     {
                         _newGameStartedSubscriptionToken.Dispose();
                         _newGameStartedSubscriptionToken = null;
+                    }
+
+                    if (_correctAnswersTurnedOnSubscriptionToken != null)
+                    {
+                        _correctAnswersTurnedOnSubscriptionToken.Dispose();
+                        _correctAnswersTurnedOnSubscriptionToken = null;
                     }
 
                     (DeleteSavepointCommand as IDisposable)?.Dispose();

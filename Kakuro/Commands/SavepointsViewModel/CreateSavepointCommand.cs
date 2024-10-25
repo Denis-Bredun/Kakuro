@@ -22,7 +22,7 @@ namespace Kakuro.Commands.SavepointsViewModel
             _dashboardViewModel = dashboardViewModel;
             _savepointProvider = savepointProvider;
 
-            _savepointsViewModel.PropertyChanged += OnSavepointsCollectionPropertyChanged;
+            _savepointsViewModel.PropertyChanged += OnSavepointsCountPropertyChanged;
         }
 
         public override void Execute(object? parameter)
@@ -55,12 +55,17 @@ namespace Kakuro.Commands.SavepointsViewModel
 
         public override bool CanExecute(object? parameter)
         {
-            return _savepointsViewModel.Savepoints.Count < 10 && base.CanExecute(parameter);
+            return NotMaxSavepointsCreated() && !AreCorrectAnswersShown() && base.CanExecute(parameter);
         }
 
-        private void OnSavepointsCollectionPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private bool NotMaxSavepointsCreated() => _savepointsViewModel.Savepoints.Count < 10;
+
+        private bool AreCorrectAnswersShown() => _savepointsViewModel.CorrectAnswersAreShown;
+
+        private void OnSavepointsCountPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(_savepointsViewModel.Savepoints.Count))
+            if (e.PropertyName == nameof(_savepointsViewModel.Savepoints.Count) ||
+                e.PropertyName == nameof(_savepointsViewModel.CorrectAnswersAreShown))
                 OnCanExecutedChanged();
         }
 
@@ -76,7 +81,7 @@ namespace Kakuro.Commands.SavepointsViewModel
             {
                 if (disposing)
                 {
-                    _savepointsViewModel.PropertyChanged -= OnSavepointsCollectionPropertyChanged;
+                    _savepointsViewModel.PropertyChanged -= OnSavepointsCountPropertyChanged;
                 }
                 _disposed = true;
             }
