@@ -24,6 +24,8 @@ namespace Kakuro.Commands.SavepointsViewModel
 
             _savepointsViewModel.Savepoints.Remove(_savepointsViewModel.SelectedSavepoint);
             _savepointsViewModel.SelectedSavepoint = null;
+
+            _savepointsViewModel.IsCreatingAllowed = _savepointsViewModel.Savepoints.Count < 10;
         }
 
         public override bool CanExecute(object? parameter)
