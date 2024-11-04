@@ -114,5 +114,9 @@ namespace Kakuro.Data_Access.Repositories
 
         private Func<Savepoint, Savepoint> GetUpdatedSavepointSelector(int id, Savepoint newEntity) => el => IsIdEqual(id)(el) ? newEntity : el;
 
+        public void CleanData()
+        {
+            _jsonFileHandler.DeleteFile(_filepath);
+        }
     }
 }

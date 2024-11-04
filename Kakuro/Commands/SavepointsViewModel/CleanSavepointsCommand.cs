@@ -16,8 +16,7 @@ namespace Kakuro.Commands.SavepointsViewModel
 
         public override void Execute(object? parameter)
         {
-            for (int i = 0; i < _savepointsViewModel.Savepoints.Count; i++)
-                _savepointProvider.Delete(_savepointsViewModel.Savepoints[i].Id);
+            _savepointProvider.CleanData();
 
             _savepointsViewModel.Savepoints.Clear();
         }

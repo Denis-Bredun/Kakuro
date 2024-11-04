@@ -6,5 +6,6 @@
         bool Add(T entity);
         void Update(T entity);
         T Delete(int id);
+        void CleanData();
     }
 }

@@ -57,5 +57,10 @@ namespace Kakuro.Data_Access.Tools
         private bool IsDirectoryNeeded(string directory) => !IsEmptyPath(directory) && !Directory.Exists(directory);
 
         private bool AreInvalidSaveParameters(IEnumerable<T> data, string filepath) => data == null || IsEmptyPath(filepath);
+
+        public void DeleteFile(string filepath)
+        {
+            File.Delete(filepath);
+        }
     }
 }

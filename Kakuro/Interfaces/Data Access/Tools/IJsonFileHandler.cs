@@ -8,5 +8,6 @@
     {
         new void Save(IEnumerable<T> data, string filepath);
         new IEnumerable<T> Load(string filepath);
+        void DeleteFile(string filepath);
     }
 }

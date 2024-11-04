@@ -84,5 +84,10 @@ namespace Kakuro.Data_Access.Data_Providers
         }
 
         private Func<Savepoint, bool> IsIdEqual(int id) => el => el.Id == id; // "el" stands for "element"
+
+        public void CleanData()
+        {
+            _dataService.CleanData();
+        }
     }
 }
