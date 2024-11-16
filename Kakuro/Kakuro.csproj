@@ -9,6 +9,8 @@
 	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	<SelfContained>true</SelfContained>
 	<EnableCompressionInSingleFile>true</EnableCompressionInSingleFile>
+	<PublishTrimmed>true</PublishTrimmed>
+	<TrimMode>Link</TrimMode>
   </PropertyGroup>
 
   <ItemGroup>
