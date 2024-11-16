@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+	<DOTNET_ROOT>C:\Program Files\dotnet</DOTNET_ROOT>
+	<DotNetSdkPath>C:\Program Files\dotnet\sdk</DotNetSdkPath>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net8.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
